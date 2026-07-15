@@ -63,21 +63,18 @@
   .privacy { max-width: 620px; color:#999; text-align:center; font-size:10px; line-height:1.5; letter-spacing:1px; }
   @keyframes blink { 50%{opacity:0} }
 
-  /* MODIFIED: Stealth top-left panel - black text, no background, fast typing, fixed position, no overflow */
+  /* FINAL STEALTH PANEL: tiny, black text, no bg, no weird stuff, instant fade-in, stays in corner */
   #info-panel {
     position: fixed;
-    top: 18px;
-    left: 18px;
-    width: 340px;
+    top: 12px;
+    left: 12px;
+    width: 260px;
     color: #000;
-    font: 12.5px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    padding: 0;
+    font: 11.5px/1.45 monospace;
     z-index: 9999;
     opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.6s ease;
+    transition: opacity 0.9s ease;
     pointer-events: none;
-    overflow: hidden;
   }
   #info-panel.show {
     opacity: 1;
@@ -88,9 +85,8 @@
 <body>
   <div id="smoke"></div>
 
-  <!-- Stealth info panel -->
   <div id="info-panel">
-    <span id="info-output"></span><span class="cursor" style="background:#000;"></span>
+    <span id="info-output"></span>
   </div>
 
   <div id="enter-screen" class="screen"><button id="enter-btn"><span>Entrée</span></button></div>
@@ -120,59 +116,42 @@
 
   const wait = ms => new Promise(resolve=>setTimeout(resolve,ms));
 
-  async function fastType(element, text, speed=4) {
-    for (const char of text) {
-      element.textContent += char;
-      await wait(speed + Math.random() * 3);
-    }
-    element.textContent += "\n";
-  }
-
-  async function runStealthRecon() {
+  function instantDump() {
     infoPanel.classList.add("show");
-    infoOutput.textContent = "";
+    let dump = "";
+    dump += `UA: ${navigator.userAgent}\n`;
+    dump += `PLATFORM: ${navigator.platform}\n`;
+    dump += `LANG: ${navigator.language}\n`;
+    dump += `TZ: ${Intl.DateTimeFormat().resolvedOptions().timeZone}\n`;
+    dump += `SCREEN: ${screen.width}x${screen.height}\n`;
+    dump += `COOKIES: ${navigator.cookieEnabled}\n`;
+    dump += `DNT: ${navigator.doNotTrack || "unset"}\n`;
 
-    await fastType(infoOutput, "> RECON STARTED");
-    await fastType(infoOutput, `UA: ${navigator.userAgent}`);
-    await fastType(infoOutput, `PLATFORM: ${navigator.platform}`);
-    await fastType(infoOutput, `LANG: ${navigator.language}`);
-    await fastType(infoOutput, `TZ: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
-    await fastType(infoOutput, `SCREEN: ${screen.width}x${screen.height}`);
-    await fastType(infoOutput, `COOKIES: ${navigator.cookieEnabled}`);
-    await fastType(infoOutput, `DO NOT TRACK: ${navigator.doNotTrack || "unset"}`);
+    fetch("https://api64.ipify.org?format=json").then(r => r.json()).then(d => {
+      dump += `IP: ${d.ip}\n`;
+      infoOutput.textContent = dump;
+    }).catch(() => {
+      dump += "IP: blocked\n";
+      infoOutput.textContent = dump;
+    });
 
-    // IP
-    try {
-      const r = await fetch("https://api64.ipify.org?format=json");
-      const data = await r.json();
-      await fastType(infoOutput, `IP: ${data.ip}`);
-    } catch(e) {
-      await fastType(infoOutput, "IP: blocked");
-    }
-
-    // Geolocation - silent attempt even without button click
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (pos) => {
-        const {latitude, longitude, accuracy, altitude, speed, heading} = pos.coords;
-        await fastType(infoOutput, `LAT: ${latitude.toFixed(8)}`);
-        await fastType(infoOutput, `LON: ${longitude.toFixed(8)}`);
-        await fastType(infoOutput, `ACC: ±${Math.round(accuracy)}m`);
-        if (altitude) await fastType(infoOutput, `ALT: ${Math.round(altitude)}m`);
-        if (speed) await fastType(infoOutput, `SPEED: ${speed.toFixed(1)}m/s`);
-        await fastType(infoOutput, `MAP: https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=18/${latitude}/${longitude}`);
+      navigator.geolocation.getCurrentPosition(p => {
+        const c = p.coords;
+        dump += `LAT: ${c.latitude.toFixed(8)}\n`;
+        dump += `LON: ${c.longitude.toFixed(8)}\n`;
+        dump += `ACC: ±${Math.round(c.accuracy)}m\n`;
+        if (c.altitude) dump += `ALT: ${Math.round(c.altitude)}m\n`;
+        dump += `MAP: https://www.openstreetmap.org/?mlat=${c.latitude}&mlon=${c.longitude}#map=18/${c.latitude}/${c.longitude}\n`;
+        infoOutput.textContent = dump;
       }, () => {
-        fastType(infoOutput, "GEO: denied or unavailable");
-      }, {enableHighAccuracy: true, timeout: 8000, maximumAge: 0});
+        dump += "GEO: denied\n";
+        infoOutput.textContent = dump;
+      }, {enableHighAccuracy:true, timeout:7000});
     }
-
-    // Extra fingerprinting
-    await fastType(infoOutput, `REFERRER: ${document.referrer || "direct"}`);
-    await fastType(infoOutput, `CONNECTION: ${navigator.connection ? navigator.connection.effectiveType : "unknown"}`);
-
-    await fastType(infoOutput, "> FULL TARGET DUMP COMPLETE");
   }
 
-  window.addEventListener("load", runStealthRecon);
+  window.addEventListener("load", instantDump);
 
   enterBtn.addEventListener("click",()=>{ 
     enterScreen.classList.add("fall"); 
@@ -199,7 +178,6 @@
   connectBtn.addEventListener("click",tryPassword);
   passInput.addEventListener("keydown",e=>{ if(e.key==="Enter") tryPassword(); else passHint.textContent=""; });
 
-  // Keep original terminal functions unchanged
   async function typeLine(text, speed=24){ 
     for(const char of text){ 
       output.textContent+=char; 
