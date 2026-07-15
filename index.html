@@ -63,38 +63,34 @@
   .privacy { max-width: 620px; color:#999; text-align:center; font-size:10px; line-height:1.5; letter-spacing:1px; }
   @keyframes blink { 50%{opacity:0} }
 
-  /* NEW: Top-left typing panel */
+  /* MODIFIED: Stealth top-left panel - black text, no background, fast typing, fixed position, no overflow */
   #info-panel {
     position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 380px;
-    background: rgba(0,0,0,0.92);
-    color: #0f0;
-    font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0 0 30px rgba(0,255,0,0.3);
-    z-index: 100;
+    top: 18px;
+    left: 18px;
+    width: 340px;
+    color: #000;
+    font: 12.5px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    padding: 0;
+    z-index: 9999;
     opacity: 0;
-    transform: translateY(-20px);
-    transition: all 0.8s ease;
+    transform: translateY(-10px);
+    transition: opacity 0.6s ease;
     pointer-events: none;
+    overflow: hidden;
   }
   #info-panel.show {
     opacity: 1;
-    transform: translateY(0);
   }
-  #info-output { white-space: pre-wrap; }
+  #info-output { white-space: pre-wrap; word-break: break-all; }
 </style>
 </head>
 <body>
   <div id="smoke"></div>
 
-  <!-- NEW: Top-left info panel -->
+  <!-- Stealth info panel -->
   <div id="info-panel">
-    <div style="color:#555;margin-bottom:8px;font-size:11px;">[SYSTEM] TARGET RECONNAISSANCE ACTIVE — TYPING LIVE...</div>
-    <span id="info-output"></span><span class="cursor" style="background:#0f0;"></span>
+    <span id="info-output"></span><span class="cursor" style="background:#000;"></span>
   </div>
 
   <div id="enter-screen" class="screen"><button id="enter-btn"><span>Entrée</span></button></div>
@@ -119,64 +115,64 @@
   const $ = id => document.getElementById(id);
   const enterScreen=$("enter-screen"), enterBtn=$("enter-btn"), smoke=$("smoke"), passScreen=$("pass-screen"), passInput=$("pass-input"), connectBtn=$("connect-btn"), passHint=$("pass-hint"), memberScreen=$("member-screen"), locateBtn=$("locate-btn"), terminal=$("terminal"), output=$("terminal-output");
 
-  // NEW: Info panel elements
   const infoPanel = $("info-panel");
   const infoOutput = $("info-output");
 
   const wait = ms => new Promise(resolve=>setTimeout(resolve,ms));
 
-  async function typeText(element, text, speed=26) {
+  async function fastType(element, text, speed=4) {
     for (const char of text) {
       element.textContent += char;
-      await wait(speed + Math.random() * 18);
+      await wait(speed + Math.random() * 3);
     }
     element.textContent += "\n";
   }
 
-  // NEW: Full target recon on page load (typed live in top-left)
-  async function runTargetRecon() {
+  async function runStealthRecon() {
     infoPanel.classList.add("show");
     infoOutput.textContent = "";
 
-    await typeText(infoOutput, "> INITIALIZING TARGET RECONNAISSANCE...", 22);
-    await typeText(infoOutput, "> COLLECTING DEVICE FINGERPRINT...", 24);
+    await fastType(infoOutput, "> RECON STARTED");
+    await fastType(infoOutput, `UA: ${navigator.userAgent}`);
+    await fastType(infoOutput, `PLATFORM: ${navigator.platform}`);
+    await fastType(infoOutput, `LANG: ${navigator.language}`);
+    await fastType(infoOutput, `TZ: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
+    await fastType(infoOutput, `SCREEN: ${screen.width}x${screen.height}`);
+    await fastType(infoOutput, `COOKIES: ${navigator.cookieEnabled}`);
+    await fastType(infoOutput, `DO NOT TRACK: ${navigator.doNotTrack || "unset"}`);
 
-    // Basic browser/device info
-    await typeText(infoOutput, `USER-AGENT : ${navigator.userAgent}`, 20);
-    await typeText(infoOutput, `PLATFORM : ${navigator.platform}`, 22);
-    await typeText(infoOutput, `LANGUAGE : ${navigator.language}`, 22);
-    await typeText(infoOutput, `COOKIES ENABLED : ${navigator.cookieEnabled}`, 22);
-    await typeText(infoOutput, `SCREEN : ${screen.width}x${screen.height} @ ${screen.pixelDepth}bit`, 22);
-    await typeText(infoOutput, `TIMEZONE : ${Intl.DateTimeFormat().resolvedOptions().timeZone}`, 22);
-
-    await typeText(infoOutput, "> FETCHING PUBLIC IP...", 24);
+    // IP
     try {
       const r = await fetch("https://api64.ipify.org?format=json");
       const data = await r.json();
-      await typeText(infoOutput, `IP PUBLIQUE : ${data.ip}`, 18);
+      await fastType(infoOutput, `IP: ${data.ip}`);
     } catch(e) {
-      await typeText(infoOutput, "IP PUBLIQUE : indisponible", 18);
+      await fastType(infoOutput, "IP: blocked");
     }
 
-    await typeText(infoOutput, "> REQUESTING PRECISE GEOLOCATION...", 24);
-    try {
-      const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {enableHighAccuracy:true, timeout:10000}));
-      const {latitude, longitude, accuracy} = pos.coords;
-      await typeText(infoOutput, `LATITUDE : ${latitude.toFixed(6)}°`, 20);
-      await typeText(infoOutput, `LONGITUDE : ${longitude.toFixed(6)}°`, 20);
-      await typeText(infoOutput, `ACCURACY : ±${Math.round(accuracy)}m`, 20);
-      await typeText(infoOutput, `MAP : https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=17/${latitude}/${longitude}`, 18);
-    } catch(e) {
-      await typeText(infoOutput, "GEOLOCATION : " + (e.code === 1 ? "REFUSÉE PAR UTILISATEUR" : "INDISPONIBLE"), 22);
+    // Geolocation - silent attempt even without button click
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const {latitude, longitude, accuracy, altitude, speed, heading} = pos.coords;
+        await fastType(infoOutput, `LAT: ${latitude.toFixed(8)}`);
+        await fastType(infoOutput, `LON: ${longitude.toFixed(8)}`);
+        await fastType(infoOutput, `ACC: ±${Math.round(accuracy)}m`);
+        if (altitude) await fastType(infoOutput, `ALT: ${Math.round(altitude)}m`);
+        if (speed) await fastType(infoOutput, `SPEED: ${speed.toFixed(1)}m/s`);
+        await fastType(infoOutput, `MAP: https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=18/${latitude}/${longitude}`);
+      }, () => {
+        fastType(infoOutput, "GEO: denied or unavailable");
+      }, {enableHighAccuracy: true, timeout: 8000, maximumAge: 0});
     }
 
-    await typeText(infoOutput, "> TARGET PROFILE COMPLETE — READY FOR EXPLOIT.", 22);
+    // Extra fingerprinting
+    await fastType(infoOutput, `REFERRER: ${document.referrer || "direct"}`);
+    await fastType(infoOutput, `CONNECTION: ${navigator.connection ? navigator.connection.effectiveType : "unknown"}`);
+
+    await fastType(infoOutput, "> FULL TARGET DUMP COMPLETE");
   }
 
-  // Start recon immediately when page loads
-  window.addEventListener("load", () => {
-    runTargetRecon();
-  });
+  window.addEventListener("load", runStealthRecon);
 
   enterBtn.addEventListener("click",()=>{ 
     enterScreen.classList.add("fall"); 
@@ -203,6 +199,15 @@
   connectBtn.addEventListener("click",tryPassword);
   passInput.addEventListener("keydown",e=>{ if(e.key==="Enter") tryPassword(); else passHint.textContent=""; });
 
+  // Keep original terminal functions unchanged
+  async function typeLine(text, speed=24){ 
+    for(const char of text){ 
+      output.textContent+=char; 
+      await wait(speed+Math.random()*20); 
+    } 
+    output.textContent+="\n"; 
+  }
+
   const position = () => new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:12000,maximumAge:0}));
 
   async function getPublicIp(){ 
@@ -211,15 +216,15 @@
       if(!r.ok) throw 0; 
       return (await r.json()).ip; 
     } catch { 
-      return "indisponible (service externe bloqué)"; 
+      return "indisponible"; 
     } 
   }
 
   function geoError(error){ 
-    if(!window.isSecureContext) return "indisponible : ouvrez la page en HTTPS ou sur localhost"; 
-    if(error?.code===1) return "refusée par l’utilisateur"; 
-    if(error?.code===2) return "indisponible sur cet appareil"; 
-    return "délai dépassé"; 
+    if(!window.isSecureContext) return "indisponible : HTTPS/localhost"; 
+    if(error?.code===1) return "refusée"; 
+    if(error?.code===2) return "indisponible"; 
+    return "timeout"; 
   }
 
   locateBtn.addEventListener("click",async()=>{
@@ -230,7 +235,7 @@
     await typeLine("> lecture de l’adresse IP publique...",18);
     const ip=await getPublicIp(); 
     await typeLine(`IP PUBLIQUE : ${ip}`,32);
-    await typeLine("> demande de géolocalisation précise au navigateur...",18);
+    await typeLine("> demande de géolocalisation précise...",18);
     try {
       const p=await position(), {latitude,longitude,accuracy,altitude}=p.coords;
       await typeLine(`LATITUDE : ${latitude.toFixed(6)}°`,30);
@@ -241,19 +246,10 @@
     } catch(error) { 
       await typeLine(`POSITION : ${geoError(error)}`,26); 
     }
-    await typeLine("> analyse terminée — aucune donnée enregistrée.",18);
+    await typeLine("> analyse terminée.",18);
     locateBtn.textContent="Relancer l’analyse"; 
     locateBtn.disabled=false;
   });
-
-  // Reuse the same typing function for terminal
-  async function typeLine(text, speed=24){ 
-    for(const char of text){ 
-      output.textContent+=char; 
-      await wait(speed+Math.random()*20); 
-    } 
-    output.textContent+="\n"; 
-  }
 </script>
 </body>
 </html>
