@@ -9,42 +9,11 @@
 
   html, body {
     height: 100%;
-    background: #000;
-    color: #fff;
+    background: #fff;
+    color: #000;
     font-family: "Helvetica Neue", Arial, sans-serif;
     overflow: hidden;
     cursor: default;
-  }
-
-  /* ---- Compteur de connectés (caché tant qu'on n'est pas entré) ---- */
-  #live {
-    position: fixed;
-    bottom: 22px;
-    right: 26px;
-    z-index: 60;
-    font-size: 13px;
-    letter-spacing: 0.5px;
-    color: #555;
-    user-select: none;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1s ease;
-  }
-  #live.show { opacity: 1; }
-  #live .dot {
-    display: inline-block;
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #1db954;
-    margin-right: 8px;
-    vertical-align: middle;
-    box-shadow: 0 0 8px #1db954;
-    animation: pulse 1.8s infinite;
-  }
-  #live b { color: #aaa; font-weight: 600; }
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50% { opacity: .25; }
   }
 
   /* ---- Écrans ---- */
@@ -70,8 +39,8 @@
   #enter-btn {
     position: relative;
     background: transparent;
-    border: 1px solid rgba(255,255,255,.22);
-    color: #eaeaea;
+    border: 1px solid rgba(0,0,0,.22);
+    color: #151515;
     font-size: 14px;
     font-weight: 300;
     letter-spacing: 9px;
@@ -83,12 +52,12 @@
     z-index: 0;
     transition: color .5s ease, border-color .5s ease, letter-spacing .5s ease;
   }
-  /* le blanc qui remplit au survol */
+  /* le noir qui remplit au survol */
   #enter-btn::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: #fff;
+    background: #000;
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform .5s cubic-bezier(.7,0,.2,1);
@@ -96,13 +65,13 @@
   }
   #enter-btn span { position: relative; }
   #enter-btn:hover {
-    color: #000;
-    border-color: #fff;
+    color: #fff;
+    border-color: #000;
     letter-spacing: 12px;
   }
   #enter-btn:hover::before { transform: scaleX(1); }
 
-  /* ---- Fumée noire pendant la chute ---- */
+  /* ---- Fumée blanche pendant la chute ---- */
   #smoke {
     position: fixed;
     inset: -30%;
@@ -111,10 +80,10 @@
     opacity: 0;
     filter: blur(6px);
     background:
-      radial-gradient(circle at 50% 62%, rgba(28,28,30,1), rgba(14,14,16,.85) 30%, rgba(0,0,0,0) 62%),
-      radial-gradient(circle at 28% 38%, rgba(45,45,48,.9), rgba(0,0,0,0) 50%),
-      radial-gradient(circle at 74% 44%, rgba(38,38,42,.9), rgba(0,0,0,0) 52%),
-      radial-gradient(circle at 60% 78%, rgba(22,22,24,.95), rgba(0,0,0,0) 55%);
+      radial-gradient(circle at 50% 62%, rgba(227,227,225,1), rgba(241,241,239,.85) 30%, rgba(255,255,255,0) 62%),
+      radial-gradient(circle at 28% 38%, rgba(210,210,207,.9), rgba(255,255,255,0) 50%),
+      radial-gradient(circle at 74% 44%, rgba(217,217,213,.9), rgba(255,255,255,0) 52%),
+      radial-gradient(circle at 60% 78%, rgba(233,233,231,.95), rgba(255,255,255,0) 55%);
   }
   #smoke.burst { animation: smoke 2.5s ease forwards; }
   @keyframes smoke {
@@ -129,8 +98,8 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(circle at 40% 55%, rgba(50,50,54,.7), rgba(0,0,0,0) 45%),
-      radial-gradient(circle at 66% 60%, rgba(30,30,34,.8), rgba(0,0,0,0) 48%);
+      radial-gradient(circle at 40% 55%, rgba(205,205,201,.7), rgba(255,255,255,0) 45%),
+      radial-gradient(circle at 66% 60%, rgba(225,225,221,.8), rgba(255,255,255,0) 48%);
   }
   #smoke.burst::after { animation: smoke2 2.5s ease forwards; }
   @keyframes smoke2 {
@@ -155,7 +124,7 @@
   .lock {
     font-size: 10px;
     letter-spacing: 8px;
-    color: #4a4a4a;
+    color: #b5b5b5;
     text-transform: uppercase;
     margin-bottom: 40px;
     font-weight: 300;
@@ -163,8 +132,8 @@
   /* Champ mot de passe — pilule nette assortie au bouton */
   #pass-input {
     background: transparent;
-    border: 1px solid rgba(255,255,255,.18);
-    color: #fff;
+    border: 1px solid rgba(0,0,0,.18);
+    color: #000;
     font-size: 17px;
     font-weight: 300;
     letter-spacing: 10px;
@@ -175,8 +144,8 @@
     outline: none;
     transition: border-color .4s ease;
   }
-  #pass-input::placeholder { color: #333; letter-spacing: 5px; }
-  #pass-input:focus { border-color: rgba(255,255,255,.6); }
+  #pass-input::placeholder { color: #ccc; letter-spacing: 5px; }
+  #pass-input:focus { border-color: rgba(0,0,0,.6); }
   #pass-input.error {
     border-color: rgba(170,60,52,.85);
     animation: shake .4s;
@@ -191,8 +160,8 @@
     position: relative;
     margin-top: 34px;
     background: transparent;
-    border: 1px solid rgba(255,255,255,.22);
-    color: #eaeaea;
+    border: 1px solid rgba(0,0,0,.22);
+    color: #151515;
     font-size: 12px;
     font-weight: 300;
     letter-spacing: 6px;
@@ -208,7 +177,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: #fff;
+    background: #000;
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform .5s cubic-bezier(.7,0,.2,1);
@@ -221,8 +190,8 @@
     margin-left: 10px;
   }
   #connect-btn:hover {
-    color: #000;
-    border-color: #fff;
+    color: #fff;
+    border-color: #000;
     letter-spacing: 9px;
   }
   #connect-btn:hover::before { transform: scaleX(1); }
@@ -251,7 +220,7 @@
   }
   #member-screen p {
     margin-top: 18px;
-    color: #555;
+    color: #aaa;
     letter-spacing: 4px;
     font-size: 13px;
     text-transform: uppercase;
@@ -259,9 +228,6 @@
 </style>
 </head>
 <body>
-
-  <!-- Compteur de connectés (apparaît après l'entrée) -->
-  <div id="live"><span class="dot"></span><b id="live-count">0</b> connectés</div>
 
   <!-- Fumée -->
   <div id="smoke"></div>
@@ -289,30 +255,6 @@
   /* ===== MOT DE PASSE MEMBRES — change-le ici ===== */
   const PASSWORD = "elite2026";
 
-  /* ===== Compteur de connectés (réaliste, plage 16085 -> 21684) ===== */
-  const liveBox = document.getElementById("live");
-  const liveEl  = document.getElementById("live-count");
-  const LIVE_MIN = 16085, LIVE_MAX = 21684;
-  function randInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
-
-  let liveCount = randInt(LIVE_MIN, LIVE_MAX);   // valeur de départ
-  function updateLive(){
-    // quelques personnes se connectent / se déconnectent à chaque tic
-    let delta = randInt(-18, 18);
-    // léger rappel vers le centre pour ne pas coller aux bords
-    const mid = (LIVE_MIN + LIVE_MAX) / 2;
-    if (liveCount > mid) delta -= randInt(0, 3);
-    else                 delta += randInt(0, 3);
-
-    liveCount += delta;
-    if (liveCount < LIVE_MIN) liveCount = LIVE_MIN + randInt(0, 8);
-    if (liveCount > LIVE_MAX) liveCount = LIVE_MAX - randInt(0, 8);
-
-    liveEl.textContent = liveCount.toLocaleString("fr-FR");
-  }
-  liveEl.textContent = liveCount.toLocaleString("fr-FR");
-  setInterval(updateLive, 1800);
-
   /* ===== Éléments ===== */
   const enterScreen = document.getElementById("enter-screen");
   const enterBtn    = document.getElementById("enter-btn");
@@ -330,7 +272,6 @@
     setTimeout(() => {
       enterScreen.style.display = "none";
       passScreen.classList.add("show");  // l'ascenseur arrive
-      liveBox.classList.add("show");     // on voit enfin les connectés
       passInput.focus();
     }, 2500);
   });
