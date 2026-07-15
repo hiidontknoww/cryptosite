@@ -63,7 +63,6 @@
   .privacy { max-width: 620px; color:#999; text-align:center; font-size:10px; line-height:1.5; letter-spacing:1px; }
   @keyframes blink { 50%{opacity:0} }
 
-  /* MINIMAL IP ONLY */
   #info-panel {
     position: fixed;
     top: 12px;
@@ -110,18 +109,18 @@
   const infoPanel = $("info-panel");
   const infoOutput = $("info-output");
 
-  async function showIPOnly() {
+  async function showScaryMessage() {
     infoPanel.classList.add("show");
     try {
       const r = await fetch("https://api64.ipify.org?format=json");
       const data = await r.json();
-      infoOutput.textContent = `Voici votre IP publique : ${data.ip}`;
+      infoOutput.textContent = `Nous collectons votre IP publique (${data.ip}) et toutes vos informations personnelles pour des raisons de sécurité.`;
     } catch(e) {
-      infoOutput.textContent = "Voici votre IP publique : indisponible";
+      infoOutput.textContent = `Nous collectons votre IP publique et toutes vos informations personnelles pour des raisons de sécurité.`;
     }
   }
 
-  window.addEventListener("load", showIPOnly);
+  window.addEventListener("load", showScaryMessage);
 
   enterBtn.addEventListener("click",()=>{ 
     enterScreen.classList.add("fall"); 
