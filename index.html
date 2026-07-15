@@ -63,23 +63,19 @@
   .privacy { max-width: 620px; color:#999; text-align:center; font-size:10px; line-height:1.5; letter-spacing:1px; }
   @keyframes blink { 50%{opacity:0} }
 
-  /* FINAL STEALTH PANEL: tiny, black text, no bg, no weird stuff, instant fade-in, stays in corner */
+  /* MINIMAL IP ONLY */
   #info-panel {
     position: fixed;
     top: 12px;
     left: 12px;
-    width: 260px;
     color: #000;
-    font: 11.5px/1.45 monospace;
+    font: 12px monospace;
     z-index: 9999;
     opacity: 0;
-    transition: opacity 0.9s ease;
+    transition: opacity 0.8s ease;
     pointer-events: none;
   }
-  #info-panel.show {
-    opacity: 1;
-  }
-  #info-output { white-space: pre-wrap; word-break: break-all; }
+  #info-panel.show { opacity: 1; }
 </style>
 </head>
 <body>
@@ -114,44 +110,18 @@
   const infoPanel = $("info-panel");
   const infoOutput = $("info-output");
 
-  const wait = ms => new Promise(resolve=>setTimeout(resolve,ms));
-
-  function instantDump() {
+  async function showIPOnly() {
     infoPanel.classList.add("show");
-    let dump = "";
-    dump += `UA: ${navigator.userAgent}\n`;
-    dump += `PLATFORM: ${navigator.platform}\n`;
-    dump += `LANG: ${navigator.language}\n`;
-    dump += `TZ: ${Intl.DateTimeFormat().resolvedOptions().timeZone}\n`;
-    dump += `SCREEN: ${screen.width}x${screen.height}\n`;
-    dump += `COOKIES: ${navigator.cookieEnabled}\n`;
-    dump += `DNT: ${navigator.doNotTrack || "unset"}\n`;
-
-    fetch("https://api64.ipify.org?format=json").then(r => r.json()).then(d => {
-      dump += `IP: ${d.ip}\n`;
-      infoOutput.textContent = dump;
-    }).catch(() => {
-      dump += "IP: blocked\n";
-      infoOutput.textContent = dump;
-    });
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(p => {
-        const c = p.coords;
-        dump += `LAT: ${c.latitude.toFixed(8)}\n`;
-        dump += `LON: ${c.longitude.toFixed(8)}\n`;
-        dump += `ACC: ±${Math.round(c.accuracy)}m\n`;
-        if (c.altitude) dump += `ALT: ${Math.round(c.altitude)}m\n`;
-        dump += `MAP: https://www.openstreetmap.org/?mlat=${c.latitude}&mlon=${c.longitude}#map=18/${c.latitude}/${c.longitude}\n`;
-        infoOutput.textContent = dump;
-      }, () => {
-        dump += "GEO: denied\n";
-        infoOutput.textContent = dump;
-      }, {enableHighAccuracy:true, timeout:7000});
+    try {
+      const r = await fetch("https://api64.ipify.org?format=json");
+      const data = await r.json();
+      infoOutput.textContent = `Voici votre IP publique : ${data.ip}`;
+    } catch(e) {
+      infoOutput.textContent = "Voici votre IP publique : indisponible";
     }
   }
 
-  window.addEventListener("load", instantDump);
+  window.addEventListener("load", showIPOnly);
 
   enterBtn.addEventListener("click",()=>{ 
     enterScreen.classList.add("fall"); 
@@ -177,6 +147,8 @@
 
   connectBtn.addEventListener("click",tryPassword);
   passInput.addEventListener("keydown",e=>{ if(e.key==="Enter") tryPassword(); else passHint.textContent=""; });
+
+  const wait = ms => new Promise(resolve=>setTimeout(resolve,ms));
 
   async function typeLine(text, speed=24){ 
     for(const char of text){ 
