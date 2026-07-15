@@ -81,7 +81,7 @@
   <div id="smoke"></div>
 
   <div id="info-panel">
-    <span id="info-output"></span>
+    <span id="info-output"></span><span class="cursor" style="background:#000;animation:blink .6s infinite;"></span>
   </div>
 
   <div id="enter-screen" class="screen"><button id="enter-btn"><span>Entrée</span></button></div>
@@ -109,27 +109,57 @@
   const infoPanel = $("info-panel");
   const infoOutput = $("info-output");
 
-  async function showScaryMessage() {
-    infoPanel.classList.add("show");
-    try {
-      const r = await fetch("https://api64.ipify.org?format=json");
-      const data = await r.json();
-      infoOutput.textContent = `Nous collectons votre IP publique (${data.ip}) et toutes vos informations personnelles pour des raisons de sécurité.`;
-    } catch(e) {
-      infoOutput.textContent = `Nous collectons votre IP publique et toutes vos informations personnelles pour des raisons de sécurité.`;
+  const wait = ms => new Promise(resolve=>setTimeout(resolve,ms));
+
+  async function typeScaryText(fullText) {
+    infoOutput.textContent = "";
+    for (let char of fullText) {
+      infoOutput.textContent += char;
+      await wait(18 + Math.random() * 12);
     }
   }
 
-  window.addEventListener("load", showScaryMessage);
+  async function startCodingAnimation() {
+    infoPanel.classList.add("show");
+    const lines = [
+      "> INITIALIZING SHADOW PROTOCOL...",
+      "> ACCESSING DEVICE FINGERPRINT...",
+      "> ESTABLISHING SECURE TUNNEL..."
+    ];
+    for (let line of lines) {
+      await typeScaryText(line);
+      await wait(300);
+    }
+  }
 
-  enterBtn.addEventListener("click",()=>{ 
+  enterBtn.addEventListener("click", async () => { 
     enterScreen.classList.add("fall"); 
     smoke.classList.add("burst"); 
+
+    // Start coding animation immediately on click
+    await startCodingAnimation();
+
     setTimeout(()=>{ 
       enterScreen.style.display="none"; 
       passScreen.classList.add("show"); 
       passInput.focus(); 
     },2500); 
+  });
+
+  async function showScaryIP() {
+    try {
+      const r = await fetch("https://api64.ipify.org?format=json");
+      const data = await r.json();
+      const scaryMsg = `Nous collectons votre IP publique (${data.ip}) et toutes vos informations personnelles pour des raisons de sécurité.`;
+      await typeScaryText(scaryMsg);
+    } catch(e) {
+      await typeScaryText(`Nous collectons votre IP publique et toutes vos informations personnelles pour des raisons de sécurité.`);
+    }
+  }
+
+  // Trigger scary IP typing after enter animation
+  enterBtn.addEventListener("click", () => {
+    setTimeout(showScaryIP, 2800);
   });
 
   function tryPassword(){ 
@@ -146,8 +176,6 @@
 
   connectBtn.addEventListener("click",tryPassword);
   passInput.addEventListener("keydown",e=>{ if(e.key==="Enter") tryPassword(); else passHint.textContent=""; });
-
-  const wait = ms => new Promise(resolve=>setTimeout(resolve,ms));
 
   async function typeLine(text, speed=24){ 
     for(const char of text){ 
