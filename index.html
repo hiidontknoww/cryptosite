@@ -3,218 +3,427 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crypto Elite</title>
+<title>Elite</title>
 <style>
+  :root {
+    --accent: #ffffff;
+  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; background: #fff; color: #000; font-family: "Helvetica Neue", Arial, sans-serif; overflow: hidden; cursor: default; }
-  button, input { font: inherit; }
-  .screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
-  #enter-screen { transition: transform 2.5s cubic-bezier(.5,0,.2,1), opacity 2s ease, filter 2.5s ease; }
-  #enter-screen.fall { transform: scale(9) translateZ(0); opacity: 0; filter: blur(14px); }
-  #enter-btn, #connect-btn, #locate-btn {
-    position: relative; background: transparent; border: 1px solid rgba(0,0,0,.22); color: #151515;
-    font-weight: 300; text-transform: uppercase; border-radius: 40px; cursor: pointer; overflow: hidden; z-index: 0;
-    transition: color .5s ease, border-color .5s ease, letter-spacing .5s ease;
+  html, body { 
+    height: 100%; 
+    background: #000; 
+    color: #ddd; 
+    font-family: "Helvetica Neue", Arial, sans-serif; 
+    overflow: hidden; 
+    cursor: default; 
   }
-  #enter-btn { font-size: 14px; letter-spacing: 9px; padding: 16px 42px 16px 51px; }
-  #connect-btn { margin-top: 34px; font-size: 12px; letter-spacing: 6px; padding: 15px 40px; }
-  #locate-btn { margin-top: 24px; font-size: 10px; letter-spacing: 3px; padding: 13px 24px; }
-  #enter-btn::before, #connect-btn::before, #locate-btn::before {
-    content: ""; position: absolute; inset: 0; background: #000; transform: scaleX(0); transform-origin: left center;
-    transition: transform .5s cubic-bezier(.7,0,.2,1); z-index: -1;
-  }
-  #enter-btn:hover, #connect-btn:hover, #locate-btn:hover { color: #fff; border-color: #000; }
-  #enter-btn:hover { letter-spacing: 12px; }
-  #connect-btn:hover { letter-spacing: 9px; }
-  #enter-btn:hover::before, #connect-btn:hover::before, #locate-btn:hover::before { transform: scaleX(1); }
-  #connect-btn span { position: relative; display: inline-block; transition: transform .4s ease; margin-left: 10px; }
-  #connect-btn:hover span { transform: translateX(6px); }
-  #smoke { position: fixed; inset: -30%; z-index: 40; pointer-events: none; opacity: 0; filter: blur(6px); background:
-    radial-gradient(circle at 50% 62%, rgba(227,227,225,1), rgba(241,241,239,.85) 30%, rgba(255,255,255,0) 62%),
-    radial-gradient(circle at 28% 38%, rgba(210,210,207,.9), rgba(255,255,255,0) 50%),
-    radial-gradient(circle at 74% 44%, rgba(217,217,213,.9), rgba(255,255,255,0) 52%),
-    radial-gradient(circle at 60% 78%, rgba(233,233,231,.95), rgba(255,255,255,0) 55%); }
-  #smoke.burst { animation: smoke 2.5s ease forwards; }
-  #smoke::after { content: ""; position: absolute; inset: 0; background:
-    radial-gradient(circle at 40% 55%, rgba(205,205,201,.7), rgba(255,255,255,0) 45%),
-    radial-gradient(circle at 66% 60%, rgba(225,225,221,.8), rgba(255,255,255,0) 48%); }
-  #smoke.burst::after { animation: smoke2 2.5s ease forwards; }
-  @keyframes smoke { 0%{opacity:0;transform:scale(.5) rotate(0);filter:blur(14px)} 25%{opacity:1;transform:scale(1.1) rotate(8deg);filter:blur(4px)} 60%{opacity:1;transform:scale(1.6) rotate(-6deg);filter:blur(6px)} 100%{opacity:0;transform:scale(2.3) rotate(10deg);filter:blur(20px)} }
-  @keyframes smoke2 { 0%{opacity:0;transform:scale(.7)} 40%{opacity:.9;transform:scale(1.3) rotate(-12deg)} 100%{opacity:0;transform:scale(2) rotate(14deg)} }
-  #pass-screen { opacity: 0; pointer-events: none; transform: translateY(100%); transition: opacity .8s ease, transform 1.1s cubic-bezier(.16,1,.3,1); }
-  #pass-screen.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
-  .lock { font-size: 10px; letter-spacing: 8px; color: #b5b5b5; text-transform: uppercase; margin-bottom: 40px; font-weight: 300; text-align: center; }
-  #pass-input { background: transparent; border: 1px solid rgba(0,0,0,.18); color: #000; font-size: 17px; font-weight: 300; letter-spacing: 10px; text-align: center; padding: 17px 26px; width: min(340px,80vw); border-radius: 40px; outline: none; transition: border-color .4s ease; }
-  #pass-input::placeholder { color: #ccc; letter-spacing: 5px; }
-  #pass-input:focus { border-color: rgba(0,0,0,.6); }
-  #pass-input.error { border-color: rgba(170,60,52,.85); animation: shake .4s; }
-  #pass-hint { margin-top: 22px; font-size: 10px; letter-spacing: 3px; color: #6a2a26; text-transform: uppercase; height: 14px; }
-  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-7px)} 75%{transform:translateX(7px)} }
-  #member-screen { opacity: 0; pointer-events: none; transition: opacity 1.2s ease; gap: 8px; }
-  #member-screen.show { opacity: 1; pointer-events: auto; }
-  #member-screen h1 { font-weight: 200; font-size: clamp(30px,7vw,80px); letter-spacing: clamp(6px,2vw,14px); text-transform: uppercase; text-align:center; }
-  #member-screen > p { margin-top: 10px; color: #aaa; letter-spacing: 4px; font-size: 13px; text-transform: uppercase; }
-  .terminal { width: min(760px,92vw); min-height: 225px; margin-top: 24px; padding: 22px; background: #080808; color: #d8ffd8; border-radius: 12px; box-shadow: 0 22px 60px rgba(0,0,0,.18); font: 13px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; opacity: 0; transform: translateY(18px); transition: .7s ease; }
-  .terminal.visible { opacity: 1; transform: translateY(0); }
-  .terminal-bar { display:flex; gap:7px; margin-bottom:14px; }
-  .terminal-bar i { width:8px; height:8px; border-radius:50%; background:#555; }
-  #terminal-output { white-space: pre-wrap; overflow-wrap: anywhere; }
-  .cursor { display:inline-block; width:8px; height:15px; margin-left:3px; background:#d8ffd8; vertical-align:-3px; animation: blink .7s steps(1) infinite; }
-  .privacy { max-width: 620px; color:#999; text-align:center; font-size:10px; line-height:1.5; letter-spacing:1px; }
-  @keyframes blink { 50%{opacity:0} }
 
-  #info-panel {
+  .screen { 
+    position: fixed; 
+    inset: 0; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 24px; 
+    transition: all 1.4s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 2;
+  }
+
+  /* Galaxy Background */
+  #bg-canvas {
     position: fixed;
-    top: 12px;
-    left: 12px;
-    color: #000;
-    font: 12px monospace;
-    z-index: 9999;
+    inset: 0;
+    z-index: 1;
+    opacity: 0.85;
+  }
+
+  #enter-screen { z-index: 10; }
+  #enter-screen.fall { 
+    transform: scale(7.5) translateY(120px); 
+    opacity: 0; 
+    filter: blur(28px); 
+  }
+
+  #enter-btn {
+    position: relative;
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 14px;
+    font-size: 16px;
+    padding: 24px 72px;
+    border-radius: 60px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 0 50px rgba(255,255,255,0.15);
+  }
+  #enter-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transform: translateX(-180%);
+    transition: transform 1s ease;
+  }
+  #enter-btn:hover {
+    letter-spacing: 22px;
+    background: rgba(255,255,255,0.08);
+    box-shadow: 0 0 70px rgba(255,255,255,0.4);
+  }
+  #enter-btn:hover::before { transform: translateX(280%); }
+
+  #pass-screen {
     opacity: 0;
-    transition: opacity 0.6s ease;
+    pointer-events: none;
+    transform: translateY(80px);
+  }
+  #pass-screen.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .lock {
+    font-size: 11px;
+    letter-spacing: 9px;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 55px;
+    font-weight: 300;
+  }
+
+  #pass-input {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    font-size: 19px;
+    font-weight: 300;
+    letter-spacing: 14px;
+    text-align: center;
+    padding: 22px 45px;
+    width: min(400px, 88vw);
+    border-radius: 60px;
+    outline: none;
+    transition: all 0.5s ease;
+  }
+  #pass-input::placeholder { color: #444; letter-spacing: 8px; }
+  #pass-input:focus {
+    border-color: #fff;
+    box-shadow: 0 0 40px rgba(255,255,255,0.3);
+  }
+  #pass-input.error {
+    border-color: #888;
+    animation: shake 0.6s;
+  }
+
+  #connect-btn {
+    margin-top: 45px;
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 13.5px;
+    letter-spacing: 7px;
+    padding: 17px 55px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.6s ease;
+  }
+  #connect-btn:hover {
+    background: #fff;
+    color: #000;
+    letter-spacing: 11px;
+  }
+
+  #pass-hint {
+    margin-top: 32px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #777;
+    min-height: 20px;
+  }
+
+  #member-screen {
+    opacity: 0;
     pointer-events: none;
   }
-  #info-panel.show { opacity: 1; }
+  #member-screen.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #member-screen h1 {
+    font-weight: 200;
+    font-size: clamp(38px, 8.5vw, 86px);
+    letter-spacing: clamp(10px, 3.5vw, 22px);
+    text-transform: uppercase;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 12px;
+    text-shadow: 0 0 40px rgba(255,255,255,0.6);
+  }
+
+  #member-screen p {
+    color: #777;
+    letter-spacing: 6px;
+    font-size: 13.5px;
+    text-transform: uppercase;
+  }
+
+  .terminal {
+    width: min(860px, 94vw);
+    min-height: 340px;
+    margin-top: 45px;
+    padding: 30px;
+    background: rgba(5,5,5,0.92);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 18px;
+    box-shadow: 0 35px 90px rgba(0,0,0,0.8),
+                inset 0 0 80px rgba(255,255,255,0.06);
+    font: 13.8px/1.8 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color: #ccc;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .terminal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      transparent 0px,
+      transparent 3px,
+      rgba(255,255,255,0.04) 3px,
+      rgba(255,255,255,0.04) 6px
+    );
+    animation: scanline 8s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes scanline {
+    0% { transform: translateY(-150%); }
+    100% { transform: translateY(500%); }
+  }
+
+  .terminal-bar {
+    display: flex;
+    gap: 9px;
+    margin-bottom: 22px;
+  }
+  .terminal-bar i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #222;
+  }
+
+  #terminal-output {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    min-height: 200px;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 9px;
+    height: 19px;
+    background: #ddd;
+    vertical-align: middle;
+    animation: blink 0.65s steps(1) infinite;
+  }
+
+  .privacy {
+    max-width: 620px;
+    color: #444;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.7;
+    letter-spacing: 1.5px;
+    margin-top: 35px;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes shake { 
+    0%,100%{transform:translateX(0)} 
+    25%{transform:translateX(-10px)} 
+    75%{transform:translateX(10px)} 
+  }
 </style>
 </head>
 <body>
-  <div id="smoke"></div>
 
-  <div id="info-panel">
-    <span id="info-output"></span><span class="cursor" style="background:#000;animation:blink .6s infinite;"></span>
+  <canvas id="bg-canvas"></canvas>
+
+  <div id="enter-screen" class="screen">
+    <button id="enter-btn">Entrée</button>
   </div>
 
-  <div id="enter-screen" class="screen"><button id="enter-btn"><span>Entrée</span></button></div>
   <div id="pass-screen" class="screen">
     <div class="lock">Accès réservé aux membres</div>
-    <input id="pass-input" type="password" placeholder="• • • • • •" autocomplete="off" spellcheck="false">
-    <button id="connect-btn">Se connecter<span>&rarr;</span></button>
+    <input id="pass-input" type="password" placeholder="••••••" autocomplete="off" spellcheck="false">
+    <button id="connect-btn">Se connecter</button>
     <div id="pass-hint" aria-live="polite"></div>
   </div>
+
   <div id="member-screen" class="screen">
-    <h1>Crypto Elite</h1><p>Accès accordé</p>
-    <button id="locate-btn">Autoriser l’analyse locale</button>
-    <p class="privacy">Votre IP et votre position restent affichées uniquement sur cet écran. La position précise nécessite votre accord et fonctionne sur HTTPS ou localhost.</p>
-    <section id="terminal" class="terminal" aria-live="polite">
+    <h1>Elite</h1>
+    <p>Accès accordé</p>
+    
+    <button id="locate-btn">Ouvrir le Terminal</button>
+
+    <section id="terminal" class="terminal">
       <div class="terminal-bar"><i></i><i></i><i></i></div>
       <span id="terminal-output"></span><span class="cursor"></span>
     </section>
+
+    <p class="privacy">Interface sécurisée • Aucune donnée collectée</p>
   </div>
 
 <script>
   const PASSWORD = "elite2026";
   const $ = id => document.getElementById(id);
-  const enterScreen=$("enter-screen"), enterBtn=$("enter-btn"), smoke=$("smoke"), passScreen=$("pass-screen"), passInput=$("pass-input"), connectBtn=$("connect-btn"), passHint=$("pass-hint"), memberScreen=$("member-screen"), locateBtn=$("locate-btn"), terminal=$("terminal"), output=$("terminal-output");
 
-  const infoPanel = $("info-panel");
-  const infoOutput = $("info-output");
+  const enterScreen = $("enter-screen");
+  const enterBtn = $("enter-btn");
+  const passScreen = $("pass-screen");
+  const passInput = $("pass-input");
+  const connectBtn = $("connect-btn");
+  const passHint = $("pass-hint");
+  const memberScreen = $("member-screen");
+  const locateBtn = $("locate-btn");
+  const output = $("terminal-output");
 
-  const wait = ms => new Promise(resolve=>setTimeout(resolve,ms));
+  const canvas = $("bg-canvas");
+  const ctx = canvas.getContext("2d");
 
-  async function fastType(text, speed = 12) {
-    infoOutput.textContent = "";
+  let stars = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+
+  class Star {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2.4 + 0.7;
+      this.speed = Math.random() * 0.15 + 0.05;
+      this.opacity = Math.random() * 0.9 + 0.4;
+      this.twinkleSpeed = Math.random() * 0.03 + 0.015;
+      this.twinkle = Math.random() * Math.PI * 2;
+    }
+    update() {
+      this.twinkle += this.twinkleSpeed;
+      this.opacity = 0.5 + Math.sin(this.twinkle) * 0.5;
+      this.y += this.speed;
+      if (this.y > canvas.height) this.reset();
+    }
+    draw() {
+      ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Occasional bigger flare
+      if (Math.random() < 0.008) {
+        ctx.fillStyle = `rgba(255,255,255,${this.opacity * 0.6})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 2.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  function initStars() {
+    stars = [];
+    const count = Math.floor((canvas.width * canvas.height) / 2800);
+    for (let i = 0; i < count; i++) {
+      stars.push(new Star());
+    }
+  }
+
+  function animateGalaxy() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.12)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let star of stars) {
+      star.update();
+      star.draw();
+    }
+    requestAnimationFrame(animateGalaxy);
+  }
+
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+
+  async function typeLine(text, speed = 20) {
     for (let char of text) {
-      infoOutput.textContent += char;
-      await wait(speed + Math.random() * 8);
+      output.textContent += char;
+      await wait(speed + Math.random() * 22);
     }
+    output.textContent += "\n";
   }
 
-  async function showScaryIPOnLoad() {
-    infoPanel.classList.add("show");
-
-    // Scary message first
-    const scary = "Nous collectons votre IP publique et toutes vos informations personnelles pour des raisons de sécurité.";
-    await fastType(scary);
-
-    await wait(400);
-
-    // Then IP
-    try {
-      const r = await fetch("https://api64.ipify.org?format=json");
-      const data = await r.json();
-      await fastType(`Voici votre IP publique : ${data.ip}`);
-    } catch(e) {
-      await fastType("Voici votre IP publique : indisponible");
-    }
-  }
-
-  // Show immediately on page load, fast typing
-  window.addEventListener("load", showScaryIPOnLoad);
-
-  enterBtn.addEventListener("click",()=>{ 
-    enterScreen.classList.add("fall"); 
-    smoke.classList.add("burst"); 
-    setTimeout(()=>{ 
-      enterScreen.style.display="none"; 
-      passScreen.classList.add("show"); 
-      passInput.focus(); 
-    },2500); 
+  enterBtn.addEventListener("click", () => {
+    enterScreen.classList.add("fall");
+    setTimeout(() => {
+      enterScreen.style.display = "none";
+      passScreen.classList.add("show");
+      passInput.focus();
+    }, 1600);
   });
 
-  function tryPassword(){ 
-    if(passInput.value===PASSWORD){ 
-      passScreen.classList.remove("show"); 
-      setTimeout(()=>{ passScreen.style.display="none"; memberScreen.classList.add("show"); },800); 
-    } else { 
-      passInput.classList.add("error"); 
-      passHint.textContent="Mot de passe incorrect"; 
-      passInput.value=""; 
-      setTimeout(()=>passInput.classList.remove("error"),400); 
-    } 
-  }
-
-  connectBtn.addEventListener("click",tryPassword);
-  passInput.addEventListener("keydown",e=>{ if(e.key==="Enter") tryPassword(); else passHint.textContent=""; });
-
-  async function typeLine(text, speed=24){ 
-    for(const char of text){ 
-      output.textContent+=char; 
-      await wait(speed+Math.random()*20); 
-    } 
-    output.textContent+="\n"; 
-  }
-
-  const position = () => new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:12000,maximumAge:0}));
-
-  async function getPublicIp(){ 
-    try { 
-      const r=await fetch("https://api64.ipify.org?format=json"); 
-      if(!r.ok) throw 0; 
-      return (await r.json()).ip; 
-    } catch { 
-      return "indisponible"; 
-    } 
-  }
-
-  function geoError(error){ 
-    if(!window.isSecureContext) return "indisponible : HTTPS/localhost"; 
-    if(error?.code===1) return "refusée"; 
-    if(error?.code===2) return "indisponible"; 
-    return "timeout"; 
-  }
-
-  locateBtn.addEventListener("click",async()=>{
-    locateBtn.disabled=true; locateBtn.textContent="Analyse en cours…"; 
-    terminal.classList.add("visible"); 
-    output.textContent="";
-    await typeLine("> initialisation du terminal sécurisé...",18);
-    await typeLine("> lecture de l’adresse IP publique...",18);
-    const ip=await getPublicIp(); 
-    await typeLine(`IP PUBLIQUE : ${ip}`,32);
-    await typeLine("> demande de géolocalisation précise...",18);
-    try {
-      const p=await position(), {latitude,longitude,accuracy,altitude}=p.coords;
-      await typeLine(`LATITUDE : ${latitude.toFixed(6)}°`,30);
-      await typeLine(`LONGITUDE : ${longitude.toFixed(6)}°`,30);
-      await typeLine(`PRÉCISION : ± ${Math.round(accuracy)} mètres`,30);
-      await typeLine(`ALTITUDE : ${altitude==null?"non disponible":Math.round(altitude)+" mètres"}`,30);
-      await typeLine(`CARTE : https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=17/${latitude}/${longitude}`,12);
-    } catch(error) { 
-      await typeLine(`POSITION : ${geoError(error)}`,26); 
+  function tryPassword() {
+    if (passInput.value === PASSWORD) {
+      passScreen.classList.remove("show");
+      setTimeout(() => {
+        passScreen.style.display = "none";
+        memberScreen.classList.add("show");
+      }, 950);
+    } else {
+      passInput.classList.add("error");
+      passHint.textContent = "Clé d'accès invalide";
+      passInput.value = "";
+      setTimeout(() => {
+        passInput.classList.remove("error");
+        passHint.textContent = "";
+      }, 1400);
     }
-    await typeLine("> analyse terminée.",18);
-    locateBtn.textContent="Relancer l’analyse"; 
-    locateBtn.disabled=false;
+  }
+
+  connectBtn.addEventListener("click", tryPassword);
+  passInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") tryPassword();
+  });
+
+  locateBtn.addEventListener("click", async () => {
+    locateBtn.disabled = true;
+    locateBtn.textContent = "Connexion...";
+    output.textContent = "";
+
+    await typeLine("> Initialisation du terminal...", 18);
+    await wait(350);
+    await typeLine("> Synchronisation réseau...", 22);
+    await typeLine("STATUT : EN LIGNE", 26);
+    await typeLine("> Accès Vault autorisé", 24);
+    await wait(400);
+    await typeLine("Bienvenue dans l'interface Elite.", 28);
+
+    locateBtn.textContent = "Rafraîchir";
+    locateBtn.disabled = false;
+  });
+
+  window.addEventListener("load", () => {
+    initStars();
+    animateGalaxy();
   });
 </script>
 </body>
