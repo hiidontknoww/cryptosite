@@ -4,17 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Elite</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <style>
-  :root { --accent: #ffffff; }
+  :root { --accent: #000; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { 
     height: 100%; 
-    background: #000; 
-    color: #ddd; 
-    font-family: "Helvetica Neue", Arial, sans-serif; 
+    background: #fff; 
+    color: #000; 
+    font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; 
     overflow: hidden; 
-    cursor: default; 
   }
 
   .screen { 
@@ -24,156 +22,133 @@
     flex-direction: column; 
     align-items: center; 
     justify-content: center; 
-    padding: 24px; 
-    transition: all 1.8s cubic-bezier(0.23, 1, 0.32, 1);
+    padding: 24px 20px; 
     z-index: 10;
+    transition: all 1.6s cubic-bezier(0.6, 0, 0.2, 1);
   }
 
-  #enter-screen { z-index: 20; }
-  #enter-screen.fall { 
-    transform: scale(0.6) translateY(80px) rotateX(25deg); 
+  #enter-screen { z-index: 20; background: #fff; }
+  #enter-screen.zoom-out { 
+    transform: scale(12); 
     opacity: 0; 
-    filter: blur(12px); 
   }
 
   #enter-btn {
-    position: relative;
-    background: transparent;
-    border: 1px solid #fff;
+    background: #000;
     color: #fff;
     font-weight: 300;
     text-transform: uppercase;
-    letter-spacing: 16px;
-    font-size: 17px;
-    padding: 26px 80px;
-    border-radius: 60px;
+    letter-spacing: 12px;
+    font-size: clamp(16px, 5vw, 19px);
+    padding: 24px 72px;
+    border-radius: 9999px;
     cursor: pointer;
-    overflow: hidden;
-    box-shadow: 0 0 60px rgba(255,255,255,0.2);
-    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-  }
-  #enter-btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transform: translateX(-200%);
-    transition: transform 1.1s;
+    border: none;
+    transition: all 0.8s ease;
+    z-index: 30;
   }
   #enter-btn:hover {
-    letter-spacing: 24px;
-    box-shadow: 0 0 90px rgba(255,255,255,0.6);
+    letter-spacing: 18px;
+    background: #111;
     transform: scale(1.05);
   }
-  #enter-btn:hover::before { transform: translateX(300%); }
 
   #pass-screen {
     opacity: 0;
     pointer-events: none;
-    transform: translateY(100px) scale(0.95);
+    transform: translateY(40px);
+    background: #fff;
   }
   #pass-screen.show {
     opacity: 1;
     pointer-events: auto;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 
-  .lock {
-    font-size: 11px;
-    letter-spacing: 10px;
-    color: #666;
-    text-transform: uppercase;
-    margin-bottom: 60px;
+  .lock { 
+    font-size: clamp(11px, 3.5vw, 13px); 
+    letter-spacing: 8px; 
+    color: #555; 
+    text-transform: uppercase; 
+    margin-bottom: 50px; 
+    text-align: center; 
   }
 
   #pass-input {
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.4);
-    color: #fff;
-    font-size: 20px;
-    font-weight: 300;
-    letter-spacing: 16px;
+    border: 2px solid #000;
+    color: #000;
+    font-size: clamp(19px, 6vw, 23px);
+    letter-spacing: 12px;
     text-align: center;
-    padding: 24px 50px;
-    width: min(420px, 88vw);
-    border-radius: 60px;
+    padding: 22px 40px;
+    width: 100%;
+    max-width: 380px;
+    border-radius: 9999px;
     outline: none;
-    transition: all 0.5s ease;
   }
-  #pass-input:focus {
-    border-color: #fff;
-    box-shadow: 0 0 50px rgba(255,255,255,0.35);
-  }
-  #pass-input.error {
-    border-color: #ff3333;
-    animation: shake 0.6s;
-  }
+  #pass-input:focus { border-color: #000; box-shadow: 0 0 0 4px rgba(0,0,0,0.1); }
+  #pass-input.error { border-color: #c00; }
 
   #connect-btn {
-    margin-top: 48px;
-    background: transparent;
-    border: 1px solid #fff;
+    margin-top: 38px;
+    background: #000;
     color: #fff;
-    font-size: 14px;
+    font-size: clamp(13px, 4vw, 15px);
     letter-spacing: 8px;
-    padding: 18px 60px;
-    border-radius: 50px;
+    padding: 16px 56px;
+    border-radius: 9999px;
     cursor: pointer;
+    border: none;
     transition: all 0.6s ease;
   }
-  #connect-btn:hover {
-    background: #fff;
-    color: #000;
-    letter-spacing: 12px;
+  #connect-btn:hover { background: #222; letter-spacing: 12px; }
+
+  #pass-hint { 
+    margin-top: 28px; 
+    font-size: clamp(10px, 3.2vw, 12px); 
+    letter-spacing: 2px; 
+    color: #c00; 
+    min-height: 24px; 
   }
 
-  #pass-hint {
-    margin-top: 35px;
-    font-size: 11.5px;
-    letter-spacing: 2px;
-    color: #ff3333;
-    min-height: 22px;
-    font-weight: 400;
+  #member-screen { 
+    opacity: 0; 
+    pointer-events: none; 
+    background: #fff; 
   }
-
-  #member-screen {
-    opacity: 0;
-    pointer-events: none;
-  }
-  #member-screen.show {
-    opacity: 1;
-    pointer-events: auto;
+  #member-screen.show { 
+    opacity: 1; 
+    pointer-events: auto; 
   }
 
   #member-screen h1 {
     font-weight: 200;
-    font-size: clamp(42px, 9vw, 92px);
-    letter-spacing: clamp(12px, 4vw, 26px);
+    font-size: clamp(42px, 12vw, 78px);
+    letter-spacing: clamp(10px, 5vw, 20px);
     text-transform: uppercase;
-    color: #fff;
+    color: #000;
     text-align: center;
-    text-shadow: 0 0 60px rgba(255,255,255,0.7);
   }
 
   #member-screen p {
-    color: #888;
-    letter-spacing: 7px;
-    font-size: 14px;
+    color: #555;
+    letter-spacing: 6px;
+    font-size: clamp(13px, 4vw, 15px);
     text-transform: uppercase;
-    margin-top: 10px;
+    margin-top: 12px;
   }
 
   .terminal {
-    width: min(880px, 94vw);
-    min-height: 360px;
-    margin-top: 50px;
-    padding: 32px;
-    background: rgba(8,8,8,0.94);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 20px;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.9);
-    font: 14px/1.85 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    width: 100%;
+    max-width: 820px;
+    min-height: 320px;
+    margin-top: 40px;
+    padding: 26px;
+    background: #111;
     color: #ddd;
+    border-radius: 20px;
+    font: clamp(13px, 3.5vw, 14.5px)/1.75 ui-monospace, monospace;
     position: relative;
     overflow: hidden;
   }
@@ -182,40 +157,31 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(transparent 0px, transparent 4px, rgba(255,255,255,0.05) 4px, rgba(255,255,255,0.05) 8px);
+    background: repeating-linear-gradient(transparent 0px, transparent 4px, rgba(255,255,255,0.08) 4px, rgba(255,255,255,0.08) 8px);
     animation: scanline 7s linear infinite;
   }
 
-  @keyframes scanline { 0% { transform: translateY(-200%); } 100% { transform: translateY(600%); } }
+  @keyframes scanline { 0% { transform: translateY(-150%); } 100% { transform: translateY(500%); } }
 
-  .terminal-bar { display:flex; gap:10px; margin-bottom:24px; }
-  .terminal-bar i { width:12px; height:12px; border-radius:50%; background:#333; }
+  .terminal-bar { display:flex; gap:8px; margin-bottom:20px; }
+  .terminal-bar i { width:10px; height:10px; border-radius:50%; background:#666; }
 
-  #terminal-output { white-space: pre-wrap; min-height: 220px; }
-  .cursor { 
-    display: inline-block; 
-    width: 9px; height: 20px; 
-    background: #ddd; 
-    animation: blink 0.7s infinite; 
-  }
+  #terminal-output { white-space: pre-wrap; min-height: 190px; }
+  .cursor { display: inline-block; width: 8px; height: 19px; background: #fff; animation: blink 0.75s infinite; }
 
   .privacy {
-    max-width: 620px;
-    color: #555;
+    max-width: 580px;
+    color: #666;
     text-align: center;
-    font-size: 10px;
-    line-height: 1.8;
-    letter-spacing: 1.5px;
-    margin-top: 40px;
+    font-size: clamp(9px, 3vw, 10.5px);
+    line-height: 1.6;
+    margin-top: 32px;
   }
 
   @keyframes blink { 50% { opacity: 0; } }
-  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-12px)} 40%{transform:translateX(12px)} 60%{transform:translateX(-8px)} 80%{transform:translateX(8px)} }
 </style>
 </head>
 <body>
-
-  <div id="three-container"></div>
 
   <div id="enter-screen" class="screen">
     <button id="enter-btn">Entrée</button>
@@ -231,95 +197,15 @@
   <div id="member-screen" class="screen">
     <h1>Elite</h1>
     <p>Accès accordé</p>
-    
     <button id="locate-btn">Ouvrir le Terminal</button>
-
     <section id="terminal" class="terminal">
       <div class="terminal-bar"><i></i><i></i><i></i></div>
       <span id="terminal-output"></span><span class="cursor"></span>
     </section>
-
     <p class="privacy">Interface sécurisée • Aucune donnée collectée</p>
   </div>
 
 <script>
-  // ==================== THREE.JS 3D GALAXY ====================
-  const container = document.getElementById('three-container');
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  container.appendChild(renderer.domElement);
-
-  camera.position.z = 280;
-
-  // Stars
-  const starsGeometry = new THREE.BufferGeometry();
-  const starsCount = 8500;
-  const positions = new Float32Array(starsCount * 3);
-  const colors = new Float32Array(starsCount * 3);
-  const sizes = new Float32Array(starsCount);
-
-  for (let i = 0; i < starsCount * 3; i += 3) {
-    const radius = 800;
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    
-    positions[i]     = radius * Math.sin(phi) * Math.cos(theta);
-    positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta) * 0.6;
-    positions[i + 2] = radius * Math.cos(phi);
-
-    const brightness = Math.random();
-    colors[i] = colors[i+1] = colors[i+2] = brightness;
-
-    sizes[i/3] = Math.random() * 3.2 + 1.1;
-  }
-
-  starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  starsGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-  const starsMaterial = new THREE.PointsMaterial({
-    size: 1.8,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.92,
-    depthTest: false,
-    blending: THREE.AdditiveBlending
-  });
-
-  const starField = new THREE.Points(starsGeometry, starsMaterial);
-  scene.add(starField);
-
-  // Nebula glow
-  const nebula = new THREE.Mesh(
-    new THREE.SphereGeometry(650, 32, 32),
-    new THREE.MeshBasicMaterial({
-      color: 0x111111,
-      transparent: true,
-      opacity: 0.15,
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide
-    })
-  );
-  scene.add(nebula);
-
-  function animate3D() {
-    requestAnimationFrame(animate3D);
-    starField.rotation.y += 0.00008;
-    nebula.rotation.y += 0.00003;
-    renderer.render(scene, camera);
-  }
-  animate3D();
-
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-
-  // ==================== UI LOGIC ====================
   const PASSWORD = "elite2026";
   const $ = id => document.getElementById(id);
 
@@ -343,20 +229,26 @@
     output.textContent += "\n";
   }
 
-  // Enter animation
+  // Animation améliorée : zoom + écran noir 1.2s
   enterBtn.addEventListener("click", () => {
-    enterBtn.style.transition = "all 1.2s cubic-bezier(0.6, 0, 0.2, 1)";
-    enterBtn.style.transform = "scale(0.85) translateY(30px)";
-    enterBtn.style.opacity = "0.4";
+    // Zoom progressif
+    enterScreen.style.transition = "transform 1.5s cubic-bezier(0.55, 0, 0.1, 1), opacity 1.3s ease";
+    enterScreen.style.transform = "scale(14)";
+    enterScreen.style.opacity = "0";
 
+    // Passage au noir
     setTimeout(() => {
-      enterScreen.classList.add("fall");
-      setTimeout(() => {
-        enterScreen.style.display = "none";
-        passScreen.classList.add("show");
-        passInput.focus();
-      }, 1400);
-    }, 400);
+      document.body.style.background = "#000";
+      enterScreen.style.color = "#fff";
+    }, 300);
+
+    // Durée écran noir ≈ 1.2s
+    setTimeout(() => {
+      enterScreen.style.display = "none";
+      document.body.style.background = "#fff";
+      passScreen.classList.add("show");
+      passInput.focus();
+    }, 1550); // 1.55s total pour un bon timing
   });
 
   function tryPassword() {
@@ -365,14 +257,14 @@
       setTimeout(() => {
         passScreen.style.display = "none";
         memberScreen.classList.add("show");
-      }, 1100);
+      }, 900);
     } else {
       passInput.classList.add("error");
       passHint.textContent = "Clé d'accès invalide";
       passInput.value = "";
-      setTimeout(() => {
-        passInput.classList.remove("error");
-        passHint.textContent = "";
+      setTimeout(() => { 
+        passInput.classList.remove("error"); 
+        passHint.textContent = ""; 
       }, 1600);
     }
   }
