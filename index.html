@@ -2,207 +2,949 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
 <title>Elite</title>
+
 <style>
-  :root { --accent: #000; }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { 
-    height: 100%; 
-    background: #fff; 
-    color: #000; 
-    font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; 
-    overflow: hidden; 
+  :root{
+    --bg:#ffffff;
+    --fg:#090909;
+    --muted:#747474;
+    --soft:#efefef;
+    --line:rgba(0,0,0,.10);
+    --ease:cubic-bezier(.22,.78,.20,1);
+    --ease-out:cubic-bezier(.16,1,.30,1);
   }
 
-  .screen { 
-    position: fixed; 
-    inset: 0; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-    padding: 24px 20px; 
-    z-index: 10;
-    transition: all 1.6s cubic-bezier(0.6, 0, 0.2, 1);
+  *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
   }
 
-  #enter-screen { z-index: 20; background: #fff; }
-  #enter-screen.zoom-out { 
-    transform: scale(12); 
-    opacity: 0; 
+  html,
+  body{
+    width:100%;
+    height:100%;
+    min-height:100%;
+    background:var(--bg);
+    color:var(--fg);
+    overflow:hidden;
   }
 
-  #enter-btn {
-    background: #000;
-    color: #fff;
-    font-weight: 300;
-    text-transform: uppercase;
-    letter-spacing: 12px;
-    font-size: clamp(16px, 5vw, 19px);
-    padding: 24px 72px;
-    border-radius: 9999px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.8s ease;
-    z-index: 30;
-  }
-  #enter-btn:hover {
-    letter-spacing: 18px;
-    background: #111;
-    transform: scale(1.05);
+  body{
+    font-family:
+      Inter,
+      "SF Pro Display",
+      "SF Pro Text",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Helvetica,
+      Arial,
+      sans-serif;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+    font-synthesis:none;
   }
 
-  #pass-screen {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(40px);
-    background: #fff;
-  }
-  #pass-screen.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
+  button,
+  input{
+    font:inherit;
   }
 
-  .lock { 
-    font-size: clamp(11px, 3.5vw, 13px); 
-    letter-spacing: 8px; 
-    color: #555; 
-    text-transform: uppercase; 
-    margin-bottom: 50px; 
-    text-align: center; 
+  button{
+    -webkit-appearance:none;
+    appearance:none;
   }
 
-  #pass-input {
-    background: transparent;
-    border: 2px solid #000;
-    color: #000;
-    font-size: clamp(19px, 6vw, 23px);
-    letter-spacing: 12px;
-    text-align: center;
-    padding: 22px 40px;
-    width: 100%;
-    max-width: 380px;
-    border-radius: 9999px;
-    outline: none;
-  }
-  #pass-input:focus { border-color: #000; box-shadow: 0 0 0 4px rgba(0,0,0,0.1); }
-  #pass-input.error { border-color: #c00; }
-
-  #connect-btn {
-    margin-top: 38px;
-    background: #000;
-    color: #fff;
-    font-size: clamp(13px, 4vw, 15px);
-    letter-spacing: 8px;
-    padding: 16px 56px;
-    border-radius: 9999px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.6s ease;
-  }
-  #connect-btn:hover { background: #222; letter-spacing: 12px; }
-
-  #pass-hint { 
-    margin-top: 28px; 
-    font-size: clamp(10px, 3.2vw, 12px); 
-    letter-spacing: 2px; 
-    color: #c00; 
-    min-height: 24px; 
+  ::selection{
+    background:#000;
+    color:#fff;
   }
 
-  #member-screen { 
-    opacity: 0; 
-    pointer-events: none; 
-    background: #fff; 
-  }
-  #member-screen.show { 
-    opacity: 1; 
-    pointer-events: auto; 
-  }
+  /* ---------- AMBIANCE ---------- */
 
-  #member-screen h1 {
-    font-weight: 200;
-    font-size: clamp(42px, 12vw, 78px);
-    letter-spacing: clamp(10px, 5vw, 20px);
-    text-transform: uppercase;
-    color: #000;
-    text-align: center;
+  body::before{
+    content:"";
+    position:fixed;
+    inset:-30%;
+    z-index:0;
+    pointer-events:none;
+    opacity:.34;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(0,0,0,.045), transparent 27%),
+      radial-gradient(circle at 22% 76%, rgba(0,0,0,.026), transparent 20%),
+      radial-gradient(circle at 80% 20%, rgba(0,0,0,.022), transparent 18%);
+    animation:ambientFloat 18s ease-in-out infinite alternate;
   }
 
-  #member-screen p {
-    color: #555;
-    letter-spacing: 6px;
-    font-size: clamp(13px, 4vw, 15px);
-    text-transform: uppercase;
-    margin-top: 12px;
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    opacity:.16;
+    background-image:
+      linear-gradient(rgba(0,0,0,.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,.014) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
   }
 
-  .terminal {
-    width: 100%;
-    max-width: 820px;
-    min-height: 320px;
-    margin-top: 40px;
-    padding: 26px;
-    background: #111;
-    color: #ddd;
-    border-radius: 20px;
-    font: clamp(13px, 3.5vw, 14.5px)/1.75 ui-monospace, monospace;
-    position: relative;
-    overflow: hidden;
+  @keyframes ambientFloat{
+    0%{transform:translate3d(-1.5%, -1%, 0) scale(1)}
+    100%{transform:translate3d(1.5%, 1%, 0) scale(1.045)}
   }
 
-  .terminal::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(transparent 0px, transparent 4px, rgba(255,255,255,0.08) 4px, rgba(255,255,255,0.08) 8px);
-    animation: scanline 7s linear infinite;
+  /* ---------- ÉCRANS ---------- */
+
+  .screen{
+    position:fixed;
+    inset:0;
+    z-index:10;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:
+      max(24px, env(safe-area-inset-top))
+      max(20px, env(safe-area-inset-right))
+      max(24px, env(safe-area-inset-bottom))
+      max(20px, env(safe-area-inset-left));
+    isolation:isolate;
+    will-change:transform, opacity, filter;
   }
 
-  @keyframes scanline { 0% { transform: translateY(-150%); } 100% { transform: translateY(500%); } }
-
-  .terminal-bar { display:flex; gap:8px; margin-bottom:20px; }
-  .terminal-bar i { width:10px; height:10px; border-radius:50%; background:#666; }
-
-  #terminal-output { white-space: pre-wrap; min-height: 190px; }
-  .cursor { display: inline-block; width: 8px; height: 19px; background: #fff; animation: blink 0.75s infinite; }
-
-  .privacy {
-    max-width: 580px;
-    color: #666;
-    text-align: center;
-    font-size: clamp(9px, 3vw, 10.5px);
-    line-height: 1.6;
-    margin-top: 32px;
+  #enter-screen{
+    z-index:30;
+    background:#fff;
+    overflow:hidden;
+    transition:
+      opacity .5s ease,
+      visibility 0s linear .55s;
   }
 
-  @keyframes blink { 50% { opacity: 0; } }
+  #enter-screen::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:10px;
+    height:10px;
+    border:1px solid rgba(0,0,0,.2);
+    border-radius:50%;
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.6);
+    pointer-events:none;
+  }
+
+  #enter-screen.leaving{
+    pointer-events:none;
+  }
+
+  /* disparition premium :
+     1) les lettres se resserrent et disparaissent
+     2) le bouton s'aplatit en ligne
+     3) petite onde centrale très discrète
+     4) la ligne s'efface
+  */
+  #enter-screen.leaving #enter-btn{
+    color:transparent;
+    text-shadow:none;
+    letter-spacing:-2px;
+    min-width:190px;
+    width:190px;
+    height:2px;
+    padding:0;
+    border-width:0;
+    border-radius:999px;
+    background:#000;
+    box-shadow:none;
+    transform:scaleX(.78);
+    opacity:1;
+    transition:
+      color .12s ease,
+      letter-spacing .24s var(--ease-out),
+      min-width .46s .08s var(--ease-out),
+      width .46s .08s var(--ease-out),
+      height .46s .08s var(--ease-out),
+      padding .46s .08s var(--ease-out),
+      border-width .25s ease,
+      border-radius .35s ease,
+      transform .52s .08s var(--ease-out),
+      box-shadow .2s ease,
+      opacity .28s .62s ease;
+  }
+
+  #enter-screen.leaving #enter-btn::before{
+    opacity:0;
+    transition:opacity .08s linear;
+  }
+
+  #enter-screen.leaving::before{
+    animation:entryRipple .82s .18s var(--ease-out) both;
+  }
+
+  #enter-screen.collapse-line #enter-btn{
+    transform:scaleX(.04);
+    opacity:0;
+  }
+
+  #enter-screen.fade-away{
+    opacity:0;
+    visibility:hidden;
+  }
+
+  @keyframes entryRipple{
+    0%{
+      opacity:0;
+      transform:translate(-50%,-50%) scale(.5);
+    }
+    25%{
+      opacity:.28;
+    }
+    100%{
+      opacity:0;
+      transform:translate(-50%,-50%) scale(28);
+    }
+  }
+
+  #pass-screen{
+    z-index:20;
+    background:#fff;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transform:translate3d(0,24px,0) scale(.985);
+    filter:blur(8px);
+    transition:
+      opacity .85s ease,
+      transform 1.05s var(--ease-out),
+      filter .85s ease,
+      visibility 0s linear .9s;
+  }
+
+  #pass-screen.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transform:translate3d(0,0,0) scale(1);
+    filter:blur(0);
+    transition-delay:0s;
+  }
+
+  #pass-screen.leaving{
+    opacity:0;
+    transform:translate3d(0,-18px,0) scale(.985);
+    filter:blur(7px);
+    pointer-events:none;
+  }
+
+  #member-screen{
+    z-index:15;
+    background:#fff;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transform:scale(1.018);
+    filter:blur(10px);
+    transition:
+      opacity 1s ease,
+      transform 1.15s var(--ease-out),
+      filter 1s ease,
+      visibility 0s linear 1.05s;
+  }
+
+  #member-screen.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transform:scale(1);
+    filter:blur(0);
+    transition-delay:0s;
+  }
+
+  /* ---------- ENTRÉE ---------- */
+
+  #enter-btn{
+    position:relative;
+    z-index:2;
+    min-width:min(330px, 82vw);
+    padding:22px 38px 22px 50px;
+    border:1px solid #000;
+    border-radius:999px;
+    background:#000;
+    color:#fff;
+    cursor:pointer;
+    overflow:hidden;
+    text-transform:uppercase;
+    font-size:clamp(13px, 3vw, 16px);
+    font-weight:450;
+    letter-spacing:clamp(7px, 2.4vw, 12px);
+    line-height:1;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.15) inset,
+      0 18px 50px rgba(0,0,0,.12);
+    transition:
+      color .15s ease,
+      transform .55s var(--ease-out),
+      letter-spacing .65s var(--ease-out),
+      min-width .45s var(--ease-out),
+      width .45s var(--ease-out),
+      height .45s var(--ease-out),
+      padding .45s var(--ease-out),
+      border-radius .45s var(--ease-out),
+      box-shadow .55s ease,
+      background .45s ease;
+    animation:entranceButton 1s .15s both var(--ease-out);
+  }
+
+  #enter-btn::before{
+    content:"";
+    position:absolute;
+    top:-50%;
+    left:-35%;
+    width:28%;
+    height:200%;
+    opacity:.7;
+    transform:rotate(18deg);
+    background:linear-gradient(
+      to right,
+      transparent,
+      rgba(255,255,255,.24),
+      transparent
+    );
+    transition:left .8s var(--ease-out);
+  }
+
+  #enter-btn:hover{
+    transform:translateY(-2px) scale(1.025);
+    letter-spacing:clamp(9px, 3vw, 15px);
+    background:#080808;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.17) inset,
+      0 22px 60px rgba(0,0,0,.17);
+  }
+
+  #enter-btn:hover::before{
+    left:110%;
+  }
+
+  #enter-btn:active{
+    transform:translateY(0) scale(.985);
+    transition-duration:.12s;
+  }
+
+  #enter-btn:focus-visible{
+    outline:2px solid #000;
+    outline-offset:5px;
+  }
+
+  @keyframes entranceButton{
+    from{
+      opacity:0;
+      transform:translateY(14px) scale(.96);
+      filter:blur(8px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      filter:blur(0);
+    }
+  }
+
+  /* ---------- MOT DE PASSE ---------- */
+
+  .auth-wrap{
+    width:min(440px, 100%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .lock{
+    position:relative;
+    margin-bottom:42px;
+    color:#4d4d4d;
+    text-align:center;
+    text-transform:uppercase;
+    font-size:clamp(9px, 2.4vw, 11px);
+    font-weight:550;
+    letter-spacing:clamp(5px, 2vw, 8px);
+    line-height:1.4;
+    opacity:0;
+    transform:translateY(12px);
+  }
+
+  #pass-screen.show .lock{
+    animation:authRise .9s .12s both var(--ease-out);
+  }
+
+  .lock::after{
+    content:"";
+    display:block;
+    width:34px;
+    height:1px;
+    margin:18px auto 0;
+    background:rgba(0,0,0,.22);
+    transform:scaleX(0);
+    transform-origin:center;
+  }
+
+  #pass-screen.show .lock::after{
+    animation:lineGrow .7s .55s both var(--ease-out);
+  }
+
+  .input-shell{
+    width:100%;
+    position:relative;
+    opacity:0;
+    transform:translateY(14px) scale(.985);
+  }
+
+  #pass-screen.show .input-shell{
+    animation:authRise .92s .25s both var(--ease-out);
+  }
+
+  #pass-input{
+    width:100%;
+    height:66px;
+    padding:0 30px;
+    border:1px solid rgba(0,0,0,.22);
+    border-radius:999px;
+    outline:none;
+    background:rgba(255,255,255,.82);
+    color:#000;
+    caret-color:#000;
+    text-align:center;
+    font-size:clamp(17px, 4.5vw, 20px);
+    font-weight:480;
+    letter-spacing:11px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.9) inset,
+      0 10px 35px rgba(0,0,0,.035);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    transition:
+      border-color .3s ease,
+      box-shadow .35s ease,
+      transform .35s var(--ease-out),
+      background .35s ease;
+  }
+
+  #pass-input::placeholder{
+    color:#9d9d9d;
+    opacity:1;
+  }
+
+  #pass-input:hover{
+    border-color:rgba(0,0,0,.42);
+  }
+
+  #pass-input:focus{
+    border-color:#000;
+    background:#fff;
+    box-shadow:
+      0 0 0 4px rgba(0,0,0,.055),
+      0 16px 45px rgba(0,0,0,.065);
+    transform:translateY(-1px);
+  }
+
+  #pass-input.error{
+    border-color:#b21313;
+    box-shadow:0 0 0 4px rgba(178,19,19,.07);
+    animation:inputShake .45s cubic-bezier(.36,.07,.19,.97);
+  }
+
+  #connect-btn,
+  #locate-btn{
+    border:none;
+    border-radius:999px;
+    cursor:pointer;
+    background:#000;
+    color:#fff;
+    box-shadow:0 12px 28px rgba(0,0,0,.10);
+    transition:
+      transform .38s var(--ease-out),
+      letter-spacing .5s var(--ease-out),
+      background .3s ease,
+      box-shadow .38s ease,
+      opacity .25s ease;
+  }
+
+  #connect-btn{
+    margin-top:22px;
+    min-width:220px;
+    padding:15px 28px 15px 34px;
+    text-transform:uppercase;
+    font-size:clamp(10px, 2.7vw, 12px);
+    font-weight:560;
+    letter-spacing:5px;
+    opacity:0;
+    transform:translateY(12px);
+  }
+
+  #pass-screen.show #connect-btn{
+    animation:authRise .9s .38s both var(--ease-out);
+  }
+
+  #connect-btn:hover,
+  #locate-btn:hover{
+    transform:translateY(-2px);
+    background:#111;
+    box-shadow:0 16px 38px rgba(0,0,0,.14);
+  }
+
+  #connect-btn:hover{
+    letter-spacing:6.5px;
+  }
+
+  #connect-btn:active,
+  #locate-btn:active{
+    transform:translateY(0) scale(.985);
+  }
+
+  #connect-btn:focus-visible,
+  #locate-btn:focus-visible{
+    outline:2px solid #000;
+    outline-offset:4px;
+  }
+
+  #pass-hint{
+    min-height:20px;
+    margin-top:18px;
+    color:#b21313;
+    text-align:center;
+    text-transform:uppercase;
+    font-size:9px;
+    font-weight:600;
+    letter-spacing:2.2px;
+    opacity:0;
+    transform:translateY(-4px);
+    transition:
+      opacity .25s ease,
+      transform .35s var(--ease-out);
+  }
+
+  #pass-hint.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  @keyframes authRise{
+    from{
+      opacity:0;
+      transform:translateY(16px) scale(.985);
+      filter:blur(5px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      filter:blur(0);
+    }
+  }
+
+  @keyframes lineGrow{
+    from{transform:scaleX(0);opacity:0}
+    to{transform:scaleX(1);opacity:1}
+  }
+
+  @keyframes inputShake{
+    10%,90%{transform:translateX(-2px)}
+    20%,80%{transform:translateX(4px)}
+    30%,50%,70%{transform:translateX(-7px)}
+    40%,60%{transform:translateX(7px)}
+  }
+
+  /* ---------- ESPACE MEMBRE ---------- */
+
+  .member-wrap{
+    width:min(900px, 100%);
+    max-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .member-heading{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  #member-screen h1{
+    color:#000;
+    text-align:center;
+    text-transform:uppercase;
+    font-size:clamp(46px, 11vw, 82px);
+    font-weight:220;
+    letter-spacing:clamp(8px, 3.2vw, 18px);
+    line-height:.95;
+    opacity:0;
+    transform:translateY(20px);
+  }
+
+  #member-screen.show h1{
+    animation:memberReveal 1.05s .1s both var(--ease-out);
+  }
+
+  #member-screen .status{
+    margin-top:13px;
+    color:#777;
+    text-align:center;
+    text-transform:uppercase;
+    font-size:clamp(9px, 2.3vw, 11px);
+    font-weight:560;
+    letter-spacing:5px;
+    opacity:0;
+    transform:translateY(12px);
+  }
+
+  #member-screen.show .status{
+    animation:memberReveal .95s .27s both var(--ease-out);
+  }
+
+  .status-dot{
+    display:inline-block;
+    width:5px;
+    height:5px;
+    margin:0 7px 2px 0;
+    border-radius:50%;
+    background:#000;
+    box-shadow:0 0 0 0 rgba(0,0,0,.18);
+    animation:statusPulse 2.2s infinite;
+  }
+
+  @keyframes statusPulse{
+    0%{box-shadow:0 0 0 0 rgba(0,0,0,.18)}
+    65%,100%{box-shadow:0 0 0 7px rgba(0,0,0,0)}
+  }
+
+  #locate-btn{
+    margin-top:28px;
+    padding:13px 24px 13px 29px;
+    text-transform:uppercase;
+    font-size:9px;
+    font-weight:620;
+    letter-spacing:3.6px;
+    opacity:0;
+    transform:translateY(12px);
+  }
+
+  #member-screen.show #locate-btn{
+    animation:memberReveal .9s .42s both var(--ease-out);
+  }
+
+  #locate-btn:disabled{
+    cursor:default;
+    opacity:.55;
+    transform:none;
+  }
+
+  /* ---------- TERMINAL ---------- */
+
+  .terminal{
+    width:min(820px, 100%);
+    min-height:300px;
+    margin-top:24px;
+    padding:20px 22px 24px;
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    background:
+      linear-gradient(180deg, #101010 0%, #090909 100%);
+    color:#d9d9d9;
+    box-shadow:
+      0 26px 70px rgba(0,0,0,.14),
+      0 1px 0 rgba(255,255,255,.06) inset;
+    font-family:
+      "SFMono-Regular",
+      "SF Mono",
+      "Roboto Mono",
+      "Cascadia Code",
+      Consolas,
+      monospace;
+    font-size:clamp(11.5px, 2.6vw, 13.5px);
+    font-weight:420;
+    line-height:1.75;
+    opacity:0;
+    transform:translateY(22px) scale(.985);
+  }
+
+  #member-screen.show .terminal{
+    animation:terminalReveal 1.15s .52s both var(--ease-out);
+  }
+
+  .terminal::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.18;
+    background:
+      linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(255,255,255,.055) 48%,
+        rgba(255,255,255,.09) 50%,
+        rgba(255,255,255,.055) 52%,
+        transparent 100%
+      );
+    transform:translateY(-120%);
+    animation:terminalSweep 7s linear infinite;
+  }
+
+  .terminal::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.14;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.022) 0,
+        rgba(255,255,255,.022) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+  }
+
+  .terminal-bar{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-bottom:18px;
+    padding-bottom:14px;
+    border-bottom:1px solid rgba(255,255,255,.075);
+  }
+
+  .terminal-bar i{
+    display:block;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#575757;
+  }
+
+  .terminal-bar i:nth-child(2){opacity:.72}
+  .terminal-bar i:nth-child(3){opacity:.48}
+
+  .terminal-title{
+    margin-left:auto;
+    color:#6d6d6d;
+    text-transform:uppercase;
+    font-size:8px;
+    font-weight:600;
+    letter-spacing:2px;
+  }
+
+  .terminal-content{
+    position:relative;
+    z-index:2;
+  }
+
+  #terminal-output{
+    white-space:pre-wrap;
+    min-height:190px;
+    word-break:break-word;
+  }
+
+  .cursor{
+    display:inline-block;
+    width:7px;
+    height:15px;
+    margin-left:2px;
+    vertical-align:-2px;
+    background:#f0f0f0;
+    animation:blink .78s steps(1,end) infinite;
+  }
+
+  .privacy{
+    max-width:580px;
+    margin-top:20px;
+    color:#8c8c8c;
+    text-align:center;
+    text-transform:uppercase;
+    font-size:8px;
+    font-weight:520;
+    letter-spacing:1.4px;
+    line-height:1.7;
+    opacity:0;
+    transform:translateY(10px);
+  }
+
+  #member-screen.show .privacy{
+    animation:memberReveal .9s .72s both var(--ease-out);
+  }
+
+  @keyframes memberReveal{
+    from{
+      opacity:0;
+      transform:translateY(18px);
+      filter:blur(5px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0);
+      filter:blur(0);
+    }
+  }
+
+  @keyframes terminalReveal{
+    from{
+      opacity:0;
+      transform:translateY(24px) scale(.975);
+      filter:blur(8px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      filter:blur(0);
+    }
+  }
+
+  @keyframes terminalSweep{
+    0%{transform:translateY(-130%)}
+    100%{transform:translateY(130%)}
+  }
+
+  @keyframes blink{
+    0%,46%{opacity:1}
+    47%,100%{opacity:0}
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+
+  @media (max-width:640px){
+    .screen{
+      justify-content:center;
+      padding-left:18px;
+      padding-right:18px;
+    }
+
+    #enter-btn{
+      min-width:min(305px, 88vw);
+      padding-top:20px;
+      padding-bottom:20px;
+    }
+
+    .lock{
+      margin-bottom:32px;
+    }
+
+    #pass-input{
+      height:60px;
+      letter-spacing:9px;
+    }
+
+    #member-screen h1{
+      letter-spacing:10px;
+    }
+
+    .terminal{
+      min-height:280px;
+      padding:17px 17px 21px;
+      border-radius:15px;
+    }
+
+    #terminal-output{
+      min-height:176px;
+    }
+  }
+
+  @media (max-height:760px){
+    .member-wrap{
+      transform:scale(.92);
+    }
+
+    .terminal{
+      min-height:250px;
+      margin-top:18px;
+    }
+
+    #terminal-output{
+      min-height:145px;
+    }
+
+    #locate-btn{
+      margin-top:20px;
+    }
+
+    .privacy{
+      margin-top:14px;
+    }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,
+    *::before,
+    *::after{
+      animation-duration:.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+      scroll-behavior:auto !important;
+    }
+  }
 </style>
 </head>
+
 <body>
 
   <div id="enter-screen" class="screen">
-    <button id="enter-btn">Entrée</button>
+    <button id="enter-btn" type="button">Entrée</button>
   </div>
 
   <div id="pass-screen" class="screen">
-    <div class="lock">Accès réservé aux membres</div>
-    <input id="pass-input" type="password" placeholder="••••••" autocomplete="off" spellcheck="false">
-    <button id="connect-btn">Se connecter</button>
-    <div id="pass-hint" aria-live="polite"></div>
+    <div class="auth-wrap">
+      <div class="lock">Accès réservé aux membres</div>
+
+      <div class="input-shell">
+        <input
+          id="pass-input"
+          type="password"
+          placeholder="••••••"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Clé d'accès"
+        >
+      </div>
+
+      <button id="connect-btn" type="button">Se connecter</button>
+      <div id="pass-hint" aria-live="polite"></div>
+    </div>
   </div>
 
   <div id="member-screen" class="screen">
-    <h1>Elite</h1>
-    <p>Accès accordé</p>
-    <button id="locate-btn">Ouvrir le Terminal</button>
-    <section id="terminal" class="terminal">
-      <div class="terminal-bar"><i></i><i></i><i></i></div>
-      <span id="terminal-output"></span><span class="cursor"></span>
-    </section>
-    <p class="privacy">Interface sécurisée • Aucune donnée collectée</p>
+    <div class="member-wrap">
+      <div class="member-heading">
+        <h1>Elite</h1>
+        <p class="status"><span class="status-dot"></span>Accès accordé</p>
+      </div>
+
+      <button id="locate-btn" type="button">Ouvrir le Terminal</button>
+
+      <section id="terminal" class="terminal" aria-label="Terminal sécurisé">
+        <div class="terminal-bar">
+          <i></i><i></i><i></i>
+          <span class="terminal-title">Elite / Secure Node</span>
+        </div>
+
+        <div class="terminal-content">
+          <span id="terminal-output"></span><span class="cursor"></span>
+        </div>
+      </section>
+
+      <p class="privacy">Interface sécurisée • Aucune donnée collectée</p>
+    </div>
   </div>
 
 <script>
@@ -219,75 +961,136 @@
   const locateBtn = $("locate-btn");
   const output = $("terminal-output");
 
-  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-  async function typeLine(text, speed = 18) {
-    for (let char of text) {
+  let typing = false;
+
+  async function typeLine(text, speed = 16) {
+    for (const char of text) {
       output.textContent += char;
-      await wait(speed + Math.random() * 20);
+
+      const punctuationPause =
+        char === "." ? 95 :
+        char === ":" ? 65 :
+        char === "…" ? 110 :
+        char === " " ? 5 : 0;
+
+      await wait(speed + Math.random() * 14 + punctuationPause);
     }
+
     output.textContent += "\n";
   }
 
-  // Animation améliorée : zoom + écran noir 1.2s
-  enterBtn.addEventListener("click", () => {
-    // Zoom progressif
-    enterScreen.style.transition = "transform 1.5s cubic-bezier(0.55, 0, 0.1, 1), opacity 1.3s ease";
-    enterScreen.style.transform = "scale(14)";
-    enterScreen.style.opacity = "0";
+  function openPasswordScreen() {
+    if (enterScreen.classList.contains("leaving")) return;
 
-    // Passage au noir
+    enterBtn.disabled = true;
+
+    // Disparition en plusieurs temps : texte -> ligne -> point -> fondu.
+    enterScreen.classList.add("leaving");
+
     setTimeout(() => {
-      document.body.style.background = "#000";
-      enterScreen.style.color = "#fff";
-    }, 300);
+      enterScreen.classList.add("collapse-line");
+    }, 610);
 
-    // Durée écran noir ≈ 1.2s
+    setTimeout(() => {
+      passScreen.classList.add("show");
+    }, 860);
+
+    setTimeout(() => {
+      enterScreen.classList.add("fade-away");
+    }, 930);
+
     setTimeout(() => {
       enterScreen.style.display = "none";
-      document.body.style.background = "#fff";
-      passScreen.classList.add("show");
-      passInput.focus();
-    }, 1550); // 1.55s total pour un bon timing
-  });
+      passInput.focus({ preventScroll: true });
+    }, 1360);
+  }
+
+  enterBtn.addEventListener("click", openPasswordScreen);
+
+  function showPasswordError() {
+    passInput.classList.remove("error");
+    void passInput.offsetWidth;
+    passInput.classList.add("error");
+
+    passHint.textContent = "Clé d'accès invalide";
+    passHint.classList.add("visible");
+
+    passInput.value = "";
+    passInput.focus({ preventScroll: true });
+
+    clearTimeout(showPasswordError.timer);
+    showPasswordError.timer = setTimeout(() => {
+      passInput.classList.remove("error");
+      passHint.classList.remove("visible");
+
+      setTimeout(() => {
+        if (!passHint.classList.contains("visible")) {
+          passHint.textContent = "";
+        }
+      }, 300);
+    }, 1450);
+  }
+
+  function grantAccess() {
+    connectBtn.disabled = true;
+    passInput.disabled = true;
+    passHint.classList.remove("visible");
+    passScreen.classList.add("leaving");
+
+    setTimeout(() => {
+      passScreen.classList.remove("show");
+      memberScreen.classList.add("show");
+    }, 420);
+
+    setTimeout(() => {
+      passScreen.style.display = "none";
+    }, 1300);
+  }
 
   function tryPassword() {
     if (passInput.value === PASSWORD) {
-      passScreen.classList.remove("show");
-      setTimeout(() => {
-        passScreen.style.display = "none";
-        memberScreen.classList.add("show");
-      }, 900);
+      grantAccess();
     } else {
-      passInput.classList.add("error");
-      passHint.textContent = "Clé d'accès invalide";
-      passInput.value = "";
-      setTimeout(() => { 
-        passInput.classList.remove("error"); 
-        passHint.textContent = ""; 
-      }, 1600);
+      showPasswordError();
     }
   }
 
   connectBtn.addEventListener("click", tryPassword);
-  passInput.addEventListener("keydown", e => { if (e.key === "Enter") tryPassword(); });
+
+  passInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+      tryPassword();
+    }
+  });
 
   locateBtn.addEventListener("click", async () => {
+    if (typing) return;
+
+    typing = true;
     locateBtn.disabled = true;
-    locateBtn.textContent = "Initialisation...";
+    locateBtn.textContent = "Initialisation";
     output.textContent = "";
 
-    await typeLine("> Connexion au réseau sécurisé...", 16);
-    await wait(400);
-    await typeLine("> Authentification biométrique...", 20);
-    await typeLine("STATUT : VALIDÉ", 24);
-    await typeLine("> Accès complet accordé", 22);
-    await wait(350);
-    await typeLine("Bienvenue dans le système Elite.", 26);
+    await wait(180);
+    await typeLine("> Connexion au réseau sécurisé...", 13);
+    await wait(270);
+    await typeLine("> Vérification du protocole d'accès...", 15);
+    await wait(210);
+    await typeLine("> Authentification biométrique...", 17);
+    await wait(260);
+    await typeLine("STATUT : VALIDÉ", 21);
+    await wait(320);
+    await typeLine("> Accès complet accordé", 16);
+    await wait(300);
+    await typeLine("Bienvenue dans le système Elite.", 22);
 
     locateBtn.textContent = "Rafraîchir Terminal";
     locateBtn.disabled = false;
+    typing = false;
   });
 </script>
+
 </body>
 </html>
