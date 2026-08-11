@@ -921,7 +921,7 @@
     }
     100%{
       transform:scale(1.035);
-      opacity:.48;
+      opacity:.52;
     }
   }
 
@@ -1354,10 +1354,314 @@
     }
   }
 
+
+  /* =========================================================
+     LIVE MEME / NEW-POOL MARKET WALL — REAL DATA + MICRO MOTION
+     GeckoTerminal fournit les pools/prix/OHLCV. Le dernier segment
+     est animé entre deux rafraîchissements afin que le desk reste vivant.
+  ========================================================= */
+
+  :root{
+    --market-ink:rgba(7,7,7,.94);
+    --market-muted:rgba(10,10,10,.52);
+    --market-grid:rgba(8,8,8,.092);
+    --market-panel:rgba(255,255,255,.30);
+    --market-line:rgba(8,8,8,.17);
+    --market-red:#991c24;
+    --market-red-soft:#b63b42;
+    --market-black:#080808;
+    --market-graphite:#3e3e3e;
+  }
+
+  #market-bg{
+    position:fixed;
+    inset:0;
+    z-index:2;
+    overflow:hidden;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 45%, rgba(255,255,255,.19), rgba(255,255,255,.045) 39%, transparent 72%),
+      linear-gradient(180deg,#f6f6f6 0%,#ececec 100%);
+  }
+
+  #market-bg::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+      linear-gradient(var(--market-grid) 1px, transparent 1px),
+      linear-gradient(90deg,var(--market-grid) 1px,transparent 1px);
+    background-size:38px 38px;
+    opacity:.82;
+    mask-image:linear-gradient(to bottom,#000 0%,#000 92%,transparent 100%);
+    animation:marketGridDrift 14s linear infinite;
+  }
+
+  #market-bg::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:4;
+    background:radial-gradient(circle at 50% 47%,rgba(255,255,255,.76) 0 9%,rgba(255,255,255,.47) 23%,rgba(255,255,255,.10) 51%,transparent 75%);
+  }
+
+  .market-tape{
+    position:absolute;
+    top:max(12px,env(safe-area-inset-top));
+    left:max(17px,env(safe-area-inset-left));
+    right:max(17px,env(safe-area-inset-right));
+    z-index:6;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    color:rgba(0,0,0,.61);
+    font-family:"SFMono-Regular","SF Mono",Consolas,monospace;
+    font-size:7.5px;
+    font-weight:720;
+    letter-spacing:1.85px;
+    text-transform:uppercase;
+  }
+
+  .market-live{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+  .market-live-dot{
+    width:5px;height:5px;border-radius:50%;background:var(--market-red);
+    box-shadow:0 0 0 0 rgba(153,28,36,.24);
+    animation:marketLivePulse 1.08s ease-out infinite;
+  }
+  .market-clock{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  .market-grid-live{
+    position:absolute;
+    inset:43px 19px 18px;
+    z-index:2;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-template-rows:repeat(3,minmax(0,1fr));
+    gap:8px;
+    opacity:.94;
+    transform:scale(1.018);
+  }
+
+  .market-card{
+    --series-color:9,9,9;
+    min-width:0;min-height:0;position:relative;overflow:hidden;
+    border:1px solid var(--market-line);
+    border-radius:13px;
+    background:var(--market-panel);
+    backdrop-filter:blur(.7px);
+    -webkit-backdrop-filter:blur(.7px);
+    transition:opacity .34s ease,transform .45s var(--ease-out),border-color .3s ease;
+  }
+
+  .market-card:nth-child(4n+1){--series-color:9,9,9}
+  .market-card:nth-child(4n+2){--series-color:137,25,33}
+  .market-card:nth-child(4n+3){--series-color:55,55,55}
+  .market-card:nth-child(4n){--series-color:165,31,39}
+
+  .market-card.is-new{border-color:rgba(145,25,33,.26)}
+  .market-card.swap{opacity:.12;transform:scale(.975)}
+  .market-card.flash::before{
+    content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
+    border:1px solid rgba(var(--series-color),.52);border-radius:inherit;
+    animation:newPoolFlash 1.05s ease-out both;
+  }
+
+  .market-card::after{
+    content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.18),transparent 24%,rgba(255,255,255,.035)),
+      linear-gradient(90deg,transparent 0 76%,rgba(var(--series-color),.026) 100%);
+  }
+
+  .market-meta{
+    position:absolute;top:9px;left:11px;right:11px;z-index:4;
+    display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
+    font-family:"SFMono-Regular","SF Mono",Consolas,monospace;
+    font-variant-numeric:tabular-nums;
+  }
+  .market-name{min-width:0;max-width:58%}
+  .market-symbol-row{display:flex;align-items:center;gap:6px;min-width:0}
+  .market-symbol{
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    color:rgba(var(--series-color),.91);font-size:8px;font-weight:820;letter-spacing:1.15px;
+  }
+  .market-badge{
+    flex:0 0 auto;padding:2px 4px;border:1px solid rgba(var(--series-color),.18);border-radius:999px;
+    color:rgba(var(--series-color),.58);font-size:5px;font-weight:800;letter-spacing:.75px;
+  }
+  .market-pair{
+    display:block;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    color:rgba(0,0,0,.39);font-size:5.5px;font-weight:670;letter-spacing:.85px;
+  }
+  .market-quote{text-align:right;min-width:38%}
+  .market-price{
+    display:block;color:rgba(var(--series-color),.91);font-size:8.5px;font-weight:760;letter-spacing:.1px;
+    transition:opacity .1s ease,transform .12s ease;
+  }
+  .market-price.tick{opacity:.42;transform:translateY(-1px)}
+  .market-change{display:block;margin-top:3px;color:rgba(0,0,0,.46);font-size:5.5px;font-weight:760;letter-spacing:.4px}
+  .market-change.up{color:rgba(12,12,12,.70)}
+  .market-change.down{color:rgba(150,24,32,.82)}
+  .market-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+
+  .market-foot{
+    position:absolute;left:10px;right:10px;bottom:7px;z-index:4;
+    display:flex;justify-content:space-between;gap:7px;
+    color:rgba(0,0,0,.35);font-family:"SFMono-Regular","SF Mono",Consolas,monospace;
+    font-size:4.9px;font-weight:700;letter-spacing:.58px;text-transform:uppercase;
+  }
+  .market-foot span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .market-source{color:rgba(var(--series-color),.44)}
+
+  #enter-screen,#pass-screen,#member-screen{
+    background:rgba(255,255,255,.54);
+    backdrop-filter:blur(1.65px);
+    -webkit-backdrop-filter:blur(1.65px);
+  }
+  #enter-screen{background:rgba(255,255,255,.47)}
+  #pass-screen{background:rgba(255,255,255,.61)}
+  #member-screen{background:rgba(255,255,255,.65)}
+  .auth-wrap,.member-wrap,#enter-btn{position:relative;z-index:7}
+
+  @keyframes marketLivePulse{
+    0%{box-shadow:0 0 0 0 rgba(153,28,36,.27);transform:scale(.88)}
+    35%{transform:scale(1.22)}
+    75%,100%{box-shadow:0 0 0 8px rgba(153,28,36,0);transform:scale(.88)}
+  }
+  @keyframes marketGridDrift{from{background-position:0 0,0 0}to{background-position:38px 0,38px 0}}
+  @keyframes newPoolFlash{0%{opacity:0;transform:scale(.985)}25%{opacity:.72}100%{opacity:0;transform:scale(1.035)}}
+
+  @media (max-width:980px){
+    .market-grid-live{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr));inset:43px 12px 12px;gap:7px;opacity:.83}
+  }
+  @media (max-width:640px){
+    .market-grid-live{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));inset:39px 7px 7px;gap:5px;opacity:.72}
+    .market-card{border-radius:9px}
+    .market-meta{top:7px;left:7px;right:7px}.market-foot{left:7px;right:7px;bottom:5px}
+    .market-symbol{font-size:6.8px}.market-badge{font-size:4.3px;padding:1px 3px}.market-pair{font-size:4.5px}
+    .market-price{font-size:7px}.market-change{font-size:4.5px}.market-foot{font-size:4px}
+    .market-tape{font-size:6.5px;letter-spacing:1.25px}
+    #enter-screen,#pass-screen,#member-screen{backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  }
+  @media (max-height:700px) and (min-width:641px){
+    .market-grid-live{top:40px;gap:5px}.market-meta{top:6px}.market-foot{bottom:4px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    #market-bg::before,.market-live-dot{animation:none !important}
+    .market-card{transition:none}
+  }
+
 </style>
 </head>
 
 <body>
+
+
+  <div id="market-bg" data-state="loading" aria-hidden="true">
+    <div class="market-tape">
+      <span class="market-live"><span class="market-live-dot"></span><span id="market-state-label">DEX scan · nouveaux pools Solana</span></span>
+      <span class="market-clock" id="market-clock">--:--:-- UTC</span>
+    </div>
+    <div class="market-grid-live" id="market-grid-live">
+      <article class="market-card" data-slot="0">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="1">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="2">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="3">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="4">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="5">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="6">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="7">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="8">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="9">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="10">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+      <article class="market-card" data-slot="11">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">SCAN</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · LIQ —</span><span class="market-source">DISCOVERY</span></div>
+      </article>
+    </div>
+  </div>
 
   <div id="enter-screen" class="screen">
     <button id="enter-btn" type="button">Entrée</button>
@@ -1566,6 +1870,480 @@
     passInput.parentElement.classList.remove("focused");
   });
 
+</script>
+
+
+<script>
+  /* =========================================================
+     LIVE NEW-POOL / MEME MARKET WALL
+     - Discovery: GeckoTerminal public keyless API (Solana new + trending pools)
+     - History: real 1-minute OHLCV whenever available
+     - Prices: batch pool refresh
+     - Between real refreshes, a tiny mean-reverting micro-motion keeps the
+       decorative last candle alive without letting it drift away from real data.
+  ========================================================= */
+  (() => {
+    const marketBg = document.getElementById("market-bg");
+    if (!marketBg) return;
+
+    const cards = [...document.querySelectorAll(".market-card[data-slot]")];
+    const stateLabel = document.getElementById("market-state-label");
+    const clock = document.getElementById("market-clock");
+    const reduceMotion = false; // mouvement du market wall explicitement demandé
+    const API = "https://api.geckoterminal.com/api/v2";
+    const NETWORK = "solana";
+    const SLOT_COUNT = cards.length;
+    const DISCOVERY_MS = 30000;
+    const PRICE_MS = 12000;
+    const OHLCV_ROTATE_MS = 62000;
+    const MAX_OHLCV = 42;
+
+    const FALLBACK = [
+      ["DOGE","DOGE / USDT",.22,.0042],["SHIB","SHIB / USDT",.000014,.0051],
+      ["PEPE","PEPE / USDT",.000011,.0064],["BONK","BONK / USDT",.000021,.0071],
+      ["WIF","WIF / USDT",1.10,.0068],["FLOKI","FLOKI / USDT",.00009,.0061],
+      ["POPCAT","POPCAT / SOL",.31,.0082],["MOG","MOG / USDT",.0000007,.0074],
+      ["BRETT","BRETT / USDT",.04,.0070],["TURBO","TURBO / USDT",.003,.0076],
+      ["PNUT","PNUT / SOL",.18,.0090],["MEME","NEW / SOL",.0008,.011]
+    ];
+    const EXCLUDE = new Set(["SOL","WSOL","USDC","USDT","USD1","PYUSD","BTC","WBTC","ETH","WETH","JITOSOL","JUPSOL","MSOL","BSOL"]);
+    const MEME_HINTS = ["DOG","DOGE","INU","SHIB","PEPE","FROG","CAT","KITTY","PUP","PUPPY","MEME","BONK","WIF","WOJAK","BABY","MOON","ELON","TRUMP","CHAD","GIGA","GOAT","FART","PENGU","PNUT","POPCAT","MOG","BRETT","TURBO","MONKEY","APE","HAMSTER","PONKE","SLERF","MOTHER","MICHI","BILLY","MOODENG","HIPPO","AI","ROBOT"];
+
+    let items = [];
+    let poolById = new Map();
+    let destroyed = false;
+    let raf = 0;
+    let lastFrame = performance.now();
+    let discoveryTimer = 0;
+    let priceTimer = 0;
+    let ohlcvTimer = 0;
+    let ohlcvCursor = 0;
+    let backoffUntil = 0;
+
+    const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+    const sleep = ms => new Promise(r => setTimeout(r,ms));
+    const n = v => { const x = Number(v); return Number.isFinite(x) ? x : 0; };
+    const randomNormal = () => {
+      let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random();
+      return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+    };
+    const compact = value => {
+      if (!Number.isFinite(value) || value <= 0) return "—";
+      return new Intl.NumberFormat("en-US",{notation:"compact",maximumFractionDigits:1}).format(value);
+    };
+    const formatPrice = value => {
+      if (!Number.isFinite(value) || value <= 0) return "—";
+      if (value >= 1000) return value.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2});
+      if (value >= 1) return value.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:4});
+      if (value >= .01) return value.toLocaleString("fr-FR",{minimumFractionDigits:4,maximumFractionDigits:6});
+      if (value >= .0001) return value.toLocaleString("fr-FR",{minimumFractionDigits:6,maximumFractionDigits:8});
+      return value.toExponential(3).replace("e-","e−");
+    };
+    const ageLabel = iso => {
+      const t = Date.parse(iso || ""); if (!Number.isFinite(t)) return "LIVE";
+      const m = Math.max(0,Math.floor((Date.now()-t)/60000));
+      if (m < 1) return "<1M"; if (m < 60) return `${m}M`; const h=Math.floor(m/60); if(h<48)return `${h}H`; return `${Math.floor(h/24)}D`;
+    };
+
+    function tickClock(){
+      if (!clock) return;
+      clock.textContent = new Date().toLocaleTimeString("fr-FR",{timeZone:"UTC",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}) + " UTC";
+    }
+    tickClock(); setInterval(tickClock,1000);
+
+    async function fetchJSON(url, timeout=6500){
+      if (Date.now() < backoffUntil) throw new Error("backoff");
+      const ctrl = new AbortController();
+      const timer = setTimeout(()=>ctrl.abort(),timeout);
+      try{
+        const res = await fetch(url,{headers:{accept:"application/json"},cache:"no-store",signal:ctrl.signal});
+        if (res.status === 429){ backoffUntil = Date.now()+45000; throw new Error("429"); }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } finally { clearTimeout(timer); }
+    }
+
+    function includedMap(payload){
+      return new Map((payload?.included || []).map(x => [x.id,x]));
+    }
+
+    function parsePool(entry, inc, source){
+      const a = entry?.attributes || {};
+      const rel = entry?.relationships || {};
+      const base = inc.get(rel.base_token?.data?.id)?.attributes || {};
+      const quote = inc.get(rel.quote_token?.data?.id)?.attributes || {};
+      const dex = inc.get(rel.dex?.data?.id)?.attributes || {};
+      const symbol = String(base.symbol || String(a.name||"").split("/")[0] || "NEW").slice(0,13).toUpperCase();
+      const name = String(base.name || symbol);
+      const quoteSymbol = String(quote.symbol || String(a.name||"").split("/")[1] || "SOL").trim().slice(0,9).toUpperCase();
+      const price = n(a.base_token_price_usd);
+      const m5 = n(a.price_change_percentage?.m5);
+      const tx5 = n(a.transactions?.m5?.buys) + n(a.transactions?.m5?.sells);
+      const tx1 = n(a.transactions?.h1?.buys) + n(a.transactions?.h1?.sells);
+      const liq = n(a.reserve_in_usd);
+      const vol5 = n(a.volume_usd?.m5);
+      const created = a.pool_created_at || "";
+      const ageMin = Number.isFinite(Date.parse(created)) ? Math.max(0,(Date.now()-Date.parse(created))/60000) : 99999;
+      const hay = `${symbol} ${name}`.toUpperCase();
+      const meme = MEME_HINTS.some(k => hay.includes(k));
+      if (!entry?.id || !a.address || !price || EXCLUDE.has(symbol)) return null;
+      return {
+        id:entry.id,address:a.address,network:NETWORK,source,symbol,name,quoteSymbol,price,m5,tx5,tx1,liq,vol5,created,
+        dex:String(dex.name || rel.dex?.data?.id || "DEX").toUpperCase().slice(0,11),meme,ageMin,
+        score:(meme?8:0)+(source==="NEW"?6:2)+(ageMin<30?5:ageMin<120?2:0)+Math.log10(tx5+1)*2.2+Math.log10(liq+10)*.55+Math.min(4,Math.abs(m5)*.12)
+      };
+    }
+
+    async function discoverPools(){
+      const q = "include=base_token,quote_token,dex&page=1";
+      const [newR,trendR] = await Promise.allSettled([
+        fetchJSON(`${API}/networks/${NETWORK}/new_pools?${q}`),
+        fetchJSON(`${API}/networks/${NETWORK}/trending_pools?${q}&duration=5m`)
+      ]);
+      const out=[];
+      if (newR.status === "fulfilled"){
+        const inc=includedMap(newR.value);
+        for(const e of newR.value.data||[]){const p=parsePool(e,inc,"NEW");if(p)out.push(p)}
+      }
+      if (trendR.status === "fulfilled"){
+        const inc=includedMap(trendR.value);
+        for(const e of trendR.value.data||[]){const p=parsePool(e,inc,"TREND");if(p)out.push(p)}
+      }
+      const unique=new Map();
+      for(const p of out){const old=unique.get(p.id);if(!old||p.score>old.score)unique.set(p.id,p)}
+      return [...unique.values()].filter(p=>p.liq>=400 || p.tx5>=2).sort((a,b)=>b.score-a.score);
+    }
+
+    function fallbackPool(index){
+      const [symbol,pair,price,vol]=FALLBACK[index%FALLBACK.length];
+      return {id:`fallback-${index}`,address:"",network:NETWORK,source:"DEMO",symbol,name:symbol,quoteSymbol:pair.split("/")[1].trim(),price,m5:0,tx5:0,tx1:0,liq:0,vol5:0,created:"",dex:"LOCAL",meme:true,ageMin:99999,score:0,vol};
+    }
+
+    function makeItem(card,index,pool){
+      const canvas=card.querySelector("canvas");
+      const ctx=canvas.getContext("2d",{alpha:true,desynchronized:true});
+      const rgb=getComputedStyle(card).getPropertyValue("--series-color").trim()||"9,9,9";
+      const p=pool?.price || FALLBACK[index][2];
+      const now=performance.now();
+      return {
+        card,canvas,ctx,index,rgb,pool:pool||fallbackPool(index),candles:[],
+        realPrice:p,visualPrice:p,velocity:0,momentum:0,regime:0,impulse:0,
+        microOpen:p,microHigh:p,microLow:p,microVolume:1,pulse:0,
+        resizeObserver:null,lastRealAt:0,lastUiPrice:p,sessionOpen:p,
+        regimeUntil:now+900+Math.random()*2400,
+        nextImpulseAt:now+700+Math.random()*2600,
+        nextBarAt:now+550+Math.random()*1100,
+        nextUiAt:now,
+        syntheticTicks:0,
+        lastDirection:1
+      };
+    }
+
+    function seedFallbackCandles(item){
+      const base=item.realPrice||1; const vol=item.pool.vol || (item.pool.source==="NEW"?.010:.006);
+      let p=base*(1+(Math.random()-.5)*vol*8), vel=0;
+      const arr=[]; const now=Math.floor(Date.now()/60000)*60000;
+      for(let i=MAX_OHLCV-1;i>=0;i--){
+        const o=p; vel=vel*.62+randomNormal()*vol*.38; const c=Math.max(base*.25,p*Math.exp(vel));
+        const spread=Math.abs(randomNormal())*vol*.75;
+        arr.push({t:now-i*60000,o,h:Math.max(o,c)*(1+spread),l:Math.min(o,c)*(1-spread),c,v:Math.random()*100}); p=c;
+      }
+      item.candles=arr; item.visualPrice=item.realPrice||arr[arr.length-1].c;
+      item.sessionOpen=item.visualPrice;
+      item.microOpen=item.visualPrice;item.microHigh=item.visualPrice;item.microLow=item.visualPrice;item.microVolume=1;
+      const animNow=performance.now();
+      item.nextBarAt=animNow+520+Math.random()*1250;
+      item.regimeUntil=animNow+850+Math.random()*2600;
+      item.nextImpulseAt=animNow+650+Math.random()*2800;
+    }
+
+    function sizeCanvas(item){
+      const r=item.canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
+      const w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));
+      if(item.canvas.width!==w||item.canvas.height!==h){item.canvas.width=w;item.canvas.height=h}
+      item.ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
+    function updateCardText(item,flash=false){
+      const p=item.pool,c=item.card;
+      c.querySelector(".market-symbol").textContent=p.symbol||"NEW";
+      c.querySelector(".market-pair").textContent=`${p.symbol||"TOKEN"} / ${p.quoteSymbol||"SOL"} · ${p.dex||"DEX"}`;
+      const badge=c.querySelector(".market-badge");
+      badge.textContent=p.source==="NEW"?`NEW ${ageLabel(p.created)}`:p.source==="TREND"?"TREND":"DEMO";
+      c.classList.toggle("is-new",p.source==="NEW");
+      c.querySelector(".market-price").textContent=formatPrice(item.realPrice||p.price);
+      const ch=c.querySelector(".market-change"),pct=n(p.m5);
+      ch.textContent=`M5 ${pct>=0?"+":""}${pct.toFixed(2)}%`;
+      ch.classList.toggle("up",pct>=0);ch.classList.toggle("down",pct<0);
+      c.querySelector(".market-activity").textContent=`TX ${Math.round(p.tx5||0)} · LIQ $${compact(p.liq)}`;
+      c.querySelector(".market-source").textContent=p.source==="DEMO"?"VISUAL FLOW":"GT ANCHOR · FLOW";
+      if(flash){c.classList.remove("flash");void c.offsetWidth;c.classList.add("flash");setTimeout(()=>c.classList.remove("flash"),1100)}
+    }
+
+    async function loadOHLCV(item){
+      const p=item.pool;if(!p.address||p.source==="DEMO")return;
+      try{
+        const url=`${API}/networks/${NETWORK}/pools/${encodeURIComponent(p.address)}/ohlcv/minute?aggregate=1&limit=${MAX_OHLCV}&currency=usd&token=base&include_empty_intervals=true`;
+        const j=await fetchJSON(url,7000); const list=j?.data?.attributes?.ohlcv_list||[];
+        const candles=list.map(x=>({t:n(x[0])*1000,o:n(x[1]),h:n(x[2]),l:n(x[3]),c:n(x[4]),v:n(x[5])})).filter(x=>x.t&&x.c).sort((a,b)=>a.t-b.t);
+        if(candles.length>=4){
+          item.candles=candles.slice(-MAX_OHLCV);
+          const last=item.candles[item.candles.length-1];
+          if(!item.realPrice)item.realPrice=last.c;
+          item.visualPrice=item.realPrice||last.c;
+          item.microOpen=item.visualPrice;item.microHigh=item.visualPrice;item.microLow=item.visualPrice;
+        }
+      }catch(e){ /* le fallback visuel continue */ }
+    }
+
+    async function assignPool(item,pool,flash=true){
+      item.card.classList.add("swap");
+      await sleep(170);
+      item.pool=pool;item.realPrice=pool.price;item.visualPrice=pool.price;item.velocity=0;item.momentum=0;item.regime=0;item.impulse=0;item.pulse=1;item.lastRealAt=Date.now();
+      seedFallbackCandles(item);updateCardText(item,flash);
+      item.card.classList.remove("swap");
+      loadOHLCV(item);
+    }
+
+    function initialItems(){
+      items=cards.map((card,i)=>makeItem(card,i,fallbackPool(i)));
+      for(const item of items){
+        seedFallbackCandles(item);updateCardText(item,false);
+        const ro=new ResizeObserver(()=>sizeCanvas(item));ro.observe(item.card);item.resizeObserver=ro;sizeCanvas(item);
+      }
+      marketBg.dataset.state="visual";
+      if(stateLabel)stateLabel.textContent="DEX scan · connexion pools réels…";
+    }
+
+    async function refreshDiscovery(first=false){
+      try{
+        const pools=await discoverPools();
+        if(!pools.length)throw new Error("empty");
+        poolById=new Map(pools.map(p=>[p.id,p]));
+        if(first || items.every(x=>x.pool.source==="DEMO")){
+          const chosen=pools.slice(0,SLOT_COUNT);
+          await Promise.all(items.map((item,i)=>chosen[i]?assignPool(item,chosen[i],false):Promise.resolve()));
+        }else{
+          // Actualise métadonnées des pools déjà affichés.
+          for(const item of items){
+            const fresh=poolById.get(item.pool.id);
+            if(fresh){item.pool={...item.pool,...fresh}; if(fresh.price)item.realPrice=fresh.price; updateCardText(item,false)}
+          }
+          // Un nouveau pool réellement récent entre dans le mur immédiatement.
+          const shown=new Set(items.map(x=>x.pool.id));
+          const arrivals=pools.filter(p=>p.source==="NEW"&&p.ageMin<180&&!shown.has(p.id)).slice(0,2);
+          for(const p of arrivals){
+            const candidates=items.filter(x=>x.pool.source!=="NEW"||x.pool.ageMin>p.ageMin);
+            const victim=(candidates.length?candidates:items).sort((a,b)=>(a.pool.score||0)-(b.pool.score||0))[0];
+            if(victim)await assignPool(victim,p,true);
+          }
+        }
+        marketBg.dataset.state="live";
+        if(stateLabel)stateLabel.textContent="Meme flow · real anchor + volatile microstructure";
+      }catch(e){
+        marketBg.dataset.state="fallback";
+        if(stateLabel)stateLabel.textContent="Meme flow · volatile visual engine";
+      }
+    }
+
+    async function refreshPrices(){
+      const live=items.filter(x=>x.pool.address&&x.pool.source!=="DEMO");
+      if(!live.length)return;
+      try{
+        const addresses=[...new Set(live.map(x=>x.pool.address))].join(",");
+        const j=await fetchJSON(`${API}/networks/${NETWORK}/pools/multi/${addresses}?include=base_token,quote_token`,7000);
+        const map=new Map((j?.data||[]).map(e=>[e.attributes?.address,e]));
+        for(const item of live){
+          const e=map.get(item.pool.address);if(!e)continue;
+          const a=e.attributes||{},price=n(a.base_token_price_usd); if(!price)continue;
+          const previous=item.realPrice||price;
+          item.realPrice=price;item.lastRealAt=Date.now();item.pulse=1;
+          item.pool.price=price;item.pool.m5=n(a.price_change_percentage?.m5);
+          item.pool.tx5=n(a.transactions?.m5?.buys)+n(a.transactions?.m5?.sells);
+          item.pool.liq=n(a.reserve_in_usd)||item.pool.liq;item.pool.vol5=n(a.volume_usd?.m5)||item.pool.vol5;
+          // Recalage progressif : pas de saut violent si l'API revient après une pause.
+          if(Math.abs(Math.log(price/Math.max(item.visualPrice,1e-20)))>.08)item.visualPrice=price;
+          item.lastDirection=price>=previous?1:-1; updateCardText(item,false);
+          const el=item.card.querySelector(".market-price");el.classList.add("tick");setTimeout(()=>el.classList.remove("tick"),100);
+        }
+      }catch(e){ /* animation locale ancrée sur le dernier vrai prix */ }
+    }
+
+    function volatilityFor(item){
+      const p=item.pool||{};
+      const symbol=String(p.symbol||"").toUpperCase();
+      const memeNerve=/PEPE|BONK|WIF|FLOKI|SHIB|DOGE|POPCAT|MOG|PNUT|TURBO|MEME|INU|CAT|DOG|FROG|APE|GOAT|MOON/.test(symbol)?1.30:1;
+      const fresh=p.source==="NEW"?1.65:p.source==="TREND"?1.25:1.10;
+      const liq=Math.max(250,p.liq||1200);
+      const thin=clamp(1.75-Math.log10(liq)/7,.75,1.85);
+      const activity=clamp(1+(p.tx5||0)/75,1,1.75);
+      return clamp(.0053*memeNerve*fresh*thin*activity,.0042,.021);
+    }
+
+    function closeMicroBar(item,now){
+      const o=item.microOpen||item.visualPrice;
+      const c=item.visualPrice;
+      const range=Math.max(1e-20,Math.abs(item.microHigh-item.microLow));
+      const baseVol=Math.max(1,(item.pool.vol5||1800)/65);
+      const momentumBoost=1+Math.min(4,Math.abs(Math.log(c/Math.max(o,1e-20)))*160);
+      const v=baseVol*(.35+Math.random()*1.55)*momentumBoost + item.microVolume;
+      item.candles.push({t:Date.now(),o,h:Math.max(item.microHigh,o,c),l:Math.min(item.microLow,o,c),c,v});
+      if(item.candles.length>MAX_OHLCV)item.candles.splice(0,item.candles.length-MAX_OHLCV);
+      item.microOpen=c;item.microHigh=c;item.microLow=c;item.microVolume=1;
+      item.pulse=Math.max(item.pulse,.72);
+      const vol=volatilityFor(item);
+      // Les pools les plus nerveux impriment davantage de nouvelles bougies.
+      const speed=clamp(1850-vol*56000,620,1650);
+      item.nextBarAt=now+speed*(.66+Math.random()*.62);
+    }
+
+    function updateFlowUi(item,now){
+      if(now<item.nextUiAt)return;
+      item.nextUiAt=now+72+Math.random()*85;
+      const priceEl=item.card.querySelector(".market-price");
+      const changeEl=item.card.querySelector(".market-change");
+      if(priceEl){
+        priceEl.textContent=formatPrice(item.visualPrice);
+        if(Math.abs(item.visualPrice-item.lastUiPrice)>Math.max(1e-20,item.lastUiPrice)*.00018){
+          priceEl.classList.add("tick");
+          setTimeout(()=>priceEl.classList.remove("tick"),70);
+        }
+      }
+      const basis=item.sessionOpen||item.visualPrice;
+      const pct=(item.visualPrice/Math.max(basis,1e-20)-1)*100;
+      if(changeEl){
+        changeEl.textContent=`FLOW ${pct>=0?"+":""}${pct.toFixed(2)}%`;
+        changeEl.classList.toggle("up",pct>=0);changeEl.classList.toggle("down",pct<0);
+      }
+      const activity=item.card.querySelector(".market-activity");
+      if(activity){
+        const tx=Math.round((item.pool.tx5||0)+item.syntheticTicks*.18);
+        activity.textContent=`TX ${tx} · LIQ $${compact(item.pool.liq)}`;
+      }
+      item.lastUiPrice=item.visualPrice;
+    }
+
+    function evolve(item,dt,now){
+      const anchor=item.realPrice||item.visualPrice||1;
+      const vol=volatilityFor(item);
+
+      // Changement de régime : petite tendance persistante, comme un carnet qui pousse.
+      if(now>=item.regimeUntil){
+        const bias=randomNormal()*vol*.55;
+        const burst=Math.random()<.22?randomNormal()*vol*1.15:0;
+        item.regime=clamp(bias+burst,-vol*1.55,vol*1.55);
+        item.regimeUntil=now+650+Math.random()*3300;
+      }
+
+      // Impulsions courtes et rares : achats/ventes agressifs, surtout sur nouveaux pools.
+      if(now>=item.nextImpulseAt){
+        const size=vol*(.65+Math.random()*2.35)*(Math.random()<.5?-1:1);
+        item.impulse+=size;
+        item.pulse=1;
+        item.nextImpulseAt=now+(item.pool.source==="NEW"?420:780)+Math.random()*(item.pool.source==="NEW"?2100:3600);
+      }
+
+      const deviation=Math.log(Math.max(item.visualPrice,1e-20)/Math.max(anchor,1e-20));
+      // Rappel vers l'ancre réelle seulement si le décor dérive vraiment trop loin.
+      const softBand=item.pool.source==="NEW"?.085:item.pool.source==="TREND"?.055:.045;
+      const pull=Math.abs(deviation)>softBand ? -deviation*1.8 : -deviation*.08;
+      const micro=randomNormal()*vol*Math.sqrt(dt)*.44;
+
+      item.momentum += (item.regime + item.impulse + pull - item.momentum*1.35)*dt;
+      item.impulse *= Math.exp(-3.2*dt);
+      const ret=clamp(item.momentum*dt + micro,-vol*.44,vol*.44);
+      const previous=item.visualPrice;
+      item.visualPrice=Math.max(anchor*.12,item.visualPrice*Math.exp(ret));
+      item.lastDirection=item.visualPrice>=previous?1:-1;
+      item.microHigh=Math.max(item.microHigh,item.visualPrice);
+      item.microLow=Math.min(item.microLow,item.visualPrice);
+      item.microVolume+=(.25+Math.random()*1.35)*(1+Math.abs(ret)*900);
+      item.syntheticTicks++;
+      item.pulse=Math.max(item.pulse,Math.min(1,Math.abs(ret)/(vol*.085)));
+      item.pulse*=Math.pow(.075,dt);
+
+      if(now>=item.nextBarAt)closeMicroBar(item,now);
+      updateFlowUi(item,now);
+    }
+
+    function renderCandles(item){
+      const arr=item.candles.slice(-MAX_OHLCV+1);
+      const t=Math.floor(Date.now()/60000)*60000;
+      arr.push({t,o:item.microOpen,h:item.microHigh,l:item.microLow,c:item.visualPrice,v:Math.max(1,item.microVolume)});
+      return arr.filter(c=>c.c>0&&c.o>0&&c.h>0&&c.l>0);
+    }
+
+    function draw(item,nowMs){
+      const {ctx,canvas}=item,dpr=Math.min(window.devicePixelRatio||1,2),w=canvas.width/dpr,h=canvas.height/dpr;if(!w||!h)return;
+      ctx.clearRect(0,0,w,h);
+      const left=8,right=w-8,top=31,bottom=h-17,volumeH=Math.max(8,(bottom-top)*.16),priceBottom=bottom-volumeH-3;
+      const plotW=Math.max(1,right-left),plotH=Math.max(1,priceBottom-top),candles=renderCandles(item);if(candles.length<2)return;
+
+      ctx.lineWidth=1;ctx.strokeStyle="rgba(0,0,0,.065)";
+      for(let i=0;i<=3;i++){const y=top+plotH*i/3;ctx.beginPath();ctx.moveTo(left,y+.5);ctx.lineTo(right,y+.5);ctx.stroke()}
+      for(let i=0;i<=5;i++){const x=left+plotW*i/5;ctx.beginPath();ctx.moveTo(x+.5,top);ctx.lineTo(x+.5,bottom);ctx.stroke()}
+
+      let min=Math.min(...candles.map(c=>c.l)),max=Math.max(...candles.map(c=>c.h));if(max===min){max*=1.001;min*=.999}
+      const pad=(max-min)*.10;min-=pad;max+=pad;
+      const yFor=p=>priceBottom-((p-min)/(max-min))*plotH;
+      const step=plotW/candles.length,bodyW=Math.max(1,Math.min(4.2,step*.55));
+      const maxV=Math.max(1,...candles.map(c=>c.v||0));
+
+      // Volume réel historique (ou estimation seulement pour la bougie en formation).
+      candles.forEach((c,i)=>{
+        const x=left+step*(i+.5),vh=((c.v||0)/maxV)*volumeH;
+        ctx.fillStyle=c.c>=c.o?"rgba(15,15,15,.105)":"rgba(151,27,35,.12)";
+        ctx.fillRect(x-bodyW/2,bottom-vh,bodyW,Math.max(1,vh));
+      });
+
+      // Bougies : noir = hausse, rouge = baisse.
+      candles.forEach((c,i)=>{
+        const x=left+step*(i+.5),up=c.c>=c.o;
+        ctx.strokeStyle=up?"rgba(8,8,8,.58)":"rgba(151,27,35,.72)";
+        ctx.beginPath();ctx.moveTo(x,yFor(c.h));ctx.lineTo(x,yFor(c.l));ctx.stroke();
+        const y1=yFor(c.o),y2=yFor(c.c),bh=Math.max(1.15,Math.abs(y2-y1));
+        ctx.fillStyle=up?`rgba(${item.rgb},.69)`:"rgba(151,27,35,.72)";
+        ctx.fillRect(x-bodyW/2,Math.min(y1,y2),bodyW,bh);
+      });
+
+      // Ligne de clôture fine par-dessus : renforce l'impression de flux terminal.
+      ctx.beginPath();candles.forEach((c,i)=>{const x=left+step*(i+.5),y=yFor(c.c);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});
+      ctx.strokeStyle=`rgba(${item.rgb},.52)`;ctx.lineWidth=1;ctx.lineJoin="round";ctx.lineCap="round";ctx.stroke();
+
+      const lx=left+step*(candles.length-.5),ly=yFor(item.visualPrice),pulse=reduceMotion?0:item.pulse;
+      ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(left,ly+.5);ctx.lineTo(right,ly+.5);ctx.strokeStyle=`rgba(${item.rgb},.18)`;ctx.stroke();ctx.setLineDash([]);
+      if(pulse>.02){ctx.beginPath();ctx.arc(lx,ly,3+pulse*6,0,Math.PI*2);ctx.strokeStyle=`rgba(${item.rgb},${.10+pulse*.17})`;ctx.stroke()}
+      ctx.beginPath();ctx.arc(lx,ly,1.8,0,Math.PI*2);ctx.fillStyle=`rgba(${item.rgb},.94)`;ctx.fill();
+
+      // Scanner vertical très discret, décalé par carte.
+      const scan=((nowMs*.075+item.index*37)%Math.max(1,plotW));
+      ctx.beginPath();ctx.moveTo(left+scan,top);ctx.lineTo(left+scan,priceBottom);ctx.strokeStyle=`rgba(${item.rgb},.055)`;ctx.stroke();
+    }
+
+    function frame(now){
+      if(destroyed)return; const dt=Math.min(.05,Math.max(.001,(now-lastFrame)/1000));lastFrame=now;
+      if(!document.hidden){for(const item of items){evolve(item,dt,now);draw(item,now)}}
+      raf=requestAnimationFrame(frame);
+    }
+
+    async function rotateOHLCV(){
+      const live=items.filter(x=>x.pool.address&&x.pool.source!=="DEMO");if(!live.length)return;
+      for(let k=0;k<3;k++){const item=live[(ohlcvCursor+k)%live.length];if(item)await loadOHLCV(item);await sleep(220)}
+      ohlcvCursor=(ohlcvCursor+3)%Math.max(1,live.length);
+    }
+
+    initialItems();
+    raf=requestAnimationFrame(frame);
+    refreshDiscovery(true).then(()=>refreshPrices());
+    discoveryTimer=setInterval(()=>refreshDiscovery(false),DISCOVERY_MS);
+    priceTimer=setInterval(refreshPrices,PRICE_MS);
+    ohlcvTimer=setInterval(rotateOHLCV,OHLCV_ROTATE_MS);
+    document.addEventListener("visibilitychange",()=>{lastFrame=performance.now();if(!document.hidden)refreshPrices()});
+    window.addEventListener("beforeunload",()=>{
+      destroyed=true;cancelAnimationFrame(raf);clearInterval(discoveryTimer);clearInterval(priceTimer);clearInterval(ohlcvTimer);
+      items.forEach(x=>x.resizeObserver?.disconnect());
+    },{once:true});
+  })();
 </script>
 
 </body>
