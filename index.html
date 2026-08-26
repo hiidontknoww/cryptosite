@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>Elite — Защищённый доступ</title>
+<title>Elite — защищённый доступ</title>
 
 <style>
   :root{
@@ -101,7 +101,7 @@
     100%{transform:translate3d(1.5%, 1%, 0) scale(1.045)}
   }
 
-  /* ---------- ЭКРАНЫ ---------- */
+  /* ---------- ÉCRANS ---------- */
 
   .screen{
     position:fixed;
@@ -147,6 +147,12 @@
     pointer-events:none;
   }
 
+  /* disparition premium :
+     1) les lettres se resserrent et disparaissent
+     2) le bouton s'aplatit en ligne
+     3) petite onde centrale très discrète
+     4) la ligne s'efface
+  */
   #enter-screen.leaving #enter-btn{
     color:transparent;
     text-shadow:none;
@@ -263,7 +269,7 @@
     transition-delay:0s;
   }
 
-  /* ---------- ЭНТРЕ / КНОПКА ---------- */
+  /* ---------- ENTRÉE ---------- */
 
   #enter-btn{
     position:relative;
@@ -352,7 +358,7 @@
     }
   }
 
-  /* ---------- АВТОРИЗАЦИЯ ---------- */
+  /* ---------- MOT DE PASSE ---------- */
 
   .auth-wrap{
     width:min(440px, 100%);
@@ -555,7 +561,7 @@
     40%,60%{transform:translateX(7px)}
   }
 
-  /* ---------- ЛИЧНЫЙ КАБИНЕТ (МЕМБЕР) ---------- */
+  /* ---------- ESPACE MEMBRE ---------- */
 
   .member-wrap{
     width:min(900px, 100%);
@@ -640,7 +646,7 @@
     transform:none;
   }
 
-  /* ---------- ТЕРМИНАЛ ---------- */
+  /* ---------- TERMINAL ---------- */
 
   .terminal{
     width:min(820px, 100%);
@@ -816,6 +822,8 @@
     47%,100%{opacity:0}
   }
 
+  /* ---------- RESPONSIVE ---------- */
+
   @media (max-width:640px){
     .screen{
       justify-content:center;
@@ -887,6 +895,12 @@
     }
   }
 
+  /* =========================================================
+     ANIMATIONS PREMIUM SUPPLÉMENTAIRES
+     Ajout visuel uniquement — structure et logique inchangées.
+  ========================================================= */
+
+  /* fine respiration globale */
   .screen::before{
     content:"";
     position:absolute;
@@ -911,6 +925,7 @@
     }
   }
 
+  /* halo minimal autour du bouton d'entrée */
   #enter-btn{
     isolation:isolate;
   }
@@ -934,6 +949,7 @@
     transform:scale(1.075);
   }
 
+  /* petite pulsation très lente avant interaction */
   #enter-screen:not(.leaving) #enter-btn{
     animation:
       entranceButton 1s .15s both var(--ease-out),
@@ -953,6 +969,7 @@
     }
   }
 
+  /* transition d'entrée : petit éclat au centre de la ligne */
   #enter-screen.leaving::after{
     content:"";
     position:absolute;
@@ -982,6 +999,7 @@
     }
   }
 
+  /* le bloc mot de passe arrive avec plus de profondeur */
   #pass-screen.show .auth-wrap{
     animation:authWrapReveal 1.05s both var(--ease-out);
   }
@@ -997,6 +1015,7 @@
     }
   }
 
+  /* halo léger sous le libellé */
   .lock{
     text-shadow:0 0 0 rgba(0,0,0,0);
   }
@@ -1018,6 +1037,7 @@
     }
   }
 
+  /* filet lumineux très discret dans le champ */
   .input-shell::before{
     content:"";
     position:absolute;
@@ -1046,10 +1066,12 @@
     transform:scaleX(1);
   }
 
+  /* profondeur du champ au focus */
   #pass-input:focus{
     transform:translateY(-2px) scale(1.004);
   }
 
+  /* petit flash propre quand une erreur se déclenche */
   .input-shell:has(#pass-input.error)::after{
     content:"";
     position:absolute;
@@ -1071,6 +1093,7 @@
     }
   }
 
+  /* bouton connexion : balayage subtil */
   #connect-btn,
   #locate-btn{
     position:relative;
@@ -1101,6 +1124,7 @@
     left:118%;
   }
 
+  /* apparition du message d'erreur plus lisible */
   #pass-hint.visible{
     animation:hintPop .38s both var(--ease-out);
   }
@@ -1116,6 +1140,7 @@
     }
   }
 
+  /* succès : léger éclat noir/blanc avant l'espace membre */
   #pass-screen.leaving::after{
     content:"";
     position:absolute;
@@ -1144,6 +1169,7 @@
     }
   }
 
+  /* espace membre : titre encore plus cinématique */
   #member-screen.show h1{
     animation:
       memberReveal 1.05s .1s both var(--ease-out),
@@ -1176,6 +1202,7 @@
     }
   }
 
+  /* bouton terminal : indicateur discret */
   #locate-btn::after{
     content:"";
     position:absolute;
@@ -1201,6 +1228,7 @@
     }
   }
 
+  /* terminal : profondeur et vibration lumineuse */
   .terminal{
     transition:
       transform .35s var(--ease-out),
@@ -1247,6 +1275,7 @@
     50%{opacity:.92}
   }
 
+  /* petite ligne de progression au-dessus du terminal */
   .terminal-content::before{
     content:"";
     position:absolute;
@@ -1283,6 +1312,7 @@
     }
   }
 
+  /* curseur un peu plus organique */
   .cursor{
     animation:
       blink .78s steps(1,end) infinite,
@@ -1298,6 +1328,7 @@
     }
   }
 
+  /* mobile : animations plus légères */
   @media (max-width:640px){
     body::after{
       opacity:.11;
@@ -1322,165 +1353,1678 @@
       animation:none !important;
     }
   }
+
+
+  /* =========================================================
+     LIVE MEME / NEW-POOL MARKET WALL — REAL DATA + MICRO MOTION
+     GeckoTerminal fournit les pools/prix/OHLCV. Le dernier segment
+     est animé entre deux rafraîchissements afin que le desk reste vivant.
+  ========================================================= */
+
+  :root{
+    --market-ink:rgba(7,7,7,.94);
+    --market-muted:rgba(10,10,10,.52);
+    --market-grid:rgba(8,8,8,.092);
+    --market-panel:rgba(255,255,255,.30);
+    --market-line:rgba(8,8,8,.17);
+    --market-red:#991c24;
+    --market-red-soft:#b63b42;
+    --market-black:#080808;
+    --market-graphite:#3e3e3e;
+  }
+
+  #market-bg{
+    position:fixed;
+    inset:0;
+    z-index:2;
+    overflow:hidden;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 45%, rgba(255,255,255,.19), rgba(255,255,255,.045) 39%, transparent 72%),
+      linear-gradient(180deg,#f6f6f6 0%,#ececec 100%);
+  }
+
+  #market-bg::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+      linear-gradient(var(--market-grid) 1px, transparent 1px),
+      linear-gradient(90deg,var(--market-grid) 1px,transparent 1px);
+    background-size:38px 38px;
+    opacity:.82;
+    mask-image:linear-gradient(to bottom,#000 0%,#000 92%,transparent 100%);
+    animation:marketGridDrift 14s linear infinite;
+  }
+
+  #market-bg::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:4;
+    background:radial-gradient(circle at 50% 47%,rgba(255,255,255,.76) 0 9%,rgba(255,255,255,.47) 23%,rgba(255,255,255,.10) 51%,transparent 75%);
+  }
+
+  .market-tape{
+    position:absolute;
+    top:max(12px,env(safe-area-inset-top));
+    left:max(17px,env(safe-area-inset-left));
+    right:max(17px,env(safe-area-inset-right));
+    z-index:6;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    color:rgba(0,0,0,.61);
+    font-family:"SFMono-Regular","SF Mono",Consolas,monospace;
+    font-size:7.5px;
+    font-weight:720;
+    letter-spacing:1.85px;
+    text-transform:uppercase;
+  }
+
+  .market-live{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+  .market-live-dot{
+    width:5px;height:5px;border-radius:50%;background:var(--market-red);
+    box-shadow:0 0 0 0 rgba(153,28,36,.24);
+    animation:marketLivePulse 1.08s ease-out infinite;
+  }
+  .market-clock{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  .market-grid-live{
+    position:absolute;
+    inset:43px 19px 18px;
+    z-index:2;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-template-rows:repeat(3,minmax(0,1fr));
+    gap:8px;
+    opacity:.94;
+    transform:scale(1.018);
+  }
+
+  .market-card{
+    --series-color:9,9,9;
+    min-width:0;min-height:0;position:relative;overflow:hidden;
+    border:1px solid var(--market-line);
+    border-radius:13px;
+    background:var(--market-panel);
+    backdrop-filter:blur(.7px);
+    -webkit-backdrop-filter:blur(.7px);
+    transition:opacity .34s ease,transform .45s var(--ease-out),border-color .3s ease;
+  }
+
+  .market-card:nth-child(4n+1){--series-color:9,9,9}
+  .market-card:nth-child(4n+2){--series-color:137,25,33}
+  .market-card:nth-child(4n+3){--series-color:55,55,55}
+  .market-card:nth-child(4n){--series-color:165,31,39}
+
+  .market-card.is-new{border-color:rgba(145,25,33,.26)}
+  .market-card.swap{opacity:.12;transform:scale(.975)}
+  .market-card.flash::before{
+    content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
+    border:1px solid rgba(var(--series-color),.52);border-radius:inherit;
+    animation:newPoolFlash 1.05s ease-out both;
+  }
+
+  .market-card::after{
+    content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.18),transparent 24%,rgba(255,255,255,.035)),
+      linear-gradient(90deg,transparent 0 76%,rgba(var(--series-color),.026) 100%);
+  }
+
+  .market-meta{
+    position:absolute;top:9px;left:11px;right:11px;z-index:4;
+    display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
+    font-family:"SFMono-Regular","SF Mono",Consolas,monospace;
+    font-variant-numeric:tabular-nums;
+  }
+  .market-name{min-width:0;max-width:58%}
+  .market-symbol-row{display:flex;align-items:center;gap:6px;min-width:0}
+  .market-symbol{
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    color:rgba(var(--series-color),.91);font-size:8px;font-weight:820;letter-spacing:1.15px;
+  }
+  .market-badge{
+    flex:0 0 auto;padding:2px 4px;border:1px solid rgba(var(--series-color),.18);border-radius:999px;
+    color:rgba(var(--series-color),.58);font-size:5px;font-weight:800;letter-spacing:.75px;
+  }
+  .market-pair{
+    display:block;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    color:rgba(0,0,0,.39);font-size:5.5px;font-weight:670;letter-spacing:.85px;
+  }
+  .market-quote{text-align:right;min-width:38%}
+  .market-price{
+    display:block;color:rgba(var(--series-color),.91);font-size:8.5px;font-weight:760;letter-spacing:.1px;
+    transition:opacity .1s ease,transform .12s ease;
+  }
+  .market-price.tick{opacity:.42;transform:translateY(-1px)}
+  .market-change{display:block;margin-top:3px;color:rgba(0,0,0,.46);font-size:5.5px;font-weight:760;letter-spacing:.4px}
+  .market-change.up{color:rgba(12,12,12,.70)}
+  .market-change.down{color:rgba(150,24,32,.82)}
+  .market-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+
+  .market-foot{
+    position:absolute;left:10px;right:10px;bottom:7px;z-index:4;
+    display:flex;justify-content:space-between;gap:7px;
+    color:rgba(0,0,0,.35);font-family:"SFMono-Regular","SF Mono",Consolas,monospace;
+    font-size:4.9px;font-weight:700;letter-spacing:.58px;text-transform:uppercase;
+  }
+  .market-foot span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .market-source{color:rgba(var(--series-color),.44)}
+
+  #enter-screen,#pass-screen,#member-screen{
+    background:rgba(255,255,255,.54);
+    backdrop-filter:blur(1.65px);
+    -webkit-backdrop-filter:blur(1.65px);
+  }
+  #enter-screen{background:rgba(255,255,255,.47)}
+  #pass-screen{background:rgba(255,255,255,.61)}
+  #member-screen{background:rgba(255,255,255,.65)}
+  .auth-wrap,.member-wrap,#enter-btn{position:relative;z-index:7}
+
+  @keyframes marketLivePulse{
+    0%{box-shadow:0 0 0 0 rgba(153,28,36,.27);transform:scale(.88)}
+    35%{transform:scale(1.22)}
+    75%,100%{box-shadow:0 0 0 8px rgba(153,28,36,0);transform:scale(.88)}
+  }
+  @keyframes marketGridDrift{from{background-position:0 0,0 0}to{background-position:38px 0,38px 0}}
+  @keyframes newPoolFlash{0%{opacity:0;transform:scale(.985)}25%{opacity:.72}100%{opacity:0;transform:scale(1.035)}}
+
+  @media (max-width:980px){
+    .market-grid-live{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr));inset:43px 12px 12px;gap:7px;opacity:.83}
+  }
+  @media (max-width:640px){
+    .market-grid-live{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));inset:39px 7px 7px;gap:5px;opacity:.72}
+    .market-card{border-radius:9px}
+    .market-meta{top:7px;left:7px;right:7px}.market-foot{left:7px;right:7px;bottom:5px}
+    .market-symbol{font-size:6.8px}.market-badge{font-size:4.3px;padding:1px 3px}.market-pair{font-size:4.5px}
+    .market-price{font-size:7px}.market-change{font-size:4.5px}.market-foot{font-size:4px}
+    .market-tape{font-size:6.5px;letter-spacing:1.25px}
+    #enter-screen,#pass-screen,#member-screen{backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  }
+  @media (max-height:700px) and (min-width:641px){
+    .market-grid-live{top:40px;gap:5px}.market-meta{top:6px}.market-foot{bottom:4px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    #market-bg::before,.market-live-dot{animation:none !important}
+    .market-card{transition:none}
+  }
+
+
+  /* =========================================================
+     ELITE UI — PREMIUM REDESIGN LAYER
+     Refinement only: existing market wall and access logic remain intact.
+  ========================================================= */
+  :root{
+    --elite-red:#941c24;
+    --elite-red-2:#b32a34;
+    --elite-black:#070707;
+    --elite-glass:rgba(255,255,255,.66);
+    --elite-glass-strong:rgba(255,255,255,.82);
+    --elite-hairline:rgba(8,8,8,.13);
+    --elite-shadow:0 28px 90px rgba(0,0,0,.12);
+    --wall-x:0px;
+    --wall-y:0px;
+  }
+
+  html{background:#ececec}
+  body{letter-spacing:.002em}
+
+  .market-grid-live{
+    transform:translate3d(var(--wall-x),var(--wall-y),0) scale(1.018);
+    transform-origin:center;
+    will-change:transform;
+  }
+
+  #market-bg{
+    background:
+      radial-gradient(circle at 50% 46%,rgba(255,255,255,.22),rgba(255,255,255,.045) 37%,transparent 71%),
+      linear-gradient(180deg,#f7f7f7 0%,#e9e9e9 100%);
+  }
+
+  #market-bg::after{
+    background:
+      radial-gradient(circle at 50% 48%,rgba(255,255,255,.82) 0 8%,rgba(255,255,255,.50) 22%,rgba(255,255,255,.12) 49%,transparent 74%),
+      linear-gradient(180deg,rgba(255,255,255,.06),transparent 24%,rgba(0,0,0,.018));
+  }
+
+  .market-card{
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.52) inset,
+      0 9px 24px rgba(0,0,0,.022);
+  }
+
+  .market-card::after{
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.24),transparent 22%,rgba(255,255,255,.02)),
+      linear-gradient(90deg,transparent 0 75%,rgba(var(--series-color),.035) 100%);
+  }
+
+  .auth-wrap,
+  .member-wrap{
+    isolation:isolate;
+  }
+
+  .auth-wrap::after,
+  .member-wrap::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    z-index:-2;
+    width:min(780px,92vw);
+    height:min(520px,70vh);
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    background:radial-gradient(ellipse at center,rgba(255,255,255,.84) 0%,rgba(255,255,255,.58) 38%,rgba(255,255,255,.18) 67%,transparent 79%);
+    filter:blur(9px);
+  }
+
+  .auth-wrap{
+    width:min(470px,100%);
+    padding:46px 36px 34px;
+    border:1px solid rgba(0,0,0,.105);
+    border-radius:31px;
+    background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(255,255,255,.62));
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.96) inset,
+      0 26px 80px rgba(0,0,0,.085),
+      0 4px 14px rgba(0,0,0,.035);
+    backdrop-filter:blur(18px) saturate(120%);
+    -webkit-backdrop-filter:blur(18px) saturate(120%);
+  }
+
+  .auth-wrap::before{
+    content:"ELITE / АВТОРИЗАЦИЯ";
+    position:absolute;
+    top:17px;
+    left:50%;
+    transform:translateX(-50%);
+    color:rgba(0,0,0,.32);
+    font-family:"SFMono-Regular","SF Mono",Consolas,monospace;
+    font-size:7px;
+    font-weight:760;
+    letter-spacing:2.2px;
+    white-space:nowrap;
+  }
+
+  .lock{
+    margin-bottom:34px;
+    color:rgba(0,0,0,.66);
+    font-weight:640;
+    text-shadow:0 1px 0 rgba(255,255,255,.75);
+  }
+
+  .lock::after{
+    width:48px;
+    margin-top:16px;
+    background:linear-gradient(90deg,transparent,rgba(0,0,0,.32),transparent);
+  }
+
+  .input-shell{
+    border-radius:999px;
+    filter:drop-shadow(0 11px 25px rgba(0,0,0,.035));
+  }
+
+  .input-shell::after{
+    content:"";
+    position:absolute;
+    inset:-1px;
+    border-radius:999px;
+    pointer-events:none;
+    box-shadow:0 0 0 0 rgba(148,28,36,0);
+    transition:box-shadow .36s ease,opacity .36s ease;
+  }
+
+  .input-shell.focused::after{
+    box-shadow:0 0 0 5px rgba(0,0,0,.035),0 0 38px rgba(148,28,36,.045);
+  }
+
+  #pass-input{
+    height:68px;
+    border-color:rgba(0,0,0,.15);
+    background:rgba(255,255,255,.76);
+    box-shadow:0 1px 0 rgba(255,255,255,.96) inset,0 -1px 0 rgba(0,0,0,.025) inset;
+    font-weight:540;
+    letter-spacing:12px;
+  }
+
+  #pass-input:hover{
+    border-color:rgba(0,0,0,.30);
+    background:rgba(255,255,255,.88);
+  }
+
+  #pass-input:focus{
+    border-color:rgba(0,0,0,.74);
+    background:rgba(255,255,255,.96);
+    box-shadow:0 0 0 1px rgba(0,0,0,.035),0 16px 38px rgba(0,0,0,.055),0 1px 0 #fff inset;
+  }
+
+  #enter-btn,
+  #connect-btn,
+  #locate-btn{
+    --glow-x:50%;
+    --glow-y:50%;
+    border:1px solid rgba(0,0,0,.88);
+    background:
+      radial-gradient(circle at var(--glow-x) var(--glow-y),rgba(255,255,255,.15),transparent 30%),
+      linear-gradient(180deg,#151515 0%,#050505 62%,#0b0b0b 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.22) inset,
+      0 -1px 0 rgba(0,0,0,.78) inset,
+      0 12px 30px rgba(0,0,0,.11),
+      0 2px 5px rgba(0,0,0,.055);
+    text-shadow:0 1px 0 rgba(0,0,0,.52);
+    isolation:isolate;
+  }
+
+  #enter-btn{
+    min-width:min(348px,84vw);
+    padding:23px 42px 23px 54px;
+    border-color:rgba(0,0,0,.94);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.26) inset,
+      0 -1px 0 rgba(0,0,0,.8) inset,
+      0 24px 65px rgba(0,0,0,.16),
+      0 5px 16px rgba(0,0,0,.08);
+  }
+
+  #enter-btn::before,
+  #connect-btn::before,
+  #locate-btn::before{
+    opacity:.68;
+    filter:blur(.1px);
+  }
+
+  #enter-btn:hover,
+  #connect-btn:hover,
+  #locate-btn:hover{
+    background:
+      radial-gradient(circle at var(--glow-x) var(--glow-y),rgba(255,255,255,.20),transparent 34%),
+      linear-gradient(180deg,#1b1b1b 0%,#070707 58%,#101010 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.27) inset,
+      0 -1px 0 rgba(0,0,0,.84) inset,
+      0 20px 48px rgba(0,0,0,.16),
+      0 4px 10px rgba(0,0,0,.075);
+  }
+
+  #enter-btn:hover{transform:translateY(-3px) scale(1.018)}
+
+  #connect-btn{
+    min-width:236px;
+    padding:16px 31px 16px 37px;
+  }
+
+  #locate-btn{
+    min-width:214px;
+    padding:14px 31px 14px 34px;
+  }
+
+  #connect-btn:active,
+  #locate-btn:active,
+  #enter-btn:active{
+    box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 2px 7px rgba(0,0,0,.10);
+  }
+
+  .button-ripple{
+    position:absolute;
+    z-index:0;
+    width:9px;
+    height:9px;
+    margin:-4.5px 0 0 -4.5px;
+    border-radius:50%;
+    background:rgba(255,255,255,.34);
+    pointer-events:none;
+    animation:eliteButtonRipple .72s var(--ease-out) forwards;
+  }
+
+  @keyframes eliteButtonRipple{
+    from{opacity:.48;transform:scale(.6)}
+    to{opacity:0;transform:scale(34)}
+  }
+
+  #connect-btn::after{
+    content:"";
+    position:absolute;
+    left:24%;right:24%;bottom:-1px;
+    height:1px;
+    border-radius:999px;
+    background:linear-gradient(90deg,transparent,var(--elite-red-2),transparent);
+    opacity:0;
+    transform:scaleX(.35);
+    transition:opacity .28s ease,transform .45s var(--ease-out);
+  }
+  #connect-btn:hover::after{opacity:.72;transform:scaleX(1)}
+
+  #locate-btn::after{
+    right:18px;
+    width:5px;
+    height:5px;
+    margin-top:-2.5px;
+    background:#fff;
+    box-shadow:0 0 0 0 rgba(255,255,255,.14),0 0 10px rgba(255,255,255,.12);
+  }
+
+  #locate-btn.is-running{
+    border-color:rgba(148,28,36,.62);
+    box-shadow:0 1px 0 rgba(255,255,255,.20) inset,0 0 0 1px rgba(148,28,36,.06),0 18px 44px rgba(0,0,0,.15),0 0 35px rgba(148,28,36,.08);
+  }
+
+  #pass-hint{
+    margin-top:15px;
+    font-size:8px;
+    letter-spacing:2.5px;
+  }
+
+  .member-wrap{width:min(900px,100%)}
+
+  .member-heading{
+    position:relative;
+    padding-top:20px;
+  }
+
+  .member-heading::before{
+    content:"ДОСТУП К ЗАКРЫТОМУ РЫНКУ / УЗЕЛ 01";
+    position:absolute;
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    color:rgba(0,0,0,.30);
+    font-family:"SFMono-Regular","SF Mono",Consolas,monospace;
+    font-size:6.5px;
+    font-weight:760;
+    letter-spacing:2.25px;
+    white-space:nowrap;
+    opacity:0;
+  }
+
+  #member-screen.show .member-heading::before{
+    animation:memberReveal .85s .05s both var(--ease-out);
+  }
+
+  #member-screen h1{
+    font-weight:190;
+    text-shadow:0 1px 0 rgba(255,255,255,.92),0 18px 44px rgba(0,0,0,.045);
+  }
+
+  #member-screen .status{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:27px;
+    margin-top:17px;
+    padding:0 13px;
+    border:1px solid rgba(0,0,0,.09);
+    border-radius:999px;
+    background:rgba(255,255,255,.57);
+    box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 6px 18px rgba(0,0,0,.028);
+    backdrop-filter:blur(7px);
+    -webkit-backdrop-filter:blur(7px);
+    color:rgba(0,0,0,.58);
+    letter-spacing:3.8px;
+  }
+
+  .status-dot{
+    width:5px;
+    height:5px;
+    background:var(--elite-red);
+    box-shadow:0 0 0 0 rgba(148,28,36,.20);
+  }
+
+  @keyframes statusPulse{
+    0%{box-shadow:0 0 0 0 rgba(148,28,36,.22)}
+    65%,100%{box-shadow:0 0 0 8px rgba(148,28,36,0)}
+  }
+
+  #locate-btn.is-running:disabled{opacity:.78}
+
+  .terminal{
+    margin-top:27px;
+    border-color:rgba(255,255,255,.11);
+    border-radius:21px;
+    background:
+      radial-gradient(circle at 75% 0%,rgba(148,28,36,.055),transparent 30%),
+      linear-gradient(180deg,#111 0%,#090909 58%,#070707 100%);
+    box-shadow:
+      0 34px 90px rgba(0,0,0,.19),
+      0 8px 24px rgba(0,0,0,.09),
+      0 1px 0 rgba(255,255,255,.075) inset,
+      0 -1px 0 rgba(0,0,0,.7) inset;
+    transition:transform .45s var(--ease-out),box-shadow .45s ease,border-color .35s ease;
+  }
+
+  .terminal:hover{
+    transform:translateY(-2px);
+    border-color:rgba(255,255,255,.145);
+    box-shadow:
+      0 38px 96px rgba(0,0,0,.21),
+      0 10px 27px rgba(0,0,0,.10),
+      0 1px 0 rgba(255,255,255,.085) inset;
+  }
+
+  .terminal.is-running{
+    border-color:rgba(148,28,36,.23);
+    box-shadow:
+      0 38px 100px rgba(0,0,0,.21),
+      0 0 0 1px rgba(148,28,36,.035),
+      0 0 42px rgba(148,28,36,.045),
+      0 1px 0 rgba(255,255,255,.08) inset;
+  }
+
+  .terminal-bar{
+    margin-bottom:20px;
+    padding-bottom:15px;
+  }
+
+  .terminal-bar::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-1px;
+    height:1px;
+    background:linear-gradient(90deg,rgba(255,255,255,.02),rgba(148,28,36,.20) 52%,rgba(255,255,255,.02));
+    opacity:.72;
+  }
+
+  .terminal-bar i:first-child{background:rgba(148,28,36,.78);box-shadow:0 0 9px rgba(148,28,36,.20)}
+  .terminal-bar i:nth-child(2){background:#4e4e4e}
+  .terminal-bar i:nth-child(3){background:#353535}
+
+  .terminal-title{color:#747474;letter-spacing:2.25px}
+  #terminal-output{color:#dedede;text-shadow:0 0 16px rgba(255,255,255,.025)}
+  .cursor{width:6px;background:#f1f1f1;box-shadow:0 0 12px rgba(255,255,255,.10)}
+  .privacy{margin-top:18px;color:rgba(0,0,0,.38);letter-spacing:1.65px}
+
+  #pass-screen.show .auth-wrap{
+    animation:authWrapReveal 1.05s both var(--ease-out),eliteFloatIn 1.15s both var(--ease-out);
+  }
+
+  @keyframes eliteFloatIn{
+    0%{box-shadow:0 8px 30px rgba(0,0,0,.02);filter:blur(4px)}
+    100%{box-shadow:0 1px 0 rgba(255,255,255,.96) inset,0 26px 80px rgba(0,0,0,.085),0 4px 14px rgba(0,0,0,.035);filter:blur(0)}
+  }
+
+  @media (hover:hover) and (pointer:fine){
+    #enter-btn,#connect-btn,#locate-btn{will-change:transform,box-shadow,background}
+  }
+
+  @media (max-width:640px){
+    .auth-wrap{width:min(430px,100%);padding:41px 21px 28px;border-radius:25px}
+    .auth-wrap::before{top:15px;font-size:6.2px;letter-spacing:1.8px}
+    #pass-input{height:62px;letter-spacing:9px}
+    #connect-btn{min-width:220px;padding-top:15px;padding-bottom:15px}
+    #locate-btn{min-width:205px}
+    .member-heading{padding-top:17px}
+    .member-heading::before{font-size:5.6px;letter-spacing:1.7px}
+    #member-screen .status{min-height:25px;padding:0 10px;letter-spacing:3px}
+    .terminal{border-radius:17px;margin-top:22px}
+  }
+
+  @media (max-height:760px){
+    .auth-wrap{padding-top:39px;padding-bottom:27px}
+    .member-heading{padding-top:14px}
+    #member-screen .status{margin-top:12px}
+    .terminal{margin-top:17px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .market-grid-live{transform:scale(1.018)!important}
+    .button-ripple{display:none!important}
+  }
+
+
+  /* =========================================================
+     LOCALISATION — TEL AVIV, ISRAËL
+     Badge global visible sur tous les écrans.
+  ========================================================= */
+  .site-location-badge{
+    position:fixed;
+    left:max(18px, env(safe-area-inset-left));
+    bottom:max(18px, env(safe-area-inset-bottom));
+    z-index:120;
+    display:inline-flex;
+    align-items:center;
+    gap:11px;
+    max-width:calc(100vw - 36px);
+    padding:9px 14px 9px 9px;
+    border:1px solid rgba(0,0,0,.12);
+    border-radius:999px;
+    background:rgba(255,255,255,.78);
+    color:#090909;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.95) inset,
+      0 12px 36px rgba(0,0,0,.10);
+    backdrop-filter:blur(18px) saturate(125%);
+    -webkit-backdrop-filter:blur(18px) saturate(125%);
+    font-family:Inter,"SF Pro Text",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:10px;
+    font-weight:650;
+    line-height:1.25;
+    letter-spacing:.45px;
+    pointer-events:none;
+    user-select:none;
+    -webkit-user-select:none;
+    animation:locationBadgeIn .9s .45s both var(--ease-out);
+  }
+
+  .site-location-symbol{
+    position:relative;
+    width:30px;
+    height:30px;
+    flex:0 0 30px;
+    display:block;
+    overflow:visible;
+    transform-origin:center;
+    filter:drop-shadow(0 5px 8px rgba(0,56,184,.16));
+    animation:israelSymbolFloat 2.35s ease-in-out infinite;
+  }
+
+  .site-location-symbol svg{
+    width:100%;
+    height:100%;
+    display:block;
+    overflow:visible;
+    transform-origin:center;
+    animation:israelSymbolFlutter 1.15s ease-in-out infinite alternate;
+  }
+
+  @keyframes israelSymbolFloat{
+    0%,100%{transform:translateY(0) rotate(-2deg)}
+    25%{transform:translateY(-1.5px) rotate(2.5deg)}
+    50%{transform:translateY(.8px) rotate(-1deg)}
+    75%{transform:translateY(-.8px) rotate(1.8deg)}
+  }
+
+  @keyframes israelSymbolFlutter{
+    from{transform:perspective(120px) rotateY(-5deg) scale(.985)}
+    to{transform:perspective(120px) rotateY(8deg) scale(1.035)}
+  }
+
+  .ru-flag{
+    width:28px;
+    height:19px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    border-radius:2px;
+    box-shadow:0 1px 4px rgba(0,0,0,.12);
+  }
+  .ru-flag i{display:block;flex:1;}
+  .ru-flag i:nth-child(1){background:#fff}
+  .ru-flag i:nth-child(2){background:#2455a4}
+  .ru-flag i:nth-child(3){background:#d52b1e}
+
+  .site-location-text{
+    display:block;
+    white-space:nowrap;
+  }
+
+  .site-location-text strong{
+    font-weight:780;
+  }
+
+  @keyframes locationBadgeIn{
+    from{
+      opacity:0;
+      transform:translateY(10px) scale(.96);
+      filter:blur(5px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      filter:blur(0);
+    }
+  }
+
+  @media (max-width:640px){
+    .site-location-badge{
+      left:50%;
+      bottom:max(12px, env(safe-area-inset-bottom));
+      max-width:calc(100vw - 24px);
+      transform:translateX(-50%);
+      padding:8px 12px 8px 8px;
+      gap:9px;
+      font-size:8.8px;
+      letter-spacing:.22px;
+    }
+
+    .site-location-symbol{
+      width:28px;
+      height:28px;
+      flex-basis:28px;
+    }
+
+    .site-location-text{
+      white-space:nowrap;
+      text-align:left;
+      font-size:clamp(7.4px, 2.25vw, 8.8px);
+    }
+
+    @keyframes locationBadgeIn{
+      from{
+        opacity:0;
+        transform:translate(-50%, 10px) scale(.96);
+        filter:blur(5px);
+      }
+      to{
+        opacity:1;
+        transform:translate(-50%, 0) scale(1);
+        filter:blur(0);
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .site-location-badge,
+    .site-location-symbol,
+    .site-location-symbol svg{
+      animation:none !important;
+    }
+  }
+
+
+
+  /* Russian flag — perfectly centered in the hosting badge */
+  .hosting-badge{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+
+  .hosting-russia-flag{
+    width:21px;
+    height:14px;
+    display:flex;
+    flex:0 0 21px;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-self:center;
+    overflow:hidden;
+    border-radius:2px;
+    margin:0;
+    padding:0;
+    position:relative;
+    top:0;
+    transform:none;
+    box-sizing:border-box;
+    box-shadow:0 0 0 1px rgba(0,0,0,.08);
+  }
+
+  .hosting-russia-flag span{
+    display:block;
+    width:100%;
+    height:33.3333%;
+    flex:1 1 33.3333%;
+    margin:0;
+    padding:0;
+  }
+
+  .hosting-russia-flag span:nth-child(1){background:#fff}
+  .hosting-russia-flag span:nth-child(2){background:#0039a6}
+  .hosting-russia-flag span:nth-child(3){background:#d52b1e}
+
 </style>
 </head>
+
 <body>
 
-  <!-- ЭКРАН 1: ВХОД -->
-  <div id="enter-screen" class="screen">
-    <button id="enter-btn" type="button">ВОЙТИ</button>
+  <!-- Localisation globale — visible sur tous les écrans -->
+  <div class="site-location-badge" role="note" aria-label="Инфраструктура размещена в Москве, Россия">
+    <span class="site-location-symbol" aria-hidden="true">
+      <span class="ru-flag"><i></i><i></i><i></i></span>
+    </span>
+    <span class="site-location-text">Инфраструктура размещена в <strong>Москве, Россия</strong></span>
   </div>
 
-  <!-- ЭКРАН 2: АВТОРИЗАЦИЯ / ПАРОЛЬ -->
-  <div id="pass-screen" class="screen">
-    <div class="auth-wrap">
-      <div class="lock">ЗАЩИЩЕННЫЙ ДОСТУП ELITE</div>
-      <div class="input-shell">
-        <input id="pass-input" type="password" placeholder="••••••••" autocomplete="current-password" />
-      </div>
-      <button id="connect-btn" type="button">ПОДТВЕРДИТЬ</button>
-      <div id="pass-hint">КЛЮЧ ДОСТУПА НЕВЕРНЫЙ</div>
+
+
+  <div id="market-bg" data-state="loading" aria-hidden="true">
+    <div class="market-tape">
+      <span class="market-live"><span class="market-live-dot"></span><span id="market-state-label">Сканирование DEX · новые пулы Solana</span></span>
+      <span class="market-clock" id="market-clock">--:--:-- UTC</span>
+    </div>
+    <div class="market-grid-live" id="market-grid-live">
+      <article class="market-card" data-slot="0">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="1">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="2">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="3">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="4">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="5">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="6">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="7">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="8">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="9">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="10">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
+      <article class="market-card" data-slot="11">
+        <div class="market-meta">
+          <div class="market-name"><div class="market-symbol-row"><span class="market-symbol">MEME</span><span class="market-badge">СКАН</span></div><span class="market-pair">SOLANA / DEX</span></div>
+          <div class="market-quote"><span class="market-price">—</span><span class="market-change">M5 —</span></div>
+        </div>
+        <canvas class="market-canvas"></canvas>
+        <div class="market-foot"><span class="market-activity">TX — · ЛИКВ —</span><span class="market-source">ПОИСК</span></div>
+      </article>
     </div>
   </div>
 
-  <!-- ЭКРАН 3: ЛИЧНЫЙ КАБИНЕТ / УПРАВЛЕНИЕ -->
+  <div id="enter-screen" class="screen">
+    <button id="enter-btn" type="button">Войти</button>
+  </div>
+
+  <div id="pass-screen" class="screen">
+    <div class="auth-wrap">
+      <div class="lock">Доступ только для участников</div>
+
+      <div class="input-shell">
+        <input
+          id="pass-input"
+          type="password"
+          placeholder="••••••"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Ключ доступа"
+        >
+      </div>
+
+      <button id="connect-btn" type="button">Войти в систему</button>
+      <div id="pass-hint" aria-live="polite"></div>
+    </div>
+  </div>
+
   <div id="member-screen" class="screen">
     <div class="member-wrap">
       <div class="member-heading">
-        <h1>ЭЛИТА</h1>
-        <div class="status">
-          <span class="status-dot"></span>СИСТЕМА ЗАЩИЩЕНА И АКТИВНА
-        </div>
-      </div>
-      <button id="locate-btn" type="button">ЗАПУСТИТЬ ДИГНОСТИКУ</button>
-      
-      <div class="terminal">
-        <div class="terminal-bar">
-          <i></i><i></i><i></i>
-          <span class="terminal-title">Secure Terminal v4.2</span>
-        </div>
-        <div class="terminal-content">
-          <div id="terminal-output"></div><span class="cursor"></span>
-        </div>
+        <h1>Elite</h1>
+        <p class="status"><span class="status-dot"></span>Доступ разрешён</p>
       </div>
 
-      <div class="privacy">
-        КОНФИДЕНЦИАЛЬНО • ЗАКРЫТЫЙ СЕГМЕНТ СВЯЗИ • ВСЕ ДАННЫЕ ЗАШИФРОВАНЫ
-      </div>
+      <button id="locate-btn" type="button">Открыть терминал</button>
+
+      <section id="terminal" class="terminal" aria-label="Защищённый терминал">
+        <div class="terminal-bar">
+          <i></i><i></i><i></i>
+          <span class="terminal-title">Elite / Защищённый узел</span>
+        </div>
+
+        <div class="terminal-content">
+          <span id="terminal-output"></span><span class="cursor"></span>
+        </div>
+      </section>
+
+      <p class="privacy">Защищённый интерфейс • Данные не собираются</p>
     </div>
   </div>
 
-  <script>
-    const enterScreen = document.getElementById('enter-screen');
-    const enterBtn = document.getElementById('enter-btn');
-    const passScreen = document.getElementById('pass-screen');
-    const passInput = document.getElementById('pass-input');
-    const connectBtn = document.getElementById('connect-btn');
-    const passHint = document.getElementById('pass-hint');
-    const memberScreen = document.getElementById('member-screen');
-    const locateBtn = document.getElementById('locate-btn');
-    const terminalOutput = document.getElementById('terminal-output');
+<script>
+  const PASSWORD = "elite2026";
+  const $ = id => document.getElementById(id);
 
-    // Ключ доступа для проверки (можно изменить при необходимости)
-    const CORRECT_PASS = "ELITE2026";
+  const enterScreen = $("enter-screen");
+  const enterBtn = $("enter-btn");
+  const passScreen = $("pass-screen");
+  const passInput = $("pass-input");
+  const connectBtn = $("connect-btn");
+  const passHint = $("pass-hint");
+  const memberScreen = $("member-screen");
+  const locateBtn = $("locate-btn");
+  const terminal = $("terminal");
+  const output = $("terminal-output");
 
-    enterBtn.addEventListener('click', () => {
-      enterScreen.classList.add('leaving');
-      setTimeout(() => {
-        enterScreen.classList.add('collapse-line');
-      }, 460);
-      setTimeout(() => {
-        enterScreen.classList.add('fade-away');
-        passScreen.classList.add('show');
-        passInput.focus();
-      }, 750);
-    });
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-    function handleAuth() {
-      const val = passInput.value.trim();
-      if (val === CORRECT_PASS) {
-        passHint.classList.remove('visible');
-        passInput.classList.remove('error');
-        passScreen.classList.add('leaving');
-        setTimeout(() => {
-          passScreen.style.display = 'none';
-          memberScreen.classList.add('show');
-          startTerminalSequence();
-        }, 700);
-      } else {
-        passInput.classList.add('error');
-        passHint.classList.add('visible');
-        setTimeout(() => {
-          passInput.classList.remove('error');
-        }, 500);
-      }
+  let typing = false;
+
+  async function typeLine(text, speed = 16) {
+    for (const char of text) {
+      output.textContent += char;
+
+      const punctuationPause =
+        char === "." ? 95 :
+        char === ":" ? 65 :
+        char === "…" ? 110 :
+        char === " " ? 5 : 0;
+
+      await wait(speed + Math.random() * 14 + punctuationPause);
     }
 
-    connectBtn.addEventListener('click', handleAuth);
-    passInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        handleAuth();
-      }
+    output.textContent += "\n";
+  }
+
+  function openPasswordScreen() {
+    if (enterScreen.classList.contains("leaving")) return;
+
+    enterBtn.disabled = true;
+
+    // Disparition en plusieurs temps : texte -> ligne -> point -> fondu.
+    enterScreen.classList.add("leaving");
+
+    setTimeout(() => {
+      enterScreen.classList.add("collapse-line");
+    }, 610);
+
+    setTimeout(() => {
+      passScreen.classList.add("show");
+    }, 860);
+
+    setTimeout(() => {
+      enterScreen.classList.add("fade-away");
+    }, 930);
+
+    setTimeout(() => {
+      enterScreen.style.display = "none";
+      passInput.focus({ preventScroll: true });
+    }, 1360);
+  }
+
+  enterBtn.addEventListener("click", openPasswordScreen);
+
+  function showPasswordError() {
+    passInput.classList.remove("error");
+    void passInput.offsetWidth;
+    passInput.classList.add("error");
+
+    passHint.textContent = "Недействительный ключ доступа";
+    passHint.classList.add("visible");
+
+    passInput.value = "";
+    passInput.focus({ preventScroll: true });
+
+    clearTimeout(showPasswordError.timer);
+    showPasswordError.timer = setTimeout(() => {
+      passInput.classList.remove("error");
+      passHint.classList.remove("visible");
+
+      setTimeout(() => {
+        if (!passHint.classList.contains("visible")) {
+          passHint.textContent = "";
+        }
+      }, 300);
+    }, 1450);
+  }
+
+  function grantAccess() {
+    connectBtn.disabled = true;
+    passInput.disabled = true;
+    passHint.classList.remove("visible");
+    passScreen.classList.add("leaving");
+
+    setTimeout(() => {
+      passScreen.classList.remove("show");
+      memberScreen.classList.add("show");
+    }, 420);
+
+    setTimeout(() => {
+      passScreen.style.display = "none";
+    }, 1300);
+  }
+
+  function tryPassword() {
+    if (passInput.value === PASSWORD) {
+      grantAccess();
+    } else {
+      showPasswordError();
+    }
+  }
+
+  connectBtn.addEventListener("click", tryPassword);
+
+  passInput.addEventListener("keydown", event => {
+    if (event.key === "Войти") {
+      tryPassword();
+    }
+  });
+
+  locateBtn.addEventListener("click", async () => {
+    if (typing) return;
+
+    typing = true;
+    locateBtn.disabled = true;
+    locateBtn.classList.add("is-running");
+    terminal.classList.add("is-running");
+    locateBtn.textContent = "Инициализация";
+    output.textContent = "";
+
+    await wait(180);
+    await typeLine("> Подключение к защищённой сети...", 13);
+    await wait(270);
+    await typeLine("> Проверка протокола доступа...", 15);
+    await wait(210);
+    await typeLine("> Биометрическая аутентификация...", 17);
+    await wait(260);
+    await typeLine("СТАТУС: ПОДТВЕРЖДЁН", 21);
+    await wait(320);
+    await typeLine("> Полный доступ разрешён", 16);
+    await wait(300);
+    await typeLine("Добро пожаловать в систему Elite.", 22);
+
+    locateBtn.textContent = "Обновить терминал";
+    locateBtn.disabled = false;
+    locateBtn.classList.remove("is-running");
+    terminal.classList.remove("is-running");
+    typing = false;
+  });
+
+  /* micro-feedback tactiles sans changer la logique */
+  [enterBtn, connectBtn, locateBtn].forEach(btn => {
+    btn.addEventListener("pointerdown", () => {
+      if (navigator.vibrate) navigator.vibrate(7);
+    });
+  });
+
+  passInput.addEventListener("focus", () => {
+    passInput.parentElement.classList.add("focused");
+  });
+
+  passInput.addEventListener("blur", () => {
+    passInput.parentElement.classList.remove("focused");
+  });
+
+
+  /* Premium pointer reactions — visual only. */
+  (() => {
+    const root = document.documentElement;
+    const interactive = [enterBtn, connectBtn, locateBtn].filter(Boolean);
+    const finePointer = window.matchMedia?.("(hover:hover) and (pointer:fine)")?.matches;
+
+    interactive.forEach(btn => {
+      btn.addEventListener("pointermove", event => {
+        const r = btn.getBoundingClientRect();
+        const x = ((event.clientX - r.left) / Math.max(1, r.width)) * 100;
+        const y = ((event.clientY - r.top) / Math.max(1, r.height)) * 100;
+        btn.style.setProperty("--glow-x", `${x.toFixed(1)}%`);
+        btn.style.setProperty("--glow-y", `${y.toFixed(1)}%`);
+      });
+      btn.addEventListener("pointerleave", () => {
+        btn.style.setProperty("--glow-x", "50%");
+        btn.style.setProperty("--glow-y", "50%");
+      });
+      btn.addEventListener("pointerdown", event => {
+        const r = btn.getBoundingClientRect();
+        const wave = document.createElement("span");
+        wave.className = "button-ripple";
+        wave.style.left = `${event.clientX - r.left}px`;
+        wave.style.top = `${event.clientY - r.top}px`;
+        btn.appendChild(wave);
+        wave.addEventListener("animationend", () => wave.remove(), { once:true });
+      });
     });
 
-    const terminalLogs = [
-      "Инициализация безопасного ядра...",
-      "Проверка криптографических ключей шифрования...",
-      "Соединение с защищенным узлом [RU-CENTRAL-01] установлено успешно.",
-      "Статус доступа: Уровень 1 (Элита).",
-      "Ожидание пользовательских команд..."
+    if (finePointer) {
+      let targetX = 0, targetY = 0, currentX = 0, currentY = 0, rafId = 0;
+      const animate = () => {
+        currentX += (targetX - currentX) * .075;
+        currentY += (targetY - currentY) * .075;
+        root.style.setProperty("--wall-x", `${currentX.toFixed(2)}px`);
+        root.style.setProperty("--wall-y", `${currentY.toFixed(2)}px`);
+        if (Math.abs(targetX-currentX)>.02 || Math.abs(targetY-currentY)>.02) rafId = requestAnimationFrame(animate);
+        else rafId = 0;
+      };
+      window.addEventListener("pointermove", event => {
+        const nx = event.clientX / Math.max(1, innerWidth) - .5;
+        const ny = event.clientY / Math.max(1, innerHeight) - .5;
+        targetX = nx * -5.5;
+        targetY = ny * -3.5;
+        if (!rafId) rafId = requestAnimationFrame(animate);
+      }, { passive:true });
+    }
+  })();
+
+</script>
+
+
+<script>
+  /* =========================================================
+     LIVE NEW-POOL / MEME MARKET WALL
+     - Discovery: GeckoTerminal public keyless API (Solana new + trending pools)
+     - History: real 1-minute OHLCV whenever available
+     - Prices: batch pool refresh
+     - Between real refreshes, a tiny mean-reverting micro-motion keeps the
+       decorative last candle alive without letting it drift away from real data.
+  ========================================================= */
+  (() => {
+    const marketBg = document.getElementById("market-bg");
+    if (!marketBg) return;
+
+    const cards = [...document.querySelectorAll(".market-card[data-slot]")];
+    const stateLabel = document.getElementById("market-state-label");
+    const clock = document.getElementById("market-clock");
+    const reduceMotion = false; // mouvement du market wall explicitement demandé
+    const API = "https://api.geckoterminal.com/api/v2";
+    const NETWORK = "solana";
+    const SLOT_COUNT = cards.length;
+    const DISCOVERY_MS = 30000;
+    const PRICE_MS = 12000;
+    const OHLCV_ROTATE_MS = 62000;
+    const MAX_OHLCV = 42;
+
+    const FALLBACK = [
+      ["DOGE","DOGE / USDT",.22,.0042],["SHIB","SHIB / USDT",.000014,.0051],
+      ["PEPE","PEPE / USDT",.000011,.0064],["BONK","BONK / USDT",.000021,.0071],
+      ["WIF","WIF / USDT",1.10,.0068],["FLOKI","FLOKI / USDT",.00009,.0061],
+      ["POPCAT","POPCAT / SOL",.31,.0082],["MOG","MOG / USDT",.0000007,.0074],
+      ["BRETT","BRETT / USDT",.04,.0070],["TURBO","TURBO / USDT",.003,.0076],
+      ["PNUT","PNUT / SOL",.18,.0090],["MEME","NEW / SOL",.0008,.011]
     ];
+    const EXCLUDE = new Set(["SOL","WSOL","USDC","USDT","USD1","PYUSD","BTC","WBTC","ETH","WETH","JITOSOL","JUPSOL","MSOL","BSOL"]);
+    const MEME_HINTS = ["DOG","DOGE","INU","SHIB","PEPE","FROG","CAT","KITTY","PUP","PUPPY","MEME","BONK","WIF","WOJAK","BABY","MOON","ELON","TRUMP","CHAD","GIGA","GOAT","FART","PENGU","PNUT","POPCAT","MOG","BRETT","TURBO","MONKEY","APE","HAMSTER","PONKE","SLERF","MOTHER","MICHI","BILLY","MOODENG","HIPPO","AI","ROBOT"];
 
-    function startTerminalSequence() {
-      let lineIndex = 0;
-      let charIndex = 0;
-      let currentText = "";
+    let items = [];
+    let poolById = new Map();
+    let destroyed = false;
+    let raf = 0;
+    let lastFrame = performance.now();
+    let discoveryTimer = 0;
+    let priceTimer = 0;
+    let ohlcvTimer = 0;
+    let ohlcvCursor = 0;
+    let backoffUntil = 0;
 
-      function typeLine() {
-        if (lineIndex < terminalLogs.length) {
-          if (charIndex < terminalLogs[lineIndex].length) {
-            currentText += terminalLogs[lineIndex].charAt(charIndex);
-            terminalOutput.textContent = currentText;
-            charIndex++;
-            setTimeout(typeLine, 25);
-          } else {
-            currentText += "\n";
-            lineIndex++;
-            charIndex = 0;
-            setTimeout(typeLine, 400);
+    const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+    const sleep = ms => new Promise(r => setTimeout(r,ms));
+    const n = v => { const x = Number(v); return Number.isFinite(x) ? x : 0; };
+    const randomNormal = () => {
+      let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random();
+      return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+    };
+    const compact = value => {
+      if (!Number.isFinite(value) || value <= 0) return "—";
+      return new Intl.NumberFormat("ru-RU",{notation:"compact",maximumFractionDigits:1}).format(value);
+    };
+    const formatPrice = value => {
+      if (!Number.isFinite(value) || value <= 0) return "—";
+      if (value >= 1000) return value.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2});
+      if (value >= 1) return value.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:4});
+      if (value >= .01) return value.toLocaleString("fr-FR",{minimumFractionDigits:4,maximumFractionDigits:6});
+      if (value >= .0001) return value.toLocaleString("fr-FR",{minimumFractionDigits:6,maximumFractionDigits:8});
+      return value.toExponential(3).replace("e-","e−");
+    };
+    const ageLabel = iso => {
+      const t = Date.parse(iso || ""); if (!Number.isFinite(t)) return "В ЭФИРЕ";
+      const m = Math.max(0,Math.floor((Date.now()-t)/60000));
+      if (m < 1) return "<1M"; if (m < 60) return `${m}M`; const h=Math.floor(m/60); if(h<48)return `${h}H`; return `${Math.floor(h/24)}D`;
+    };
+
+    function tickClock(){
+      if (!clock) return;
+      clock.textContent = new Date().toLocaleTimeString("ru-RU",{timeZone:"UTC",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}) + " UTC";
+    }
+    tickClock(); setInterval(tickClock,1000);
+
+    async function fetchJSON(url, timeout=6500){
+      if (Date.now() < backoffUntil) throw new Ошибка("повтор");
+      const ctrl = new AbortController();
+      const timer = setTimeout(()=>ctrl.abort(),timeout);
+      try{
+        const res = await fetch(url,{headers:{accept:"application/json"},cache:"no-store",signal:ctrl.signal});
+        if (res.status === 429){ backoffUntil = Date.now()+45000; throw new Ошибка("429"); }
+        if (!res.ok) throw new Ошибка(`HTTP ${res.status}`);
+        return await res.json();
+      } finally { clearTimeout(timer); }
+    }
+
+    function includedMap(payload){
+      return new Map((payload?.included || []).map(x => [x.id,x]));
+    }
+
+    function parsePool(entry, inc, source){
+      const a = entry?.attributes || {};
+      const rel = entry?.relationships || {};
+      const base = inc.get(rel.base_token?.data?.id)?.attributes || {};
+      const quote = inc.get(rel.quote_token?.data?.id)?.attributes || {};
+      const dex = inc.get(rel.dex?.data?.id)?.attributes || {};
+      const symbol = String(base.symbol || String(a.name||"").split("/")[0] || "НОВЫЙ").slice(0,13).toUpperCase();
+      const name = String(base.name || symbol);
+      const quoteSymbol = String(quote.symbol || String(a.name||"").split("/")[1] || "SOL").trim().slice(0,9).toUpperCase();
+      const price = n(a.base_token_price_usd);
+      const m5 = n(a.price_change_percentage?.m5);
+      const tx5 = n(a.transactions?.m5?.buys) + n(a.transactions?.m5?.sells);
+      const tx1 = n(a.transactions?.h1?.buys) + n(a.transactions?.h1?.sells);
+      const liq = n(a.reserve_in_usd);
+      const vol5 = n(a.volume_usd?.m5);
+      const created = a.pool_created_at || "";
+      const ageMin = Number.isFinite(Date.parse(created)) ? Math.max(0,(Date.now()-Date.parse(created))/60000) : 99999;
+      const hay = `${symbol} ${name}`.toUpperCase();
+      const meme = MEME_HINTS.some(k => hay.includes(k));
+      if (!entry?.id || !a.address || !price || EXCLUDE.has(symbol)) return null;
+      return {
+        id:entry.id,address:a.address,network:NETWORK,source,symbol,name,quoteSymbol,price,m5,tx5,tx1,liq,vol5,created,
+        dex:String(dex.name || rel.dex?.data?.id || "DEX").toUpperCase().slice(0,11),meme,ageMin,
+        score:(meme?8:0)+(source==="NEW"?6:2)+(ageMin<30?5:ageMin<120?2:0)+Math.log10(tx5+1)*2.2+Math.log10(liq+10)*.55+Math.min(4,Math.abs(m5)*.12)
+      };
+    }
+
+    async function discoverPools(){
+      const q = "include=base_token,quote_token,dex&page=1";
+      const [newR,trendR] = await Promise.allSettled([
+        fetchJSON(`${API}/networks/${NETWORK}/new_pools?${q}`),
+        fetchJSON(`${API}/networks/${NETWORK}/trending_pools?${q}&duration=5m`)
+      ]);
+      const out=[];
+      if (newR.status === "fulfilled"){
+        const inc=includedMap(newR.value);
+        for(const e of newR.value.data||[]){const p=parsePool(e,inc,"НОВЫЙ");if(p)out.push(p)}
+      }
+      if (trendR.status === "fulfilled"){
+        const inc=includedMap(trendR.value);
+        for(const e of trendR.value.data||[]){const p=parsePool(e,inc,"ТРЕНД");if(p)out.push(p)}
+      }
+      const unique=new Map();
+      for(const p of out){const old=unique.get(p.id);if(!old||p.score>old.score)unique.set(p.id,p)}
+      return [...unique.values()].filter(p=>p.liq>=400 || p.tx5>=2).sort((a,b)=>b.score-a.score);
+    }
+
+    function fallbackPool(index){
+      const [symbol,pair,price,vol]=FALLBACK[index%FALLBACK.length];
+      return {id:`fallback-${index}`,address:"",network:NETWORK,source:"ДЕМО",symbol,name:symbol,quoteSymbol:pair.split("/")[1].trim(),price,m5:0,tx5:0,tx1:0,liq:0,vol5:0,created:"",dex:"ЛОКАЛЬНЫЙ",meme:true,ageMin:99999,score:0,vol};
+    }
+
+    function makeItem(card,index,pool){
+      const canvas=card.querySelector("canvas");
+      const ctx=canvas.getContext("2d",{alpha:true,desynchronized:true});
+      const rgb=getComputedStyle(card).getPropertyValue("--series-color").trim()||"9,9,9";
+      const p=pool?.price || FALLBACK[index][2];
+      const now=performance.now();
+      return {
+        card,canvas,ctx,index,rgb,pool:pool||fallbackPool(index),candles:[],
+        realPrice:p,visualPrice:p,velocity:0,momentum:0,regime:0,impulse:0,
+        microOpen:p,microHigh:p,microLow:p,microVolume:1,pulse:0,
+        resizeObserver:null,lastRealAt:0,lastUiPrice:p,sessionOpen:p,
+        regimeUntil:now+900+Math.random()*2400,
+        nextImpulseAt:now+700+Math.random()*2600,
+        nextBarAt:now+550+Math.random()*1100,
+        nextUiAt:now,
+        syntheticTicks:0,
+        lastDirection:1
+      };
+    }
+
+    function seedFallbackCandles(item){
+      const base=item.realPrice||1; const vol=item.pool.vol || (item.pool.source==="NEW"?.010:.006);
+      let p=base*(1+(Math.random()-.5)*vol*8), vel=0;
+      const arr=[]; const now=Math.floor(Date.now()/60000)*60000;
+      for(let i=MAX_OHLCV-1;i>=0;i--){
+        const o=p; vel=vel*.62+randomNormal()*vol*.38; const c=Math.max(base*.25,p*Math.exp(vel));
+        const spread=Math.abs(randomNormal())*vol*.75;
+        arr.push({t:now-i*60000,o,h:Math.max(o,c)*(1+spread),l:Math.min(o,c)*(1-spread),c,v:Math.random()*100}); p=c;
+      }
+      item.candles=arr; item.visualPrice=item.realPrice||arr[arr.length-1].c;
+      item.sessionOpen=item.visualPrice;
+      item.microOpen=item.visualPrice;item.microHigh=item.visualPrice;item.microLow=item.visualPrice;item.microVolume=1;
+      const animNow=performance.now();
+      item.nextBarAt=animNow+520+Math.random()*1250;
+      item.regimeUntil=animNow+850+Math.random()*2600;
+      item.nextImpulseAt=animNow+650+Math.random()*2800;
+    }
+
+    function sizeCanvas(item){
+      const r=item.canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
+      const w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));
+      if(item.canvas.width!==w||item.canvas.height!==h){item.canvas.width=w;item.canvas.height=h}
+      item.ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+
+    function updateCardText(item,flash=false){
+      const p=item.pool,c=item.card;
+      c.querySelector(".market-symbol").textContent=p.symbol||"НОВЫЙ";
+      c.querySelector(".market-pair").textContent=`${p.symbol||"ТОКЕН"} / ${p.quoteSymbol||"SOL"} · ${p.dex||"DEX"}`;
+      const badge=c.querySelector(".market-badge");
+      badge.textContent=p.source==="NEW"?`НОВЫЙ ${ageLabel(p.created)}`:p.source==="TREND"?"ТРЕНД":"ДЕМО";
+      c.classList.toggle("is-new",p.source==="NEW");
+      c.querySelector(".market-price").textContent=formatPrice(item.realPrice||p.price);
+      const ch=c.querySelector(".market-change"),pct=n(p.m5);
+      ch.textContent=`M5 ${pct>=0?"+":""}${pct.toFixed(2)}%`;
+      ch.classList.toggle("up",pct>=0);ch.classList.toggle("down",pct<0);
+      c.querySelector(".market-activity").textContent=`TX ${Math.round(p.tx5||0)} · LIQ $${compact(p.liq)}`;
+      c.querySelector(".market-source").textContent=p.source==="DEMO"?"ВИЗУАЛЬНЫЙ ПОТОК":"GT ЯКОРЬ · ПОТОК";
+      if(flash){c.classList.remove("flash");void c.offsetWidth;c.classList.add("flash");setTimeout(()=>c.classList.remove("flash"),1100)}
+    }
+
+    async function loadOHLCV(item){
+      const p=item.pool;if(!p.address||p.source==="DEMO")return;
+      try{
+        const url=`${API}/networks/${NETWORK}/pools/${encodeURIComponent(p.address)}/ohlcv/minute?aggregate=1&limit=${MAX_OHLCV}&currency=usd&token=base&include_empty_intervals=true`;
+        const j=await fetchJSON(url,7000); const list=j?.data?.attributes?.ohlcv_list||[];
+        const candles=list.map(x=>({t:n(x[0])*1000,o:n(x[1]),h:n(x[2]),l:n(x[3]),c:n(x[4]),v:n(x[5])})).filter(x=>x.t&&x.c).sort((a,b)=>a.t-b.t);
+        if(candles.length>=4){
+          item.candles=candles.slice(-MAX_OHLCV);
+          const last=item.candles[item.candles.length-1];
+          if(!item.realPrice)item.realPrice=last.c;
+          item.visualPrice=item.realPrice||last.c;
+          item.microOpen=item.visualPrice;item.microHigh=item.visualPrice;item.microLow=item.visualPrice;
+        }
+      }catch(e){ /* le fallback visuel continue */ }
+    }
+
+    async function assignPool(item,pool,flash=true){
+      item.card.classList.add("swap");
+      await sleep(170);
+      item.pool=pool;item.realPrice=pool.price;item.visualPrice=pool.price;item.velocity=0;item.momentum=0;item.regime=0;item.impulse=0;item.pulse=1;item.lastRealAt=Date.now();
+      seedFallbackCandles(item);updateCardText(item,flash);
+      item.card.classList.remove("swap");
+      loadOHLCV(item);
+    }
+
+    function initialItems(){
+      items=cards.map((card,i)=>makeItem(card,i,fallbackPool(i)));
+      for(const item of items){
+        seedFallbackCandles(item);updateCardText(item,false);
+        const ro=new ResizeObserver(()=>sizeCanvas(item));ro.observe(item.card);item.resizeObserver=ro;sizeCanvas(item);
+      }
+      marketBg.dataset.state="visual";
+      if(stateLabel)stateLabel.textContent="Сканирование DEX · подключение к реальным пулам…";
+    }
+
+    async function refreshDiscovery(first=false){
+      try{
+        const pools=await discoverPools();
+        if(!pools.length)throw new Ошибка("пусто");
+        poolById=new Map(pools.map(p=>[p.id,p]));
+        if(first || items.every(x=>x.pool.source==="DEMO")){
+          const chosen=pools.slice(0,SLOT_COUNT);
+          await Promise.all(items.map((item,i)=>chosen[i]?assignPool(item,chosen[i],false):Promise.resolve()));
+        }else{
+          // Actualise métadonnées des pools déjà affichés.
+          for(const item of items){
+            const fresh=poolById.get(item.pool.id);
+            if(fresh){item.pool={...item.pool,...fresh}; if(fresh.price)item.realPrice=fresh.price; updateCardText(item,false)}
+          }
+          // Un nouveau pool réellement récent entre dans le mur immédiatement.
+          const shown=new Set(items.map(x=>x.pool.id));
+          const arrivals=pools.filter(p=>p.source==="NEW"&&p.ageMin<180&&!shown.has(p.id)).slice(0,2);
+          for(const p of arrivals){
+            const candidates=items.filter(x=>x.pool.source!=="NEW"||x.pool.ageMin>p.ageMin);
+            const victim=(candidates.length?candidates:items).sort((a,b)=>(a.pool.score||0)-(b.pool.score||0))[0];
+            if(victim)await assignPool(victim,p,true);
           }
         }
+        marketBg.dataset.state="live";
+        if(stateLabel)stateLabel.textContent="Поток мемов · реальный якорь + динамическая микроструктура";
+      }catch(e){
+        marketBg.dataset.state="fallback";
+        if(stateLabel)stateLabel.textContent="Поток мемов · динамический визуальный движок";
       }
-      setTimeout(typeLine, 600);
     }
 
-    let isScanning = false;
-    locateBtn.addEventListener('click', () => {
-      if (isScanning) return;
-      isScanning = true;
-      locateBtn.textContent = "В ПРОЦЕССЕ СКАНИРОВАНИЯ...";
-      locateBtn.disabled = true;
+    async function refreshPrices(){
+      const live=items.filter(x=>x.pool.address&&x.pool.source!=="DEMO");
+      if(!live.length)return;
+      try{
+        const addresses=[...new Set(live.map(x=>x.pool.address))].join(",");
+        const j=await fetchJSON(`${API}/networks/${NETWORK}/pools/multi/${addresses}?include=base_token,quote_token`,7000);
+        const map=new Map((j?.data||[]).map(e=>[e.attributes?.address,e]));
+        for(const item of live){
+          const e=map.get(item.pool.address);if(!e)continue;
+          const a=e.attributes||{},price=n(a.base_token_price_usd); if(!price)continue;
+          const previous=item.realPrice||price;
+          item.realPrice=price;item.lastRealAt=Date.now();item.pulse=1;
+          item.pool.price=price;item.pool.m5=n(a.price_change_percentage?.m5);
+          item.pool.tx5=n(a.transactions?.m5?.buys)+n(a.transactions?.m5?.sells);
+          item.pool.liq=n(a.reserve_in_usd)||item.pool.liq;item.pool.vol5=n(a.volume_usd?.m5)||item.pool.vol5;
+          // Recalage progressif : pas de saut violent si l'API revient après une pause.
+          if(Math.abs(Math.log(price/Math.max(item.visualPrice,1e-20)))>.08)item.visualPrice=price;
+          item.lastDirection=price>=previous?1:-1; updateCardText(item,false);
+          const el=item.card.querySelector(".market-price");el.classList.add("tick");setTimeout(()=>el.classList.remove("tick"),100);
+        }
+      }catch(e){ /* animation locale ancrée sur le dernier vrai prix */ }
+    }
 
-      const scanLogs = [
-        "\n> Запуск полного сканирования сети...",
-        "> Проверка целостности каналов связи...",
-        "> Угроз не обнаружено. Система работает в штатном режиме."
-      ];
+    function volatilityFor(item){
+      const p=item.pool||{};
+      const symbol=String(p.symbol||"").toUpperCase();
+      const memeNerve=/PEPE|BONK|WIF|FLOKI|SHIB|DOGE|POPCAT|MOG|PNUT|TURBO|MEME|INU|CAT|DOG|FROG|APE|GOAT|MOON/.test(symbol)?1.30:1;
+      const fresh=p.source==="NEW"?1.65:p.source==="TREND"?1.25:1.10;
+      const liq=Math.max(250,p.liq||1200);
+      const thin=clamp(1.75-Math.log10(liq)/7,.75,1.85);
+      const activity=clamp(1+(p.tx5||0)/75,1,1.75);
+      return clamp(.0053*memeNerve*fresh*thin*activity,.0042,.021);
+    }
 
-      let idx = 0;
-      function appendScan() {
-        if (idx < scanLogs.length) {
-          terminalOutput.textContent += "\n" + scanLogs[idx];
-          idx++;
-          setTimeout(appendScan, 500);
-        } else {
-          isScanning = false;
-          locateBtn.textContent = "ЗАПУСТИТЬ ДИГНОСТИКУ";
-          locateBtn.disabled = false;
+    function closeMicroBar(item,now){
+      const o=item.microOpen||item.visualPrice;
+      const c=item.visualPrice;
+      const range=Math.max(1e-20,Math.abs(item.microHigh-item.microLow));
+      const baseVol=Math.max(1,(item.pool.vol5||1800)/65);
+      const momentumBoost=1+Math.min(4,Math.abs(Math.log(c/Math.max(o,1e-20)))*160);
+      const v=baseVol*(.35+Math.random()*1.55)*momentumBoost + item.microVolume;
+      item.candles.push({t:Date.now(),o,h:Math.max(item.microHigh,o,c),l:Math.min(item.microLow,o,c),c,v});
+      if(item.candles.length>MAX_OHLCV)item.candles.splice(0,item.candles.length-MAX_OHLCV);
+      item.microOpen=c;item.microHigh=c;item.microLow=c;item.microVolume=1;
+      item.pulse=Math.max(item.pulse,.72);
+      const vol=volatilityFor(item);
+      // Les pools les plus nerveux impriment davantage de nouvelles bougies.
+      const speed=clamp(1850-vol*56000,620,1650);
+      item.nextBarAt=now+speed*(.66+Math.random()*.62);
+    }
+
+    function updateFlowUi(item,now){
+      if(now<item.nextUiAt)return;
+      item.nextUiAt=now+72+Math.random()*85;
+      const priceEl=item.card.querySelector(".market-price");
+      const changeEl=item.card.querySelector(".market-change");
+      if(priceEl){
+        priceEl.textContent=formatPrice(item.visualPrice);
+        if(Math.abs(item.visualPrice-item.lastUiPrice)>Math.max(1e-20,item.lastUiPrice)*.00018){
+          priceEl.classList.add("tick");
+          setTimeout(()=>priceEl.classList.remove("tick"),70);
         }
       }
-      setTimeout(appendScan, 400);
-    });
-  </script>
+      const basis=item.sessionOpen||item.visualPrice;
+      const pct=(item.visualPrice/Math.max(basis,1e-20)-1)*100;
+      if(changeEl){
+        changeEl.textContent=`ПОТОК ${pct>=0?"+":""}${pct.toFixed(2)}%`;
+        changeEl.classList.toggle("up",pct>=0);changeEl.classList.toggle("down",pct<0);
+      }
+      const activity=item.card.querySelector(".market-activity");
+      if(activity){
+        const tx=Math.round((item.pool.tx5||0)+item.syntheticTicks*.18);
+        activity.textContent=`TX ${tx} · LIQ $${compact(item.pool.liq)}`;
+      }
+      item.lastUiPrice=item.visualPrice;
+    }
+
+    function evolve(item,dt,now){
+      const anchor=item.realPrice||item.visualPrice||1;
+      const vol=volatilityFor(item);
+
+      // Changement de régime : petite tendance persistante, comme un carnet qui pousse.
+      if(now>=item.regimeUntil){
+        const bias=randomNormal()*vol*.55;
+        const burst=Math.random()<.22?randomNormal()*vol*1.15:0;
+        item.regime=clamp(bias+burst,-vol*1.55,vol*1.55);
+        item.regimeUntil=now+650+Math.random()*3300;
+      }
+
+      // Impulsions courtes et rares : achats/ventes agressifs, surtout sur nouveaux pools.
+      if(now>=item.nextImpulseAt){
+        const size=vol*(.65+Math.random()*2.35)*(Math.random()<.5?-1:1);
+        item.impulse+=size;
+        item.pulse=1;
+        item.nextImpulseAt=now+(item.pool.source==="NEW"?420:780)+Math.random()*(item.pool.source==="NEW"?2100:3600);
+      }
+
+      const deviation=Math.log(Math.max(item.visualPrice,1e-20)/Math.max(anchor,1e-20));
+      // Rappel vers l'ancre réelle seulement si le décor dérive vraiment trop loin.
+      const softBand=item.pool.source==="NEW"?.085:item.pool.source==="TREND"?.055:.045;
+      const pull=Math.abs(deviation)>softBand ? -deviation*1.8 : -deviation*.08;
+      const micro=randomNormal()*vol*Math.sqrt(dt)*.44;
+
+      item.momentum += (item.regime + item.impulse + pull - item.momentum*1.35)*dt;
+      item.impulse *= Math.exp(-3.2*dt);
+      const ret=clamp(item.momentum*dt + micro,-vol*.44,vol*.44);
+      const previous=item.visualPrice;
+      item.visualPrice=Math.max(anchor*.12,item.visualPrice*Math.exp(ret));
+      item.lastDirection=item.visualPrice>=previous?1:-1;
+      item.microHigh=Math.max(item.microHigh,item.visualPrice);
+      item.microLow=Math.min(item.microLow,item.visualPrice);
+      item.microVolume+=(.25+Math.random()*1.35)*(1+Math.abs(ret)*900);
+      item.syntheticTicks++;
+      item.pulse=Math.max(item.pulse,Math.min(1,Math.abs(ret)/(vol*.085)));
+      item.pulse*=Math.pow(.075,dt);
+
+      if(now>=item.nextBarAt)closeMicroBar(item,now);
+      updateFlowUi(item,now);
+    }
+
+    function renderCandles(item){
+      const arr=item.candles.slice(-MAX_OHLCV+1);
+      const t=Math.floor(Date.now()/60000)*60000;
+      arr.push({t,o:item.microOpen,h:item.microHigh,l:item.microLow,c:item.visualPrice,v:Math.max(1,item.microVolume)});
+      return arr.filter(c=>c.c>0&&c.o>0&&c.h>0&&c.l>0);
+    }
+
+    function draw(item,nowMs){
+      const {ctx,canvas}=item,dpr=Math.min(window.devicePixelRatio||1,2),w=canvas.width/dpr,h=canvas.height/dpr;if(!w||!h)return;
+      ctx.clearRect(0,0,w,h);
+      const left=8,right=w-8,top=31,bottom=h-17,volumeH=Math.max(8,(bottom-top)*.16),priceBottom=bottom-volumeH-3;
+      const plotW=Math.max(1,right-left),plotH=Math.max(1,priceBottom-top),candles=renderCandles(item);if(candles.length<2)return;
+
+      ctx.lineWidth=1;ctx.strokeStyle="rgba(0,0,0,.065)";
+      for(let i=0;i<=3;i++){const y=top+plotH*i/3;ctx.beginPath();ctx.moveTo(left,y+.5);ctx.lineTo(right,y+.5);ctx.stroke()}
+      for(let i=0;i<=5;i++){const x=left+plotW*i/5;ctx.beginPath();ctx.moveTo(x+.5,top);ctx.lineTo(x+.5,bottom);ctx.stroke()}
+
+      let min=Math.min(...candles.map(c=>c.l)),max=Math.max(...candles.map(c=>c.h));if(max===min){max*=1.001;min*=.999}
+      const pad=(max-min)*.10;min-=pad;max+=pad;
+      const yFor=p=>priceBottom-((p-min)/(max-min))*plotH;
+      const step=plotW/candles.length,bodyW=Math.max(1,Math.min(4.2,step*.55));
+      const maxV=Math.max(1,...candles.map(c=>c.v||0));
+
+      // Volume réel historique (ou estimation seulement pour la bougie en formation).
+      candles.forEach((c,i)=>{
+        const x=left+step*(i+.5),vh=((c.v||0)/maxV)*volumeH;
+        ctx.fillStyle=c.c>=c.o?"rgba(15,15,15,.105)":"rgba(151,27,35,.12)";
+        ctx.fillRect(x-bodyW/2,bottom-vh,bodyW,Math.max(1,vh));
+      });
+
+      // Bougies : noir = hausse, rouge = baisse.
+      candles.forEach((c,i)=>{
+        const x=left+step*(i+.5),up=c.c>=c.o;
+        ctx.strokeStyle=up?"rgba(8,8,8,.58)":"rgba(151,27,35,.72)";
+        ctx.beginPath();ctx.moveTo(x,yFor(c.h));ctx.lineTo(x,yFor(c.l));ctx.stroke();
+        const y1=yFor(c.o),y2=yFor(c.c),bh=Math.max(1.15,Math.abs(y2-y1));
+        ctx.fillStyle=up?`rgba(${item.rgb},.69)`:"rgba(151,27,35,.72)";
+        ctx.fillRect(x-bodyW/2,Math.min(y1,y2),bodyW,bh);
+      });
+
+      // Ligne de clôture fine par-dessus : renforce l'impression de flux terminal.
+      ctx.beginPath();candles.forEach((c,i)=>{const x=left+step*(i+.5),y=yFor(c.c);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});
+      ctx.strokeStyle=`rgba(${item.rgb},.52)`;ctx.lineWidth=1;ctx.lineJoin="round";ctx.lineCap="round";ctx.stroke();
+
+      const lx=left+step*(candles.length-.5),ly=yFor(item.visualPrice),pulse=reduceMotion?0:item.pulse;
+      ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(left,ly+.5);ctx.lineTo(right,ly+.5);ctx.strokeStyle=`rgba(${item.rgb},.18)`;ctx.stroke();ctx.setLineDash([]);
+      if(pulse>.02){ctx.beginPath();ctx.arc(lx,ly,3+pulse*6,0,Math.PI*2);ctx.strokeStyle=`rgba(${item.rgb},${.10+pulse*.17})`;ctx.stroke()}
+      ctx.beginPath();ctx.arc(lx,ly,1.8,0,Math.PI*2);ctx.fillStyle=`rgba(${item.rgb},.94)`;ctx.fill();
+
+      // Scanner vertical très discret, décalé par carte.
+      const scan=((nowMs*.075+item.index*37)%Math.max(1,plotW));
+      ctx.beginPath();ctx.moveTo(left+scan,top);ctx.lineTo(left+scan,priceBottom);ctx.strokeStyle=`rgba(${item.rgb},.055)`;ctx.stroke();
+    }
+
+    function frame(now){
+      if(destroyed)return; const dt=Math.min(.05,Math.max(.001,(now-lastFrame)/1000));lastFrame=now;
+      if(!document.hidden){for(const item of items){evolve(item,dt,now);draw(item,now)}}
+      raf=requestAnimationFrame(frame);
+    }
+
+    async function rotateOHLCV(){
+      const live=items.filter(x=>x.pool.address&&x.pool.source!=="DEMO");if(!live.length)return;
+      for(let k=0;k<3;k++){const item=live[(ohlcvCursor+k)%live.length];if(item)await loadOHLCV(item);await sleep(220)}
+      ohlcvCursor=(ohlcvCursor+3)%Math.max(1,live.length);
+    }
+
+    initialItems();
+    raf=requestAnimationFrame(frame);
+    refreshDiscovery(true).then(()=>refreshPrices());
+    discoveryTimer=setInterval(()=>refreshDiscovery(false),DISCOVERY_MS);
+    priceTimer=setInterval(refreshPrices,PRICE_MS);
+    ohlcvTimer=setInterval(rotateOHLCV,OHLCV_ROTATE_MS);
+    document.addEventListener("visibilitychange",()=>{lastFrame=performance.now();if(!document.hidden)refreshPrices()});
+    window.addEventListener("beforeunload",()=>{
+      destroyed=true;cancelAnimationFrame(raf);clearInterval(discoveryTimer);clearInterval(priceTimer);clearInterval(ohlcvTimer);
+      items.forEach(x=>x.resizeObserver?.disconnect());
+    },{once:true});
+  })();
+</script>
+
 </body>
 </html>
