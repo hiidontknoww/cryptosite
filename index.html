@@ -2168,17 +2168,247 @@
   .hosting-russia-flag span:nth-child(2){background:#0039a6}
   .hosting-russia-flag span:nth-child(3){background:#d52b1e}
 
+
+  /* =========================================================
+     FINAL POLISH — чистая premium-обработка без изменения логики
+     Рыночный фон, real-time данные, терминал и все переходы сохранены.
+  ========================================================= */
+  :root{
+    --polish-ink:#070707;
+    --polish-muted:rgba(0,0,0,.58);
+    --polish-line:rgba(0,0,0,.16);
+    --polish-glass:rgba(255,255,255,.72);
+  }
+
+  /* Более чистый и дорогой общий слой */
+  #enter-screen,
+  #pass-screen,
+  #member-screen{
+    background:rgba(255,255,255,.58);
+    backdrop-filter:blur(2.4px) saturate(108%);
+    -webkit-backdrop-filter:blur(2.4px) saturate(108%);
+  }
+
+  #enter-screen{background:rgba(255,255,255,.50)}
+  #pass-screen{background:rgba(255,255,255,.64)}
+  #member-screen{background:rgba(255,255,255,.67)}
+
+  /* Entrée plus sobre */
+  #enter-btn{
+    border-color:#000;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.16) inset,
+      0 20px 55px rgba(0,0,0,.13);
+  }
+
+  #enter-btn:hover{
+    background:#050505;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.18) inset,
+      0 24px 65px rgba(0,0,0,.16);
+  }
+
+  /* Champ d'accès plus net */
+  #pass-input{
+    border-color:rgba(0,0,0,.20);
+    background:rgba(255,255,255,.86);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.95) inset,
+      0 14px 38px rgba(0,0,0,.045);
+  }
+
+  #pass-input:hover{border-color:rgba(0,0,0,.34)}
+
+  #connect-btn,
+  #locate-btn{
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.10) inset,
+      0 14px 32px rgba(0,0,0,.12);
+  }
+
+  #connect-btn:hover,
+  #locate-btn:hover{
+    background:#080808;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.12) inset,
+      0 18px 42px rgba(0,0,0,.15);
+  }
+
+  /* Titre membre : légèrement plus précis */
+  #member-screen h1{
+    text-shadow:0 1px 0 rgba(255,255,255,.75);
+  }
+
+  #member-screen .status{
+    color:rgba(0,0,0,.62);
+  }
+
+  /* Terminal : contraste et profondeur plus propres */
+  .terminal{
+    border-color:rgba(0,0,0,.14);
+    background:
+      linear-gradient(180deg,#111 0%,#080808 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.075) inset,
+      0 28px 78px rgba(0,0,0,.17),
+      0 0 0 1px rgba(255,255,255,.018);
+  }
+
+  .terminal-bar{
+    border-bottom-color:rgba(255,255,255,.09);
+  }
+
+  /* Badge russe : même identité, rendu plus propre */
+  .site-location-badge{
+    border-color:rgba(0,0,0,.15);
+    background:rgba(255,255,255,.82);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.96) inset,
+      0 14px 40px rgba(0,0,0,.10);
+    backdrop-filter:blur(20px) saturate(125%);
+    -webkit-backdrop-filter:blur(20px) saturate(125%);
+  }
+
+  .ru-flag{
+    box-shadow:0 0 0 1px rgba(0,0,0,.10),0 2px 7px rgba(0,0,0,.10);
+  }
+
+  /* Micro-structure plus élégante sur le mur de marché */
+  .market-card{
+    border-color:rgba(8,8,8,.12);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.60) inset,
+      0 10px 28px rgba(0,0,0,.025);
+  }
+
+  .market-card:hover{
+    border-color:rgba(8,8,8,.18);
+  }
+
+  /* Mobile : garder le fond lisible sans alourdir l'interface */
+  @media (max-width:640px){
+    #enter-screen,
+    #pass-screen,
+    #member-screen{
+      backdrop-filter:blur(2.7px) saturate(106%);
+      -webkit-backdrop-filter:blur(2.7px) saturate(106%);
+    }
+
+    .site-location-badge{
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.96) inset,
+        0 10px 30px rgba(0,0,0,.09);
+    }
+  }
+
+
+/* --- Mobile polish --- */
+@media (max-width: 600px) {
+  html, body {
+    min-height: 100dvh;
+  }
+
+  body {
+    padding-top: max(18px, env(safe-area-inset-top) + 12px) !important;
+    padding-right: max(10px, env(safe-area-inset-right) + 10px) !important;
+    padding-left: max(10px, env(safe-area-inset-left) + 10px) !important;
+    padding-bottom: max(20px, env(safe-area-inset-bottom) + 16px) !important;
+    overflow-x: hidden;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Badge/drapeau du haut : centré et descendu dans le flux mobile */
+  .flag,
+  .russian-flag,
+  .flag-badge,
+  .location,
+  .top-location,
+  .server-location {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    margin: 0 auto 14px !important;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    max-width: calc(100vw - 28px);
+  }
+
+  /* Si le drapeau est contenu dans un header */
+  header {
+    padding-top: 4px !important;
+    margin-top: 0 !important;
+  }
+
+  /* Cartes / boutons */
+  .card,
+  .button,
+  button {
+    max-width: 100%;
+  }
+
+  /* Évite les débordements des textes longs */
+  .ctitle,
+  .csub,
+  .title,
+  .subtitle,
+  .description {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Très petits téléphones */
+@media (max-width: 380px) {
+  body {
+    padding-top: max(14px, env(safe-area-inset-top) + 9px) !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .flag,
+  .russian-flag,
+  .flag-badge,
+  .location,
+  .top-location,
+  .server-location {
+    margin-bottom: 11px !important;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .flag-container,
+  .flag-wrapper,
+  .top-flag,
+  .country-flag,
+  .header-flag {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    margin: 0 auto 14px !important;
+  }
+}
+
 </style>
 </head>
 
 <body>
 
   <!-- Localisation globale — visible sur tous les écrans -->
-  <div class="site-location-badge" role="note" aria-label="Инфраструктура размещена в Москве, Россия">
+  <div class="site-location-badge" role="note" aria-label="Серверы сайта размещены в Тюмени, Россия">
     <span class="site-location-symbol" aria-hidden="true">
       <span class="ru-flag"><i></i><i></i><i></i></span>
     </span>
-    <span class="site-location-text">Инфраструктура размещена в <strong>Москве, Россия</strong></span>
+    <span class="site-location-text">Серверы сайта размещены в <strong>Тюмени, Россия</strong></span>
   </div>
 
 
