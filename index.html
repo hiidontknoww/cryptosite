@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="fr">
-
 <head>
 
 <meta charset="UTF-8">
 
 <meta
-name="viewport"
-content="width=device-width, initial-scale=1, viewport-fit=cover"
-
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
 >
 
 <title>ELITE CRYPTO — Private Terminal</title>
@@ -33,11 +30,8 @@ body {
 }
 
 body {
-
     overflow: hidden;
-
     background: #020202;
-
     color: #fff;
 
     font-family:
@@ -57,30 +51,18 @@ body {
 ========================================================= */
 
 :root {
-
-    --green: #b9ff42;
-
-    --red: #ff4242;
-
-    --white: rgba(255,255,255,.9);
-
-    --gray: rgba(255,255,255,.45);
-
-    --dark: rgba(0,0,0,.88);
-
-    --ticker-height: 62px;
-
+    --green: #b6ff35;
+    --red: #ff4545;
+    --border: rgba(255,255,255,.10);
 }
 
 
 /* =========================================================
-   CANVAS
+   MARKET CANVAS
 ========================================================= */
 
 #marketCanvas {
-
     position: fixed;
-
     inset: 0;
 
     width: 100%;
@@ -93,13 +75,11 @@ body {
 
 
 /* =========================================================
-   BACKGROUND
+   BACKGROUND GRID
 ========================================================= */
 
-.grid {
-
+.backgroundGrid {
     position: fixed;
-
     inset: 0;
 
     z-index: 1;
@@ -107,26 +87,26 @@ body {
     pointer-events: none;
 
     background-image:
-
         linear-gradient(
             rgba(255,255,255,.018) 1px,
             transparent 1px
         ),
-
         linear-gradient(
             90deg,
             rgba(255,255,255,.018) 1px,
             transparent 1px
         );
 
-    background-size: 45px 45px;
+    background-size: 42px 42px;
 }
 
 
+/* =========================================================
+   DARK VIGNETTE
+========================================================= */
+
 .vignette {
-
     position: fixed;
-
     inset: 0;
 
     z-index: 2;
@@ -134,68 +114,64 @@ body {
     pointer-events: none;
 
     background:
-
         radial-gradient(
             ellipse at center,
-            rgba(0,0,0,.18) 0%,
-            rgba(0,0,0,.58) 45%,
+            rgba(0,0,0,.20) 0%,
+            rgba(0,0,0,.62) 46%,
             rgba(0,0,0,.94) 100%
         );
 }
 
 
-/*
-    Gros fondu central :
-    les graphiques restent visibles autour
-    mais la carte reste parfaitement lisible.
-*/
+/* =========================================================
+   CENTRAL BLUR / FADE
+========================================================= */
 
 .centerFade {
-
     position: fixed;
-
-    z-index: 3;
 
     left: 50%;
     top: 50%;
 
-    width: min(850px,100vw);
-    height: min(650px,100vh);
+    width: min(900px, 100vw);
+    height: min(720px, 100vh);
 
-    transform:
-        translate(-50%,-50%);
+    transform: translate(-50%, -50%);
+
+    z-index: 3;
 
     pointer-events: none;
 
     background:
-
         radial-gradient(
             ellipse,
-            rgba(0,0,0,.94) 0%,
-            rgba(0,0,0,.82) 45%,
-            rgba(0,0,0,0) 76%
+            rgba(0,0,0,.96) 0%,
+            rgba(0,0,0,.88) 43%,
+            rgba(0,0,0,.25) 70%,
+            transparent 80%
         );
 }
 
 
+/* =========================================================
+   SCANLINES
+========================================================= */
+
 .scanlines {
-
     position: fixed;
-
     inset: 0;
 
     z-index: 40;
 
     pointer-events: none;
 
-    opacity: .14;
+    opacity: .11;
 
     background:
-
         repeating-linear-gradient(
             to bottom,
-            rgba(255,255,255,.02) 0px,
-            rgba(255,255,255,.02) 1px,
+            rgba(255,255,255,.025) 0px,
+            rgba(255,255,255,.025) 1px,
             transparent 1px,
             transparent 4px
         );
@@ -207,128 +183,151 @@ body {
 ========================================================= */
 
 header {
-
     position: fixed;
 
-    top: 0;
     left: 0;
     right: 0;
-
-    z-index: 30;
+    top: 0;
 
     height: 70px;
 
+    z-index: 30;
+
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
     padding:
-        0 clamp(16px,4vw,60px);
+        0 clamp(18px, 4vw, 65px);
 
     background:
-        rgba(2,2,2,.82);
+        rgba(2,2,2,.78);
 
     border-bottom:
         1px solid
         rgba(255,255,255,.08);
 
-    backdrop-filter: blur(20px);
+    backdrop-filter:
+        blur(22px);
 }
 
 
 .logo {
-
     display: flex;
-
     align-items: center;
-
     gap: 11px;
 }
 
 
 .logoBox {
-
     width: 32px;
     height: 32px;
 
     display: grid;
-
     place-items: center;
 
     border:
         1px solid
-        rgba(255,255,255,.3);
+        rgba(255,255,255,.30);
 
     font-family: monospace;
-
     font-size: 9px;
-
     font-weight: 900;
 }
 
 
 .logoText {
-
     font-size: 13px;
-
     font-weight: 800;
 
     letter-spacing: .18em;
+}
 
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+
+.nav {
+    display: flex;
+    gap: 26px;
+
+    color: #555;
+
+    font-family: monospace;
+    font-size: 7px;
+
+    letter-spacing: .10em;
+}
+
+
+.nav span {
     white-space: nowrap;
 }
 
 
-.headerStatus {
-
+.liveStatus {
     display: flex;
-
     align-items: center;
+    gap: 7px;
 
-    gap: 8px;
-
-    color: #777;
+    color: #666;
 
     font-family: monospace;
-
-    font-size: 8px;
-
-    letter-spacing: .08em;
+    font-size: 7px;
 }
 
 
-.statusDot {
-
+.liveDot {
     width: 6px;
     height: 6px;
 
     border-radius: 50%;
 
-    background:
-        var(--green);
+    background: var(--green);
 
     box-shadow:
         0 0 12px
-        rgba(185,255,66,.9);
+        rgba(182,255,53,.9);
 
-    animation:
-        statusPulse 1.2s infinite;
+    animation: pulse 1.2s infinite;
 }
 
 
-@keyframes statusPulse {
-
-    0%,
-    100% {
+@keyframes pulse {
+    0%,100% {
         opacity: 1;
     }
 
     50% {
         opacity: .25;
     }
+}
 
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main {
+    position: fixed;
+
+    left: 0;
+    right: 0;
+
+    top: 70px;
+    bottom: 62px;
+
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
 }
 
 
@@ -336,40 +335,17 @@ header {
    ACCESS CARD
 ========================================================= */
 
-main {
-
-    position: fixed;
-
-    inset: 70px 0 62px 0;
-
-    z-index: 10;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-}
-
-
 .card {
-
-    position: relative;
-
-    width:
-        min(470px,100%);
+    width: min(470px, 100%);
 
     padding:
-        clamp(25px,5vw,42px);
+        clamp(27px, 5vw, 42px);
 
     background:
-
         linear-gradient(
             145deg,
-            rgba(16,16,16,.95),
-            rgba(3,3,3,.97)
+            rgba(15,15,15,.97),
+            rgba(3,3,3,.98)
         );
 
     border:
@@ -377,89 +353,59 @@ main {
         rgba(255,255,255,.13);
 
     box-shadow:
-
-        0 35px 100px
+        0 40px 110px
         rgba(0,0,0,.95),
 
         inset 0 1px 0
-        rgba(255,255,255,.045);
+        rgba(255,255,255,.04);
 
-    backdrop-filter: blur(30px);
-}
-
-
-.card::before {
-
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 25px;
-    right: 25px;
-
-    height: 1px;
-
-    background:
-
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,255,255,.4),
-            transparent
-        );
+    backdrop-filter:
+        blur(30px);
 }
 
 
 .smallTitle {
-
-    margin-bottom: 15px;
+    margin-bottom: 14px;
 
     color: #666;
 
     font-family: monospace;
-
     font-size: 8px;
 
-    letter-spacing: .2em;
+    letter-spacing: .18em;
 }
 
 
 h1 {
-
     margin-bottom: 12px;
 
     font-size:
-        clamp(27px,5vw,36px);
+        clamp(27px, 5vw, 37px);
 
-    letter-spacing:
-        -.05em;
+    letter-spacing: -.055em;
 
     line-height: 1.05;
 }
 
 
-.line {
-
-    width: 48px;
+.greenLine {
+    width: 43px;
     height: 2px;
 
     margin-bottom: 23px;
 
-    background:
-        var(--green);
+    background: var(--green);
 
     box-shadow:
-        0 0 15px
-        rgba(185,255,66,.5);
+        0 0 16px
+        rgba(182,255,53,.55);
 }
 
 
 .description {
-
     margin-bottom: 25px;
 
-    color: #777;
+    color: #747474;
 
     font-size: 12px;
 
@@ -467,74 +413,66 @@ h1 {
 }
 
 
-.label {
-
+.fieldHeader {
     display: flex;
-
     justify-content: space-between;
 
     margin-bottom: 8px;
 
-    color: #666;
+    color: #5b5b5b;
 
     font-family: monospace;
-
     font-size: 8px;
 
-    letter-spacing: .1em;
+    letter-spacing: .10em;
 }
 
 
 input {
-
     width: 100%;
-
     height: 53px;
 
-    padding:
-        0 14px;
+    padding: 0 14px;
 
     outline: none;
+
+    background:
+        rgba(0,0,0,.85);
 
     border:
         1px solid
         #292929;
 
-    background:
-        rgba(0,0,0,.82);
-
     color: white;
 
     font-family: monospace;
-
     font-size: 12px;
 
     transition:
-        border .2s ease;
+        border-color .2s ease,
+        box-shadow .2s ease;
 }
 
 
 input:focus {
+    border-color: #555;
 
-    border-color:
-        #555;
+    box-shadow:
+        0 0 0 1px
+        rgba(255,255,255,.04);
 }
 
 
 input.error {
-
-    border-color:
-        var(--red);
+    border-color: var(--red);
 
     animation:
-        inputShake .35s;
+        shake .35s;
 }
 
 
-@keyframes inputShake {
-
-    0%,
-    100% {
+@keyframes shake {
+    0%,100% {
         transform: translateX(0);
     }
 
@@ -545,14 +483,11 @@ input.error {
     75% {
         transform: translateX(5px);
     }
-
 }
 
 
 button {
-
     width: 100%;
-
     height: 53px;
 
     margin-top: 11px;
@@ -566,77 +501,65 @@ button {
 
     color: #ddd;
 
-    font-size: 9px;
+    cursor: pointer;
 
+    font-size: 9px;
     font-weight: 800;
 
     letter-spacing: .16em;
 
-    cursor: pointer;
-
-    transition: .2s ease;
+    transition:
+        background .2s ease,
+        border-color .2s ease;
 }
 
 
 button:hover {
-
-    background:
-        #1a1a1a;
-
-    border-color:
-        #555;
+    background: #191919;
+    border-color: #555;
 }
 
 
 #error {
-
     min-height: 38px;
 
     margin-top: 13px;
-
-    padding:
-        10px;
+    padding: 10px;
 
     display: flex;
-
     align-items: center;
-
     gap: 9px;
+
+    opacity: 0;
 
     border:
         1px solid
-        rgba(255,66,66,.16);
+        rgba(255,69,69,.15);
 
     background:
-        rgba(255,66,66,.035);
+        rgba(255,69,69,.035);
 
-    color:
-        var(--red);
+    color: var(--red);
 
     font-family: monospace;
-
     font-size: 7px;
-
-    opacity: 0;
 
     transform:
         translateY(-5px);
 
-    transition: .2s ease;
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
 }
 
 
 #error.show {
-
     opacity: 1;
-
-    transform:
-        translateY(0);
+    transform: translateY(0);
 }
 
 
 #errorDot {
-
     width: 5px;
     height: 5px;
 
@@ -644,8 +567,7 @@ button:hover {
 
     border-radius: 50%;
 
-    background:
-        var(--red);
+    background: var(--red);
 
     box-shadow:
         0 0 9px
@@ -654,69 +576,56 @@ button:hover {
 
 
 .security {
-
     display: flex;
-
     justify-content: space-between;
 
-    gap: 10px;
-
     margin-top: 22px;
-
     padding-top: 16px;
 
     border-top:
         1px solid
         rgba(255,255,255,.055);
 
-    color: #4d4d4d;
+    color: #4c4c4c;
 
     font-family: monospace;
-
     font-size: 7px;
 }
 
 
 /* =========================================================
-   TICKER
+   BOTTOM TICKER
 ========================================================= */
 
 .ticker {
-
     position: fixed;
 
     left: 0;
     right: 0;
     bottom: 0;
 
-    z-index: 50;
+    height: 62px;
 
-    height:
-        var(--ticker-height);
+    z-index: 50;
 
     overflow: hidden;
 
     background:
-        rgba(2,2,2,.96);
+        rgba(2,2,2,.97);
 
     border-top:
         1px solid
-        rgba(255,255,255,.1);
+        rgba(255,255,255,.11);
 
-    box-shadow:
-        0 -15px 50px
-        rgba(0,0,0,.7);
-
-    backdrop-filter: blur(18px);
+    backdrop-filter:
+        blur(20px);
 }
 
 
 .tickerRow {
-
     position: relative;
 
     width: 100%;
-
     height: 31px;
 
     overflow: hidden;
@@ -724,7 +633,6 @@ button:hover {
 
 
 .tickerRow + .tickerRow {
-
     border-top:
         1px solid
         rgba(255,255,255,.045);
@@ -732,7 +640,6 @@ button:hover {
 
 
 .tickerTrack {
-
     position: absolute;
 
     left: 0;
@@ -741,72 +648,68 @@ button:hover {
     height: 100%;
 
     display: flex;
-
     align-items: center;
 
     width: max-content;
 
-    will-change:
-        transform;
+    will-change: transform;
 }
 
 
-.tickerTrack.left {
+.tickerGroup {
+    display: flex;
+    align-items: center;
+}
 
+
+.tickerTrack.forward {
     animation:
-        tickerLeft
-        38s
+        tickerForward
+        45s
         linear
         infinite;
 }
 
 
-.tickerTrack.right {
-
+.tickerTrack.reverse {
     animation:
-        tickerRight
-        46s
+        tickerReverse
+        50s
         linear
         infinite;
 }
 
 
-@keyframes tickerLeft {
+@keyframes tickerForward {
 
     from {
-        transform:
-            translateX(0);
+        transform: translateX(0);
     }
 
     to {
-        transform:
-            translateX(-50%);
+        transform: translateX(-50%);
     }
 
 }
 
 
-@keyframes tickerRight {
+@keyframes tickerReverse {
 
     from {
-        transform:
-            translateX(-50%);
+        transform: translateX(-50%);
     }
 
     to {
-        transform:
-            translateX(0);
+        transform: translateX(0);
     }
 
 }
 
 
 .tickerItem {
-
-    height: 100%;
+    height: 31px;
 
     display: flex;
-
     align-items: center;
 
     flex: 0 0 auto;
@@ -818,19 +721,15 @@ button:hover {
         1px solid
         rgba(255,255,255,.055);
 
-    color: #777;
-
     font-family: monospace;
-
     font-size: 7px;
 
     white-space: nowrap;
 }
 
 
-.tickerSymbol {
-
-    margin-right: 8px;
+.symbol {
+    margin-right: 9px;
 
     color: #ddd;
 
@@ -838,21 +737,25 @@ button:hover {
 }
 
 
-.tickerPrice {
+.price {
+    margin-right: 9px;
 
-    margin-right: 8px;
-
-    color: #999;
+    color: #888;
 }
 
 
-.green {
-    color: var(--green) !important;
+.up {
+    color: var(--green);
 }
 
 
-.red {
-    color: var(--red) !important;
+.down {
+    color: var(--red);
+}
+
+
+.muted {
+    color: #555;
 }
 
 
@@ -860,51 +763,57 @@ button:hover {
    MOBILE
 ========================================================= */
 
-@media(max-width:700px) {
+@media(max-width: 900px) {
+
+    .nav {
+        display: none;
+    }
+
+}
+
+
+@media(max-width: 700px) {
 
     header {
-
         height: 62px;
     }
 
 
-    .headerStatus {
+    main {
+        top: 62px;
+        bottom: 62px;
 
+        padding: 13px;
+    }
+
+
+    .headerRight {
+        gap: 0;
+    }
+
+
+    .headerRight .liveStatus {
         display: none;
     }
 
 
-    main {
-
-        inset:
-            62px 0 62px 0;
-
-        padding:
-            13px;
-    }
-
-
     .card {
-
         padding:
             24px 19px;
     }
 
 
     .description {
-
         font-size: 11px;
     }
 
 
     #marketCanvas {
-
-        opacity: .7;
+        opacity: .82;
     }
 
 
     .tickerItem {
-
         padding:
             0 13px;
 
@@ -914,36 +823,26 @@ button:hover {
 }
 
 
-@media(max-width:390px) {
+@media(max-width: 400px) {
 
     .logoText {
-
         font-size: 10px;
     }
 
 
     .card {
-
         padding:
             21px 16px;
     }
 
 
     h1 {
-
         font-size: 24px;
     }
 
 
     .description {
-
         font-size: 10px;
-    }
-
-
-    .security {
-
-        font-size: 6px;
     }
 
 }
@@ -952,15 +851,17 @@ button:hover {
 
 </head>
 
+
 <body>
 
+
 <!-- =========================================================
-     MARKET CANVAS
+     BACKGROUND
 ========================================================= -->
 
 <canvas id="marketCanvas"></canvas>
 
-<div class="grid"></div>
+<div class="backgroundGrid"></div>
 
 <div class="vignette"></div>
 
@@ -968,168 +869,179 @@ button:hover {
 
 <div class="scanlines"></div>
 
+
 <!-- =========================================================
      HEADER
 ========================================================= -->
 
 <header>
 
-```
-<div class="logo">
+    <div class="logo">
 
-    <div class="logoBox">
-        EC
+        <div class="logoBox">
+            EC
+        </div>
+
+        <div class="logoText">
+            ELITE CRYPTO
+        </div>
+
     </div>
 
-    <div class="logoText">
-        ELITE CRYPTO
+
+    <div class="headerRight">
+
+        <div class="nav">
+            <span>ПОРТФЕЛЬ</span>
+            <span>КОМАНДА</span>
+            <span>КОНТАКТЫ</span>
+        </div>
+
+
+        <div class="liveStatus">
+
+            <span class="liveDot"></span>
+
+            LIVE MARKET
+
+        </div>
+
     </div>
-
-</div>
-
-
-<div class="headerStatus">
-
-    <span class="statusDot"></span>
-
-    LIVE MARKET
-
-</div>
-```
 
 </header>
 
+
 <!-- =========================================================
-     ACCESS
+     ACCESS CARD
 ========================================================= -->
 
 <main>
 
-```
-<section class="card">
+    <section class="card">
 
-    <div class="smallTitle">
-        PRIVATE ACCESS // TERMINAL 01
-    </div>
-
-
-    <h1>
-        Закрытая система
-    </h1>
+        <div class="smallTitle">
+            PRIVATE ACCESS // TERMINAL 01
+        </div>
 
 
-    <div class="line"></div>
+        <h1>
+            Закрытая система
+        </h1>
 
 
-    <p class="description">
-
-        Добро пожаловать в закрытую инфраструктуру
-        Elite Crypto. Для продолжения работы необходимо
-        предоставить действительный ключ доступа.
-
-    </p>
+        <div class="greenLine"></div>
 
 
-    <div class="label">
+        <p class="description">
 
-        <span>
-            КЛЮЧ ДОСТУПА
-        </span>
+            Добро пожаловать в закрытую инфраструктуру
+            Elite Crypto. Для продолжения работы необходимо
+            предоставить действительный ключ доступа.
 
-        <span>
-            ENCRYPTED
-        </span>
-
-    </div>
+        </p>
 
 
-    <input
-        id="accessKey"
-        type="password"
-        placeholder="Введите ключ доступа..."
-        autocomplete="off"
-        spellcheck="false"
-    >
+        <div class="fieldHeader">
+
+            <span>
+                КЛЮЧ ДОСТУПА
+            </span>
+
+            <span>
+                ENCRYPTED
+            </span>
+
+        </div>
 
 
-    <button id="accessButton">
-        ПОДТВЕРДИТЬ ДОСТУП
-    </button>
+        <input
+            id="accessKey"
+            type="password"
+            placeholder="Введите ключ доступа..."
+            autocomplete="off"
+            spellcheck="false"
+        >
 
 
-    <div id="error">
-
-        <span id="errorDot"></span>
-
-        <span id="errorText">
-            ДОСТУП ОТКЛОНЁН — НЕДЕЙСТВИТЕЛЬНЫЙ КЛЮЧ
-        </span>
-
-    </div>
+        <button id="accessButton">
+            ПОДТВЕРДИТЬ ДОСТУП
+        </button>
 
 
-    <div class="security">
+        <div id="error">
 
-        <span>
-            SECURE CHANNEL
-        </span>
+            <span id="errorDot"></span>
 
-        <span>
-            AES-256
-        </span>
+            <span id="errorText">
+                ДОСТУП ОТКЛОНЁН — НЕДЕЙСТВИТЕЛЬНЫЙ КЛЮЧ
+            </span>
 
-        <span>
-            ENCRYPTED
-        </span>
+        </div>
 
-    </div>
 
-</section>
-```
+        <div class="security">
+
+            <span>
+                SECURE CHANNEL
+            </span>
+
+            <span>
+                AES-256
+            </span>
+
+            <span>
+                ENCRYPTED
+            </span>
+
+        </div>
+
+    </section>
 
 </main>
 
+
 <!-- =========================================================
-     LIVE TICKER
+     TICKER
 ========================================================= -->
 
 <div class="ticker">
 
-```
-<div class="tickerRow">
+    <div class="tickerRow">
 
-    <div
-        id="ticker1"
-        class="tickerTrack left"
-    ></div>
+        <div
+            id="tickerForward"
+            class="tickerTrack forward"
+        ></div>
 
-</div>
+    </div>
 
 
-<div class="tickerRow">
+    <div class="tickerRow">
 
-    <div
-        id="ticker2"
-        class="tickerTrack right"
-    ></div>
+        <div
+            id="tickerReverse"
+            class="tickerTrack reverse"
+        ></div>
 
-</div>
-```
+    </div>
 
 </div>
+
 
 <script>
 
 /* =========================================================
    ELITE CRYPTO
-   REAL-TIME TRADING ENGINE
+   REAL MARKET ENGINE
 ========================================================= */
 
 
 /*
-    12 vrais actifs Binance.
+    =========================================================
+    MARCHÉS
+    =========================================================
 
-    Chaque graphique possède son propre marché.
+    12 vrais marchés Binance.
 */
 
 const SYMBOLS = [
@@ -1138,10 +1050,12 @@ const SYMBOLS = [
     "ETHUSDT",
     "BNBUSDT",
     "SOLUSDT",
+
     "XRPUSDT",
     "ADAUSDT",
     "DOGEUSDT",
     "AVAXUSDT",
+
     "LINKUSDT",
     "TRXUSDT",
     "SUIUSDT",
@@ -1151,16 +1065,26 @@ const SYMBOLS = [
 
 
 /*
-    Nombre de chandeliers affichés.
-
-    120 secondes de données visuelles.
+    =========================================================
+    CONFIGURATION
+    =========================================================
 */
 
-const MAX_CANDLES = 120;
+const CANDLE_INTERVAL =
+    60 * 1000;
 
 
 /*
-    Les données de chaque marché.
+    80 bougies de 1 minute.
+
+    Elles viennent directement de Binance.
+*/
+
+const HISTORY_LIMIT = 80;
+
+
+/*
+    État de chaque marché.
 */
 
 const markets = {};
@@ -1173,27 +1097,27 @@ SYMBOLS.forEach(
 
             symbol,
 
-            price: null,
-
-            previousPrice: null,
-
             candles: [],
 
             current: null,
 
+            price: null,
+
+            previousPrice: null,
+
+            change24h: null,
+
+            volume24h: null,
+
+            high24h: null,
+
+            low24h: null,
+
             live: false,
 
-            lastTrade: 0,
+            loaded: false,
 
-            firstLive: false,
-
-            change24h: 0,
-
-            volume24h: 0,
-
-            high24h: 0,
-
-            low24h: 0
+            lastTrade: 0
 
         };
 
@@ -1220,24 +1144,22 @@ const ctx =
     );
 
 
-let width = 0;
-
-let height = 0;
-
-let dpr = 1;
+let W = 0;
+let H = 0;
+let DPR = 1;
 
 
-function resize() {
+function resizeCanvas() {
 
-    width =
+    W =
         window.innerWidth;
 
 
-    height =
+    H =
         window.innerHeight;
 
 
-    dpr =
+    DPR =
         Math.min(
             window.devicePixelRatio || 1,
             2
@@ -1245,26 +1167,26 @@ function resize() {
 
 
     canvas.width =
-        width * dpr;
+        W * DPR;
 
 
     canvas.height =
-        height * dpr;
+        H * DPR;
 
 
     canvas.style.width =
-        width + "px";
+        W + "px";
 
 
     canvas.style.height =
-        height + "px";
+        H + "px";
 
 
     ctx.setTransform(
-        dpr,
+        DPR,
         0,
         0,
-        dpr,
+        DPR,
         0,
         0
     );
@@ -1274,29 +1196,24 @@ function resize() {
 
 window.addEventListener(
     "resize",
-    resize,
+    resizeCanvas,
     {
         passive: true
     }
 );
 
 
-resize();
+resizeCanvas();
 
 
 /* =========================================================
-   FORMAT PRICE
+   PRICE FORMAT
 ========================================================= */
 
-function priceDecimals(
+function decimalsFor(
     symbol,
     price
 ) {
-
-    if (!price) {
-        return 2;
-    }
-
 
     if (
         symbol === "BTCUSDT"
@@ -1360,13 +1277,13 @@ function formatPrice(
             "en-US",
             {
                 minimumFractionDigits:
-                    priceDecimals(
+                    decimalsFor(
                         symbol,
                         price
                     ),
 
                 maximumFractionDigits:
-                    priceDecimals(
+                    decimalsFor(
                         symbol,
                         price
                     )
@@ -1376,21 +1293,73 @@ function formatPrice(
 }
 
 
+function formatVolume(
+    value
+) {
+
+    if (
+        !value ||
+        !Number.isFinite(value)
+    ) {
+
+        return "—";
+
+    }
+
+
+    if (
+        value >= 1e9
+    ) {
+
+        return (
+            value / 1e9
+        ).toFixed(2)
+        + "B";
+
+    }
+
+
+    if (
+        value >= 1e6
+    ) {
+
+        return (
+            value / 1e6
+        ).toFixed(2)
+        + "M";
+
+    }
+
+
+    if (
+        value >= 1e3
+    ) {
+
+        return (
+            value / 1e3
+        ).toFixed(2)
+        + "K";
+
+    }
+
+
+    return value.toFixed(0);
+
+}
+
+
 /* =========================================================
-   CREATE STARTING CANDLES
+   LOAD REAL HISTORICAL CANDLES
 ========================================================= */
 
 
 /*
-    Ceci sert uniquement à ce que les panneaux soient
-    déjà remplis pendant la connexion initiale.
+    Ici on ne fabrique PAS une courbe artificielle.
 
-    Dès que Binance envoie le premier trade réel,
-    l'historique temporaire est remplacé par des données
-    construites autour du vrai prix.
+    On demande les vraies bougies 1 minute à Binance.
 */
 
-function createInitialVisuals(
+async function loadHistory(
     symbol
 ) {
 
@@ -1398,341 +1367,322 @@ function createInitialVisuals(
         markets[symbol];
 
 
-    /*
-        Prix de départ approximatif uniquement
-        pour le rendu pendant la connexion.
-    */
-
-    const startPrices = {
-
-        BTCUSDT: 100000,
-
-        ETHUSDT: 3000,
-
-        BNBUSDT: 700,
-
-        SOLUSDT: 180,
-
-        XRPUSDT: 2,
-
-        ADAUSDT: .7,
-
-        DOGEUSDT: .2,
-
-        AVAXUSDT: 30,
-
-        LINKUSDT: 20,
-
-        TRXUSDT: .3,
-
-        SUIUSDT: 3,
-
-        TONUSDT: 3
-
-    };
-
-
-    let price =
-        startPrices[symbol];
-
-
-    /*
-        120 petites bougies irrégulières.
-
-        Cela donne une structure de marché
-        crédible immédiatement.
-    */
-
-    for (
-        let i = 0;
-        i < MAX_CANDLES;
-        i++
-    ) {
-
-        const volatility =
-            symbol === "DOGEUSDT" ||
-            symbol === "SUIUSDT"
-                ? .004
-                : .002;
-
-
-        const movement =
-            (
-                Math.random() - .5
-            )
-            *
-            volatility;
-
-
-        const open =
-            price;
-
-
-        const close =
-            open *
-            (
-                1 + movement
-            );
-
-
-        const high =
-            Math.max(
-                open,
-                close
-            )
-            *
-            (
-                1 +
-                Math.random() * .002
-            );
-
-
-        const low =
-            Math.min(
-                open,
-                close
-            )
-            *
-            (
-                1 -
-                Math.random() * .002
-            );
-
-
-        state.candles.push({
-
-            time:
-                Date.now()
-                -
-                (
-                    MAX_CANDLES -
-                    i
-                )
-                *
-                1000,
-
-            open,
-
-            high,
-
-            low,
-
-            close,
-
-            volume:
-                10 +
-                Math.random() * 100
-
-        });
-
-
-        price =
-            close;
-
-    }
-
-}
-
-
-SYMBOLS.forEach(
-    createInitialVisuals
-);
-
-
-/* =========================================================
-   CREATE / ADVANCE CANDLE
-========================================================= */
-
-function bucketTime(
-    timestamp
-) {
-
-    /*
-        Une bougie = 1 seconde.
-
-        Le temps avance donc continuellement.
-    */
-
-    return Math.floor(
-        timestamp / 1000
-    ) * 1000;
-
-}
-
-
-function createFlatCandle(
-    state,
-    time
-) {
-
-    const price =
-        state.price;
-
-
-    if (
-        !price
-    ) {
-        return;
-    }
-
-
-    return {
-
-        time,
-
-        open: price,
-
-        high: price,
-
-        low: price,
-
-        close: price,
-
-        volume: 0
-
-    };
-
-}
-
-
-function advanceTime(
-    state,
-    now
-) {
-
-    if (
-        !state.price
-    ) {
-        return;
-    }
-
-
-    const currentBucket =
-        bucketTime(now);
-
-
-    /*
-        Première bougie réelle.
-    */
-
-    if (
-        !state.current
-    ) {
-
-        state.current = {
-
-            time:
-                currentBucket,
-
-            open:
-                state.price,
-
-            high:
-                state.price,
-
-            low:
-                state.price,
-
-            close:
-                state.price,
-
-            volume: 0
-
-        };
-
-
-        return;
-
-    }
-
-
-    /*
-        Si le temps a avancé de plusieurs secondes,
-        on crée les bougies plates intermédiaires.
-
-        C'est ce qui empêche le graphique de se figer.
-    */
-
-    while (
-        state.current.time <
-        currentBucket
-    ) {
-
-        state.candles.push(
-            state.current
-        );
-
-
-        const nextTime =
-            state.current.time +
-            1000;
-
-
-        state.current =
-            createFlatCandle(
-                state,
-                nextTime
+    try {
+
+        const url =
+            "https://api.binance.com/api/v3/klines"
+            +
+            "?symbol="
+            +
+            symbol
+            +
+            "&interval=1m"
+            +
+            "&limit="
+            +
+            HISTORY_LIMIT;
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    cache: "no-store"
+                }
             );
 
 
         if (
-            !state.current
+            !response.ok
         ) {
-            return;
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
         }
 
+
+        const rows =
+            await response.json();
+
+
+        state.candles =
+            rows.map(
+                row => ({
+
+                    time:
+                        Number(row[0]),
+
+                    open:
+                        Number(row[1]),
+
+                    high:
+                        Number(row[2]),
+
+                    low:
+                        Number(row[3]),
+
+                    close:
+                        Number(row[4]),
+
+                    volume:
+                        Number(row[5])
+
+                })
+            );
+
+
+        /*
+            La dernière bougie reçue est la bougie
+            actuellement en formation.
+
+            On la conserve séparément.
+        */
+
+        if (
+            state.candles.length
+        ) {
+
+            state.current =
+                state.candles.pop();
+
+            state.price =
+                state.current.close;
+
+        }
+
+
+        state.loaded =
+            true;
+
+
     }
+    catch(error) {
 
-
-    while (
-        state.candles.length >
-        MAX_CANDLES
-    ) {
-
-        state.candles.shift();
+        console.warn(
+            symbol,
+            "historical data unavailable",
+            error
+        );
 
     }
 
 }
 
 
+/*
+    Charge les 12 marchés en parallèle.
+*/
+
+async function loadAllHistory() {
+
+    await Promise.all(
+        SYMBOLS.map(
+            loadHistory
+        )
+    );
+
+}
+
+
+loadAllHistory();
+
+
 /* =========================================================
-   PROCESS REAL TRADE
+   REAL-TIME TRADES
 ========================================================= */
 
-function processTrade(
-    symbol,
-    price,
-    quantity,
-    tradeTime
-) {
+let ws = null;
 
-    const state =
-        markets[symbol];
+let reconnectTimer = null;
+
+let reconnectDelay = 1000;
+
+
+function connectWebSocket() {
+
+    clearTimeout(
+        reconnectTimer
+    );
 
 
     /*
-        Premier vrai prix reçu :
-        on conserve la forme graphique mais
-        on replace le niveau autour du vrai prix.
+        Chaque marché possède son propre flux trade.
+
+        Les trades arrivent immédiatement dès qu'ils
+        sont reçus par le navigateur.
     */
 
-    if (
-        !state.firstLive
-    ) {
+    const streams =
+        SYMBOLS
+            .map(
+                symbol =>
+                    symbol.toLowerCase()
+                    +
+                    "@trade"
+            )
+            .join("/");
 
-        state.firstLive =
-            true;
 
-        state.live =
-            true;
+    const url =
+        "wss://stream.binance.com:9443/stream?streams="
+        +
+        streams;
 
-        state.candles = [];
 
-        state.current = null;
+    ws =
+        new WebSocket(url);
 
-    }
 
+    ws.onopen =
+        () => {
+
+            reconnectDelay =
+                1000;
+
+            console.log(
+                "BINANCE MARKET STREAM CONNECTED"
+            );
+
+        };
+
+
+    ws.onmessage =
+        event => {
+
+            try {
+
+                const packet =
+                    JSON.parse(
+                        event.data
+                    );
+
+
+                const data =
+                    packet.data;
+
+
+                if (
+                    !data ||
+                    data.e !== "trade"
+                ) {
+
+                    return;
+
+                }
+
+
+                const symbol =
+                    data.s;
+
+
+                const state =
+                    markets[symbol];
+
+
+                if (!state) {
+                    return;
+                }
+
+
+                const price =
+                    Number(data.p);
+
+
+                const quantity =
+                    Number(data.q);
+
+
+                const tradeTime =
+                    Number(data.T);
+
+
+                if (
+                    !Number.isFinite(price)
+                ) {
+
+                    return;
+
+                }
+
+
+                processTrade(
+                    state,
+                    price,
+                    quantity,
+                    tradeTime
+                );
+
+            }
+            catch(error) {
+
+                console.warn(
+                    "WebSocket packet error",
+                    error
+                );
+
+            }
+
+        };
+
+
+    ws.onerror =
+        () => {
+
+            try {
+                ws.close();
+            }
+            catch(e) {}
+
+        };
+
+
+    ws.onclose =
+        () => {
+
+            SYMBOLS.forEach(
+                symbol => {
+
+                    markets[symbol]
+                        .live = false;
+
+                }
+            );
+
+
+            reconnectTimer =
+                setTimeout(
+                    connectWebSocket,
+                    reconnectDelay
+                );
+
+
+            reconnectDelay =
+                Math.min(
+                    reconnectDelay * 1.5,
+                    8000
+                );
+
+        };
+
+}
+
+
+connectWebSocket();
+
+
+/* =========================================================
+   PROCESS TRADE
+========================================================= */
+
+function processTrade(
+    state,
+    price,
+    quantity,
+    timestamp
+) {
 
     state.live =
         true;
@@ -1750,11 +1700,20 @@ function processTrade(
         price;
 
 
-    const bucket =
-        bucketTime(
-            tradeTime
-        );
+    const candleTime =
+        Math.floor(
+            timestamp /
+            CANDLE_INTERVAL
+        )
+        *
+        CANDLE_INTERVAL;
 
+
+    /*
+        Si on n'a pas encore reçu l'historique,
+        on crée uniquement la bougie réelle à partir
+        du trade reçu.
+    */
 
     if (
         !state.current
@@ -1762,29 +1721,43 @@ function processTrade(
 
         state.current = {
 
-            time: bucket,
+            time:
+                candleTime,
 
-            open: price,
+            open:
+                price,
 
-            high: price,
+            high:
+                price,
 
-            low: price,
+            low:
+                price,
 
-            close: price,
+            close:
+                price,
 
-            volume: quantity
+            volume:
+                quantity
 
         };
 
+
+        return;
+
     }
 
-    else if (
-        bucket >
+
+    /*
+        Nouvelle minute.
+    */
+
+    if (
+        candleTime >
         state.current.time
     ) {
 
         /*
-            Fermer la précédente.
+            Fermer l'ancienne bougie.
         */
 
         state.candles.push(
@@ -1793,60 +1766,87 @@ function processTrade(
 
 
         /*
-            Créer les éventuelles bougies
-            intermédiaires.
+            Si plusieurs minutes ont été traversées,
+            on remplit les minutes sans transaction avec
+            le dernier vrai prix.
+
+            Pas de faux mouvement.
         */
 
-        let time =
+        let nextTime =
             state.current.time +
-            1000;
+            CANDLE_INTERVAL;
 
 
         while (
-            time < bucket
+            nextTime <
+            candleTime
         ) {
 
             state.candles.push({
 
-                time,
+                time:
+                    nextTime,
 
-                open: price,
+                open:
+                    price,
 
-                high: price,
+                high:
+                    price,
 
-                low: price,
+                low:
+                    price,
 
-                close: price,
+                close:
+                    price,
 
-                volume: 0
+                volume:
+                    0
 
             });
 
 
-            time += 1000;
+            nextTime +=
+                CANDLE_INTERVAL;
 
         }
 
 
+        /*
+            Nouvelle vraie bougie.
+        */
+
         state.current = {
 
-            time: bucket,
+            time:
+                candleTime,
 
-            open: price,
+            open:
+                price,
 
-            high: price,
+            high:
+                price,
 
-            low: price,
+            low:
+                price,
 
-            close: price,
+            close:
+                price,
 
-            volume: quantity
+            volume:
+                quantity
 
         };
 
     }
-
     else {
+
+        /*
+            Même bougie :
+
+            chaque trade modifie réellement
+            High / Low / Close / Volume.
+        */
 
         state.current.high =
             Math.max(
@@ -1874,269 +1874,116 @@ function processTrade(
 
     while (
         state.candles.length >
-        MAX_CANDLES
+        HISTORY_LIMIT
     ) {
 
         state.candles.shift();
 
     }
 
-
-    updateTicker(
-        symbol
-    );
-
 }
 
 
 /* =========================================================
-   BINANCE WEBSOCKET
+   24H MARKET DATA
 ========================================================= */
 
-let socket = null;
-
-let reconnectTimer = null;
-
-let reconnectAttempt = 0;
-
-
-function connect() {
-
-    clearTimeout(
-        reconnectTimer
-    );
-
-
-    const streams =
-        SYMBOLS
-            .map(
-                symbol =>
-                    symbol.toLowerCase()
-                    +
-                    "@trade"
-            )
-            .join("/");
-
-
-    const url =
-        "wss://stream.binance.com:9443/stream?streams="
-        +
-        streams;
-
+async function load24h() {
 
     try {
 
-        socket =
-            new WebSocket(url);
-
-
-        socket.onopen =
-            () => {
-
-                reconnectAttempt =
-                    0;
-
-
-                SYMBOLS.forEach(
-                    symbol => {
-
-                        markets[symbol]
-                            .live = true;
-
-                    }
-                );
-
-            };
-
-
-        socket.onmessage =
-            event => {
-
-                try {
-
-                    const packet =
-                        JSON.parse(
-                            event.data
-                        );
-
-
-                    const data =
-                        packet.data;
-
-
-                    if (
-                        !data ||
-                        data.e !== "trade"
-                    ) {
-                        return;
-                    }
-
-
-                    const symbol =
-                        data.s;
-
-
-                    const price =
-                        Number(data.p);
-
-
-                    const quantity =
-                        Number(data.q);
-
-
-                    const tradeTime =
-                        Number(data.T);
-
-
-                    if (
-                        !markets[symbol] ||
-                        !Number.isFinite(price)
-                    ) {
-                        return;
-                    }
-
-
-                    processTrade(
-                        symbol,
-                        price,
-                        quantity,
-                        tradeTime
-                    );
-
+        const response =
+            await fetch(
+                "https://api.binance.com/api/v3/ticker/24hr",
+                {
+                    cache: "no-store"
                 }
-                catch(error) {
+            );
 
-                    console.warn(
-                        "Market packet error:",
-                        error
-                    );
+
+        if (
+            !response.ok
+        ) {
+
+            return;
+
+        }
+
+
+        const all =
+            await response.json();
+
+
+        const wanted =
+            new Set(
+                SYMBOLS
+            );
+
+
+        all.forEach(
+            ticker => {
+
+                if (
+                    !wanted.has(
+                        ticker.symbol
+                    )
+                ) {
+
+                    return;
 
                 }
 
-            };
+
+                const state =
+                    markets[
+                        ticker.symbol
+                    ];
 
 
-        socket.onerror =
-            () => {
-
-                try {
-
-                    socket.close();
-
-                }
-                catch(e) {}
-
-            };
-
-
-        socket.onclose =
-            () => {
-
-                SYMBOLS.forEach(
-                    symbol => {
-
-                        markets[symbol]
-                            .live = false;
-
-                    }
-                );
-
-
-                /*
-                    Reconnexion exponentielle courte.
-                */
-
-                reconnectAttempt =
-                    Math.min(
-                        reconnectAttempt + 1,
-                        6
+                state.change24h =
+                    Number(
+                        ticker.priceChangePercent
                     );
 
 
-                const delay =
-                    Math.min(
-                        1000 *
-                        Math.pow(
-                            1.5,
-                            reconnectAttempt
-                        ),
-                        7000
+                state.volume24h =
+                    Number(
+                        ticker.quoteVolume
                     );
 
 
-                reconnectTimer =
-                    setTimeout(
-                        connect,
-                        delay
+                state.high24h =
+                    Number(
+                        ticker.highPrice
                     );
 
-            };
+
+                state.low24h =
+                    Number(
+                        ticker.lowPrice
+                    );
+
+            }
+        );
 
     }
     catch(error) {
 
-        reconnectTimer =
-            setTimeout(
-                connect,
-                1500
-            );
+        console.warn(
+            "24h data unavailable"
+        );
 
     }
 
 }
 
 
-connect();
-
-
-/* =========================================================
-   KEEP TIME MOVING
-========================================================= */
-
-
-/*
-    Très important :
-
-    Même sans nouveau trade pendant un court instant,
-    le temps du graphique continue d'avancer.
-
-    On ne crée PAS un faux changement de prix.
-    La dernière vraie valeur reste identique.
-*/
-
-function updateClock() {
-
-    const now =
-        Date.now();
-
-
-    SYMBOLS.forEach(
-        symbol => {
-
-            const state =
-                markets[symbol];
-
-
-            if (
-                state.price
-            ) {
-
-                advanceTime(
-                    state,
-                    now
-                );
-
-            }
-
-        }
-    );
-
-}
+load24h();
 
 
 setInterval(
-    updateClock,
-    100
+    load24h,
+    5000
 );
 
 
@@ -2144,68 +1991,36 @@ setInterval(
    CHART LAYOUT
 ========================================================= */
 
-function getLayout() {
+function getChartLayout() {
 
-    const mobile =
-        width < 600;
+    /*
+        DESKTOP
 
+        4 colonnes x 3 lignes.
 
-    const tablet =
-        width >= 600 &&
-        width < 1100;
+        Le centre est couvert par le fade + la carte.
+    */
 
-
-    if (mobile) {
-
-        /*
-            3 colonnes x 4 lignes.
-        */
+    if (
+        W >= 1200
+    ) {
 
         return [
 
-            [.01,.085,.31,.17],
-            [.345,.07,.31,.17],
-            [.68,.085,.31,.17],
+            [0.01, .10, .235, .18],
+            [.255, .08, .235, .18],
+            [.50, .08, .235, .18],
+            [.745, .10, .245, .18],
 
-            [.01,.30,.31,.17],
-            [.345,.32,.31,.17],
-            [.68,.30,.31,.17],
+            [.01, .40, .235, .18],
+            [.255, .42, .235, .18],
+            [.50, .42, .235, .18],
+            [.745, .40, .245, .18],
 
-            [.01,.55,.31,.17],
-            [.345,.53,.31,.17],
-            [.68,.55,.31,.17],
-
-            [.01,.76,.31,.15],
-            [.345,.74,.31,.15],
-            [.68,.76,.31,.15]
-
-        ];
-
-    }
-
-
-    if (tablet) {
-
-        /*
-            4 colonnes x 3 lignes.
-        */
-
-        return [
-
-            [.01,.10,.235,.18],
-            [.255,.08,.235,.18],
-            [.50,.10,.235,.18],
-            [.745,.08,.245,.18],
-
-            [.01,.68,.235,.18],
-            [.255,.72,.235,.18],
-            [.50,.68,.235,.18],
-            [.745,.72,.245,.18],
-
-            [.05,.40,.21,.16],
-            [.29,.42,.21,.16],
-            [.54,.40,.21,.16],
-            [.78,.42,.19,.16]
+            [.01, .70, .235, .18],
+            [.255, .72, .235, .18],
+            [.50, .72, .235, .18],
+            [.745, .70, .245, .18]
 
         ];
 
@@ -2213,28 +2028,59 @@ function getLayout() {
 
 
     /*
-        Desktop : 5 + 2 + 5.
+        TABLETTE
+    */
 
-        Les deux graphiques latéraux au milieu
-        restent visibles autour de la carte.
+    if (
+        W >= 650
+    ) {
+
+        return [
+
+            [.01, .09, .31, .18],
+            [.345, .08, .31, .18],
+            [.68, .09, .31, .18],
+
+            [.01, .39, .31, .18],
+            [.345, .42, .31, .18],
+            [.68, .39, .31, .18],
+
+            [.01, .69, .31, .18],
+            [.345, .72, .31, .18],
+            [.68, .69, .31, .18],
+
+            [.01, .54, .20, .10],
+            [.79, .54, .20, .10],
+            [.40, .03, .20, .08]
+
+        ];
+
+    }
+
+
+    /*
+        MOBILE
+
+        3 colonnes x 4 lignes.
     */
 
     return [
 
-        [.005,.095,.175,.19],
-        [.19,.07,.175,.19],
-        [.375,.095,.175,.19],
-        [.56,.07,.175,.19],
-        [.745,.095,.25,.19],
+        [.005, .085, .31, .17],
+        [.345, .07, .31, .17],
+        [.685, .085, .31, .17],
 
-        [.005,.70,.175,.19],
-        [.19,.74,.175,.19],
-        [.375,.70,.175,.19],
-        [.56,.74,.175,.19],
-        [.745,.70,.25,.19],
+        [.005, .30, .31, .17],
+        [.345, .32, .31, .17],
+        [.685, .30, .31, .17],
 
-        [.01,.40,.18,.17],
-        [.81,.40,.18,.17]
+        [.005, .55, .31, .16],
+        [.345, .53, .31, .16],
+        [.685, .55, .31, .16],
+
+        [.005, .76, .31, .14],
+        [.345, .75, .31, .14],
+        [.685, .76, .31, .14]
 
     ];
 
@@ -2245,7 +2091,7 @@ function getLayout() {
    DRAW GRID
 ========================================================= */
 
-function drawChartGrid(
+function drawGrid(
     x,
     y,
     w,
@@ -2258,16 +2104,20 @@ function drawChartGrid(
     ctx.lineWidth = 1;
 
 
+    /*
+        lignes horizontales
+    */
+
     for (
         let i = 1;
         i < 5;
         i++
     ) {
 
-        const gy =
+        const yy =
             y +
             (
-                h * .78
+                h * .76
             )
             *
             (
@@ -2279,12 +2129,12 @@ function drawChartGrid(
 
         ctx.moveTo(
             x,
-            gy
+            yy
         );
 
         ctx.lineTo(
             x + w,
-            gy
+            yy
         );
 
         ctx.stroke();
@@ -2292,13 +2142,17 @@ function drawChartGrid(
     }
 
 
+    /*
+        lignes verticales
+    */
+
     for (
         let i = 1;
         i < 7;
         i++
     ) {
 
-        const gx =
+        const xx =
             x +
             w *
             (
@@ -2309,12 +2163,12 @@ function drawChartGrid(
         ctx.beginPath();
 
         ctx.moveTo(
-            gx,
+            xx,
             y
         );
 
         ctx.lineTo(
-            gx,
+            xx,
             y + h
         );
 
@@ -2326,27 +2180,28 @@ function drawChartGrid(
 
 
 /* =========================================================
-   DRAW REALISTIC CHART
+   DRAW CHART
 ========================================================= */
 
 function drawChart(
-    symbol,
+    state,
     x,
     y,
     w,
     h,
-    timestamp
+    now
 ) {
 
-    const state =
-        markets[symbol];
-
-
     let candles =
-        state.candles.slice(
-            -85
-        );
+        state.candles
+            .slice(
+                -HISTORY_LIMIT
+            );
 
+
+    /*
+        Ajouter la bougie actuelle.
+    */
 
     if (
         state.current
@@ -2359,18 +2214,30 @@ function drawChart(
     }
 
 
+    /*
+        Pas assez de données.
+    */
+
     if (
-        candles.length < 2
+        candles.length < 3
     ) {
+
+        drawLoadingChart(
+            state,
+            x,
+            y,
+            w,
+            h
+        );
+
         return;
+
     }
 
 
-    /*
-        =====================================================
-        RANGE
-        =====================================================
-    */
+    /* =====================================================
+       RANGE RÉEL
+    ===================================================== */
 
     let min =
         Infinity;
@@ -2400,42 +2267,61 @@ function drawChart(
     );
 
 
-    const rawRange =
+    /*
+        Marge proportionnelle.
+
+        Cela évite les chandeliers écrasés.
+    */
+
+    let range =
         max - min;
 
 
-    const range =
-        rawRange ||
-        Math.max(
-            state.price * .001,
-            .000001
-        );
+    if (
+        !Number.isFinite(range) ||
+        range <= 0
+    ) {
+
+        range =
+            Math.max(
+                Math.abs(max) * .001,
+                .000001
+            );
+
+    }
 
 
     min -=
-        range * .10;
+        range * .08;
 
 
     max +=
-        range * .10;
+        range * .08;
 
 
-    const priceArea =
-        h * .75;
+    range =
+        max - min;
 
 
-    const volumeArea =
+    const chartHeight =
+        h * .72;
+
+
+    const volumeTop =
+        y +
+        h * .77;
+
+
+    const volumeHeight =
         h * .18;
 
 
-    /*
-        =====================================================
-        PANEL
-        =====================================================
-    */
+    /* =====================================================
+       PANEL
+    ===================================================== */
 
     ctx.fillStyle =
-        "rgba(3,3,3,.28)";
+        "rgba(2,2,2,.30)";
 
 
     ctx.fillRect(
@@ -2447,7 +2333,7 @@ function drawChart(
 
 
     ctx.strokeStyle =
-        "rgba(255,255,255,.075)";
+        "rgba(255,255,255,.065)";
 
 
     ctx.strokeRect(
@@ -2458,7 +2344,7 @@ function drawChart(
     );
 
 
-    drawChartGrid(
+    drawGrid(
         x,
         y,
         w,
@@ -2466,49 +2352,66 @@ function drawChart(
     );
 
 
+    /* =====================================================
+       TIME SCROLL
+    ===================================================== */
+
     /*
-        =====================================================
-        TIME SCROLL
+        La dernière bougie avance continuellement.
 
-        Le point essentiel.
+        0 = début de minute
+        1 = fin de minute
 
-        Au lieu de mettre les bougies à des positions
-        fixes puis d'arrêter le graphique, on calcule
-        continuellement la fraction de seconde écoulée.
-
-        Les bougies glissent donc doucement vers la gauche.
+        Donc le graphique se déplace doucement,
+        pas par gros sauts.
     */
 
-    const progress =
+    let progress = 0;
+
+
+    if (
         state.current
-            ? (
-                timestamp -
+    ) {
+
+        progress =
+            (
+                now -
                 state.current.time
-            ) / 1000
-            : 0;
+            )
+            /
+            CANDLE_INTERVAL;
 
 
-    const visibleCount =
+        progress =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    progress
+                )
+            );
+
+    }
+
+
+    const count =
         candles.length;
 
 
     const candleWidth =
-        w /
-        visibleCount;
+        w / count;
 
 
     const bodyWidth =
         Math.max(
-            1,
-            candleWidth * .62
+            1.2,
+            candleWidth * .55
         );
 
 
-    /*
-        =====================================================
-        VOLUME MAX
-        =====================================================
-    */
+    /* =====================================================
+       MAX VOLUME
+    ===================================================== */
 
     let maxVolume =
         0;
@@ -2528,40 +2431,101 @@ function drawChart(
 
 
     maxVolume =
-        maxVolume ||
-        1;
+        maxVolume || 1;
 
+
+    /* =====================================================
+       CLOSE LINE
+    ===================================================== */
 
     /*
-        =====================================================
-        CANDLES
-        =====================================================
+        Ligne de clôture très discrète,
+        comme sur certains terminaux.
     */
+
+    ctx.beginPath();
+
 
     candles.forEach(
         (candle,index) => {
-
-            /*
-                Progression horizontale réelle.
-
-                Le dernier chandelier avance doucement.
-            */
 
             const px =
                 x
                 +
                 index *
                 candleWidth
+                +
+                candleWidth / 2
                 -
                 progress *
+                candleWidth;
+
+
+            const py =
+                y +
+                chartHeight -
+                (
+                    (
+                        candle.close -
+                        min
+                    )
+                    /
+                    range
+                )
+                *
+                chartHeight;
+
+
+            if (
+                index === 0
+            ) {
+
+                ctx.moveTo(
+                    px,
+                    py
+                );
+
+            }
+            else {
+
+                ctx.lineTo(
+                    px,
+                    py
+                );
+
+            }
+
+        }
+    );
+
+
+    ctx.strokeStyle =
+        "rgba(255,255,255,.09)";
+
+
+    ctx.lineWidth = 1;
+
+    ctx.stroke();
+
+
+    /* =====================================================
+       CANDLESTICKS
+    ===================================================== */
+
+    candles.forEach(
+        (candle,index) => {
+
+            const px =
+                x
+                +
+                index *
                 candleWidth
                 +
-                candleWidth / 2;
+                candleWidth / 2
+                -
+                progress *
+                candleWidth;
 
-
-            /*
-                Ne pas dessiner hors panneau.
-            */
 
             if (
                 px <
@@ -2577,83 +2541,63 @@ function drawChart(
 
 
             const openY =
-                y
-                +
-                priceArea
-                -
+                y +
+                chartHeight -
                 (
                     (
                         candle.open -
                         min
                     )
                     /
-                    (
-                        max -
-                        min
-                    )
+                    range
                 )
                 *
-                priceArea;
+                chartHeight;
 
 
             const closeY =
-                y
-                +
-                priceArea
-                -
+                y +
+                chartHeight -
                 (
                     (
                         candle.close -
                         min
                     )
                     /
-                    (
-                        max -
-                        min
-                    )
+                    range
                 )
                 *
-                priceArea;
+                chartHeight;
 
 
             const highY =
-                y
-                +
-                priceArea
-                -
+                y +
+                chartHeight -
                 (
                     (
                         candle.high -
                         min
                     )
                     /
-                    (
-                        max -
-                        min
-                    )
+                    range
                 )
                 *
-                priceArea;
+                chartHeight;
 
 
             const lowY =
-                y
-                +
-                priceArea
-                -
+                y +
+                chartHeight -
                 (
                     (
                         candle.low -
                         min
                     )
                     /
-                    (
-                        max -
-                        min
-                    )
+                    range
                 )
                 *
-                priceArea;
+                chartHeight;
 
 
             const bullish =
@@ -2661,11 +2605,9 @@ function drawChart(
                 candle.open;
 
 
-            /*
-                =================================================
-                WICK
-                =================================================
-            */
+            /* =================================================
+               WICK
+            ================================================= */
 
             ctx.beginPath();
 
@@ -2682,27 +2624,25 @@ function drawChart(
 
             ctx.strokeStyle =
                 bullish
-                    ? "rgba(185,255,66,.78)"
-                    : "rgba(255,66,66,.78)";
+                    ? "rgba(182,255,53,.88)"
+                    : "rgba(255,69,69,.88)";
 
 
             ctx.lineWidth =
                 Math.max(
                     .7,
-                    candleWidth * .10
+                    candleWidth * .09
                 );
 
 
             ctx.stroke();
 
 
-            /*
-                =================================================
-                BODY
-                =================================================
-            */
+            /* =================================================
+               BODY
+            ================================================= */
 
-            const bodyTop =
+            const top =
                 Math.min(
                     openY,
                     closeY
@@ -2721,8 +2661,8 @@ function drawChart(
 
             ctx.fillStyle =
                 bullish
-                    ? "rgba(185,255,66,.82)"
-                    : "rgba(255,66,66,.82)";
+                    ? "rgba(182,255,53,.82)"
+                    : "rgba(255,69,69,.82)";
 
 
             ctx.fillRect(
@@ -2730,7 +2670,7 @@ function drawChart(
                 px -
                 bodyWidth / 2,
 
-                bodyTop,
+                top,
 
                 bodyWidth,
 
@@ -2739,28 +2679,27 @@ function drawChart(
             );
 
 
-            /*
-                =================================================
-                VOLUME
-                =================================================
-            */
+            /* =================================================
+               VOLUME
+            ================================================= */
 
-            const volumeHeight =
+            const volume =
+                candle.volume || 0;
+
+
+            const vh =
                 (
-                    (
-                        candle.volume || 0
-                    )
-                    /
+                    volume /
                     maxVolume
                 )
                 *
-                volumeArea;
+                volumeHeight;
 
 
             ctx.fillStyle =
                 bullish
-                    ? "rgba(185,255,66,.12)"
-                    : "rgba(255,66,66,.12)";
+                    ? "rgba(182,255,53,.13)"
+                    : "rgba(255,69,69,.13)";
 
 
             ctx.fillRect(
@@ -2770,11 +2709,11 @@ function drawChart(
 
                 y +
                 h -
-                volumeHeight,
+                vh,
 
                 bodyWidth,
 
-                volumeHeight
+                vh
 
             );
 
@@ -2782,58 +2721,56 @@ function drawChart(
     );
 
 
-    /*
-        =====================================================
-        CURRENT PRICE LINE
-        =====================================================
-    */
+    /* =====================================================
+       CURRENT PRICE
+    ===================================================== */
 
     if (
         state.price
     ) {
 
-        const currentY =
-            y
-            +
-            priceArea
-            -
+        const py =
+            y +
+            chartHeight -
             (
                 (
                     state.price -
                     min
                 )
                 /
-                (
-                    max -
-                    min
-                )
+                range
             )
             *
-            priceArea;
+            chartHeight;
 
+
+        /*
+            Price line.
+        */
 
         ctx.beginPath();
 
         ctx.moveTo(
             x,
-            currentY
+            py
         );
 
         ctx.lineTo(
             x + w,
-            currentY
+            py
         );
 
-
-        ctx.strokeStyle =
-            "rgba(255,255,255,.16)";
-
-
-        ctx.lineWidth = 1;
 
         ctx.setLineDash(
             [3,4]
         );
+
+
+        ctx.strokeStyle =
+            "rgba(255,255,255,.17)";
+
+
+        ctx.lineWidth = 1;
 
         ctx.stroke();
 
@@ -2841,40 +2778,41 @@ function drawChart(
 
 
         /*
-            Petit point animé sur le prix actuel.
+            Point live.
         */
 
         const pulse =
             (
                 Math.sin(
-                    timestamp / 180
+                    now / 160
                 )
                 + 1
             )
-            / 2;
+            /
+            2;
 
 
         ctx.beginPath();
 
         ctx.arc(
             x + w - 5,
-            currentY,
+            py,
             1.5 +
-            pulse * 1.8,
+            pulse * 1.5,
             0,
             Math.PI * 2
         );
 
 
         ctx.fillStyle =
-            "rgba(255,255,255,.75)";
+            "#fff";
 
 
         ctx.fill();
 
 
         /*
-            Prix.
+            Prix actuel.
         */
 
         ctx.font =
@@ -2882,55 +2820,49 @@ function drawChart(
 
 
         ctx.fillStyle =
-            "rgba(255,255,255,.78)";
-
-
-        const priceText =
-            formatPrice(
-                symbol,
-                state.price
-            );
+            "rgba(255,255,255,.82)";
 
 
         ctx.fillText(
-            priceText,
+            formatPrice(
+                state.symbol,
+                state.price
+            ),
             x + 5,
             Math.max(
-                y + 31,
-                currentY - 4
+                y + 32,
+                py - 4
             )
         );
 
     }
 
 
-    /*
-        =====================================================
-        SYMBOL
-        =====================================================
-    */
+    /* =====================================================
+       TITLE
+    ===================================================== */
 
     ctx.font =
         "800 7px monospace";
 
 
     ctx.fillStyle =
-        "rgba(255,255,255,.72)";
+        "rgba(255,255,255,.75)";
 
 
     ctx.fillText(
-        symbol.replace(
+        state.symbol.replace(
             "USDT",
             "/USDT"
         ),
-        x + 5,
+        x + 6,
         y + 10
     );
 
 
-    /*
-        LIVE / DEMO
-    */
+    /* =====================================================
+       LIVE
+    ===================================================== */
 
     ctx.font =
         "6px monospace";
@@ -2938,54 +2870,139 @@ function drawChart(
 
     ctx.fillStyle =
         state.live
-            ? "rgba(185,255,66,.7)"
-            : "rgba(255,170,50,.65)";
+            ? "rgba(182,255,53,.72)"
+            : "rgba(255,170,60,.65)";
 
 
     ctx.fillText(
         state.live
             ? "● LIVE"
             : "● CONNECTING",
-        x + 5,
+        x + 6,
         y + 19
     );
 
 
-    /*
-        =====================================================
-        24H CHANGE
-        =====================================================
-    */
+    /* =====================================================
+       24H
+    ===================================================== */
+
+    if (
+        Number.isFinite(
+            state.change24h
+        )
+    ) {
+
+        const change =
+            state.change24h;
+
+
+        ctx.font =
+            "700 7px monospace";
+
+
+        ctx.fillStyle =
+            change >= 0
+                ? "rgba(182,255,53,.80)"
+                : "rgba(255,69,69,.80)";
+
+
+        ctx.fillText(
+
+            (
+                change >= 0
+                    ? "+"
+                    : ""
+            )
+            +
+            change.toFixed(2)
+            +
+            "%",
+
+            x + w - 39,
+
+            y + 10
+
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOADING CHART
+========================================================= */
+
+function drawLoadingChart(
+    state,
+    x,
+    y,
+    w,
+    h
+) {
 
     ctx.fillStyle =
-        state.change24h >= 0
-            ? "rgba(185,255,66,.75)"
-            : "rgba(255,66,66,.75)";
+        "rgba(2,2,2,.30)";
+
+
+    ctx.fillRect(
+        x,
+        y,
+        w,
+        h
+    );
+
+
+    ctx.strokeStyle =
+        "rgba(255,255,255,.05)";
+
+
+    ctx.strokeRect(
+        x + .5,
+        y + .5,
+        w - 1,
+        h - 1
+    );
+
+
+    ctx.font =
+        "700 7px monospace";
+
+
+    ctx.fillStyle =
+        "rgba(255,255,255,.55)";
 
 
     ctx.fillText(
-
-        (
-            state.change24h >= 0
-                ? "+"
-                : ""
-        )
-        +
-        state.change24h.toFixed(2)
-        +
-        "%",
-
-        x + w - 38,
-
+        state.symbol.replace(
+            "USDT",
+            "/USDT"
+        ),
+        x + 6,
         y + 10
+    );
 
+
+    ctx.font =
+        "6px monospace";
+
+
+    ctx.fillStyle =
+        "rgba(255,170,60,.7)";
+
+
+    ctx.fillText(
+        "● LOADING REAL MARKET DATA",
+        x + 6,
+        y + 20
     );
 
 }
 
 
 /* =========================================================
-   CANVAS RENDER LOOP
+   MAIN RENDER LOOP
 ========================================================= */
 
 function render(
@@ -2995,13 +3012,13 @@ function render(
     ctx.clearRect(
         0,
         0,
-        width,
-        height
+        W,
+        H
     );
 
 
     const layout =
-        getLayout();
+        getChartLayout();
 
 
     layout.forEach(
@@ -3011,28 +3028,27 @@ function render(
                 SYMBOLS[index];
 
 
-            if (!symbol) {
-                return;
-            }
+            const state =
+                markets[symbol];
 
 
             drawChart(
 
-                symbol,
+                state,
 
-                width *
+                W *
                 position[0],
 
-                height *
+                H *
                 position[1],
 
-                width *
+                W *
                 position[2],
 
-                height *
+                H *
                 position[3],
 
-                timestamp
+                Date.now()
 
             );
 
@@ -3053,119 +3069,10 @@ requestAnimationFrame(
 
 
 /* =========================================================
-   24H DATA
+   TICKER HTML
 ========================================================= */
 
-
-/*
-    En parallèle des trades, on récupère les informations
-    24h de Binance toutes les 5 secondes.
-
-    Les prix instantanés restent ceux du WebSocket.
-*/
-
-async function update24h() {
-
-    try {
-
-        const response =
-            await fetch(
-                "https://api.binance.com/api/v3/ticker/24hr?symbols="
-                +
-                encodeURIComponent(
-                    JSON.stringify(
-                        SYMBOLS
-                    )
-                ),
-                {
-                    cache: "no-store"
-                }
-            );
-
-
-        if (
-            !response.ok
-        ) {
-            return;
-        }
-
-
-        const data =
-            await response.json();
-
-
-        data.forEach(
-            ticker => {
-
-                const state =
-                    markets[
-                        ticker.symbol
-                    ];
-
-
-                if (!state) {
-                    return;
-                }
-
-
-                state.change24h =
-                    Number(
-                        ticker.priceChangePercent
-                    );
-
-
-                state.volume24h =
-                    Number(
-                        ticker.quoteVolume
-                    );
-
-
-                state.high24h =
-                    Number(
-                        ticker.highPrice
-                    );
-
-
-                state.low24h =
-                    Number(
-                        ticker.lowPrice
-                    );
-
-            }
-        );
-
-
-    }
-    catch(error) {
-
-        /*
-            Si REST ne répond pas,
-            les trades WebSocket continuent.
-        */
-
-        console.warn(
-            "24h data unavailable"
-        );
-
-    }
-
-}
-
-
-update24h();
-
-
-setInterval(
-    update24h,
-    5000
-);
-
-
-/* =========================================================
-   TICKER
-========================================================= */
-
-function tickerHTML(
+function createTickerItem(
     symbol
 ) {
 
@@ -3181,43 +3088,104 @@ function tickerHTML(
 
 
     const change =
-        state.change24h;
-
-
-    const changeText =
-        Number.isFinite(change)
+        Number.isFinite(
+            state.change24h
+        )
             ? (
-                change >= 0
-                    ? "+"
-                    : ""
+                (
+                    state.change24h >= 0
+                        ? "+"
+                        : ""
+                )
+                +
+                state.change24h.toFixed(2)
+                +
+                "%"
             )
-            +
-            change.toFixed(2)
-            +
-            "%"
             : "—";
 
 
-    const changeClass =
-        change >= 0
-            ? "green"
-            : "red";
+    const cls =
+        state.change24h >= 0
+            ? "up"
+            : "down";
 
 
     return `
 
         <div class="tickerItem">
 
-            <span class="tickerSymbol">
+            <span class="symbol">
                 ${symbol.replace("USDT","/USDT")}
             </span>
 
-            <span class="tickerPrice">
+            <span class="price">
                 ${price}
             </span>
 
-            <span class="${changeClass}">
-                ${changeText}
+            <span class="${cls}">
+                ${change}
+            </span>
+
+        </div>
+
+    `;
+
+}
+
+
+function createSecondTickerItem(
+    symbol
+) {
+
+    const state =
+        markets[symbol];
+
+
+    return `
+
+        <div class="tickerItem">
+
+            <span class="symbol">
+                ${symbol.replace("USDT","/USDT")}
+            </span>
+
+            <span class="muted">
+                HIGH
+            </span>
+
+            <span style="margin-left:7px">
+                ${formatPrice(
+                    symbol,
+                    state.high24h
+                )}
+            </span>
+
+            <span
+                class="muted"
+                style="margin-left:13px"
+            >
+                LOW
+            </span>
+
+            <span style="margin-left:7px">
+                ${formatPrice(
+                    symbol,
+                    state.low24h
+                )}
+            </span>
+
+            <span
+                class="muted"
+                style="margin-left:13px"
+            >
+                VOL
+            </span>
+
+            <span style="margin-left:7px">
+                ${formatVolume(
+                    state.volume24h
+                )}
             </span>
 
         </div>
@@ -3228,251 +3196,127 @@ function tickerHTML(
 
 
 /* =========================================================
-   BUILD TICKER WITHOUT EMPTY SPACE
+   BUILD CONTINUOUS TICKER
 ========================================================= */
 
 function buildTicker() {
 
-    const row1 =
+    const forward =
         document.getElementById(
-            "ticker1"
+            "tickerForward"
         );
 
 
-    const row2 =
+    const reverse =
         document.getElementById(
-            "ticker2"
+            "tickerReverse"
         );
 
 
-    /*
-        On crée plusieurs groupes.
+    let group1 = "";
 
-        Le groupe est volontairement plus long
-        que l'écran.
-
-        Ensuite on duplique exactement le même groupe.
-        L'animation peut donc boucler sans espace vide.
-    */
-
-    function makeGroup(
-        type
-    ) {
-
-        let html = "";
-
-
-        const repetitions =
-            window.innerWidth > 1400
-                ? 3
-                : 2;
-
-
-        for (
-            let r = 0;
-            r < repetitions;
-            r++
-        ) {
-
-            SYMBOLS.forEach(
-                symbol => {
-
-                    if (
-                        type === 1
-                    ) {
-
-                        html +=
-                            tickerHTML(
-                                symbol
-                            );
-
-                    }
-                    else {
-
-                        const state =
-                            markets[symbol];
-
-
-                        const high =
-                            state.high24h
-                                ? formatPrice(
-                                    symbol,
-                                    state.high24h
-                                )
-                                : "—";
-
-
-                        const low =
-                            state.low24h
-                                ? formatPrice(
-                                    symbol,
-                                    state.low24h
-                                )
-                                : "—";
-
-
-                        html += `
-
-                            <div class="tickerItem">
-
-                                <span class="tickerSymbol">
-                                    ${symbol.replace("USDT","/USDT")}
-                                </span>
-
-                                <span>
-                                    H ${high}
-                                </span>
-
-                                <span style="margin-left:10px">
-                                    L ${low}
-                                </span>
-
-                                <span style="margin-left:10px">
-                                    VOL ${formatVolume(state.volume24h)}
-                                </span>
-
-                            </div>
-
-                        `;
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        return html;
-
-    }
-
-
-    const group1 =
-        makeGroup(1);
-
-
-    const group2 =
-        makeGroup(2);
+    let group2 = "";
 
 
     /*
-        Deux copies identiques.
-
-        50% exactement = boucle continue.
+        On répète les marchés plusieurs fois
+        pour que la ligne soit plus longue que
+        n'importe quel écran.
     */
 
-    row1.innerHTML =
-        group1 +
-        group1;
+    for (
+        let r = 0;
+        r < 4;
+        r++
+    ) {
+
+        SYMBOLS.forEach(
+            symbol => {
+
+                group1 +=
+                    createTickerItem(
+                        symbol
+                    );
 
 
-    row2.innerHTML =
-        group2 +
-        group2;
+                group2 +=
+                    createSecondTickerItem(
+                        symbol
+                    );
+
+            }
+        );
+
+    }
+
+
+    /*
+        Deux groupes strictement identiques.
+
+        L'animation passe de 0 à -50%.
+        Il n'y a donc jamais de vide entre deux boucles.
+    */
+
+    forward.innerHTML =
+        `
+        <div class="tickerGroup">
+            ${group1}
+        </div>
+
+        <div class="tickerGroup">
+            ${group1}
+        </div>
+        `;
+
+
+    reverse.innerHTML =
+        `
+        <div class="tickerGroup">
+            ${group2}
+        </div>
+
+        <div class="tickerGroup">
+            ${group2}
+        </div>
+        `;
 
 }
 
-
-function formatVolume(
-    volume
-) {
-
-    if (
-        !volume
-    ) {
-        return "—";
-    }
-
-
-    if (
-        volume >= 1e9
-    ) {
-
-        return (
-            volume / 1e9
-        ).toFixed(2)
-        +
-        "B";
-
-    }
-
-
-    if (
-        volume >= 1e6
-    ) {
-
-        return (
-            volume / 1e6
-        ).toFixed(2)
-        +
-        "M";
-
-    }
-
-
-    if (
-        volume >= 1e3
-    ) {
-
-        return (
-            volume / 1e3
-        ).toFixed(2)
-        +
-        "K";
-
-    }
-
-
-    return volume.toFixed(0);
-
-}
-
-
-/*
-    Première construction.
-*/
 
 buildTicker();
 
 
 /*
-    Le contenu du ticker est actualisé sans arrêter
-    son animation.
+    Actualisation visuelle du ticker.
+
+    Pas de reconstruction permanente du DOM.
 */
 
-function refreshTickerValues() {
+function updateTickerPrices() {
 
-    /*
-        On ne reconstruit pas le DOM à chaque trade,
-        car cela pourrait provoquer des saccades.
-
-        On met simplement à jour les valeurs existantes.
-    */
-
-    const rows =
+    const items =
         document.querySelectorAll(
-            ".tickerItem"
+            "#tickerForward .tickerItem"
         );
 
 
-    rows.forEach(
+    items.forEach(
         item => {
 
-            const symbolElement =
+            const symbolNode =
                 item.querySelector(
-                    ".tickerSymbol"
+                    ".symbol"
                 );
 
 
-            if (!symbolElement) {
+            if (!symbolNode) {
                 return;
             }
 
 
             const symbol =
-                symbolElement
-                    .innerText
+                symbolNode.innerText
+                    .trim()
                     .replace(
                         "/USDT",
                         "USDT"
@@ -3488,17 +3332,23 @@ function refreshTickerValues() {
             }
 
 
-            const priceElement =
+            const priceNode =
                 item.querySelector(
-                    ".tickerPrice"
+                    ".price"
+                );
+
+
+            const changeNode =
+                item.querySelector(
+                    ".up, .down"
                 );
 
 
             if (
-                priceElement
+                priceNode
             ) {
 
-                priceElement.innerText =
+                priceNode.innerText =
                     formatPrice(
                         symbol,
                         state.price
@@ -3507,67 +3357,40 @@ function refreshTickerValues() {
             }
 
 
-            const children =
-                item.children;
-
-
             if (
-                children.length >= 3
+                changeNode
             ) {
 
-                const last =
-                    children[
-                        children.length - 1
-                    ];
-
-
-                if (
-                    last &&
-                    last !== symbolElement &&
-                    !last.classList.contains(
-                        "tickerPrice"
+                const change =
+                    Number.isFinite(
+                        state.change24h
                     )
-                ) {
-
-                    /*
-                        Pour la première ligne :
-                        actualiser le pourcentage.
-                    */
-
-                    if (
-                        children.length === 3
-                    ) {
-
-                        const change =
-                            state.change24h;
+                        ? state.change24h
+                        : 0;
 
 
-                        last.innerText =
-                            (
-                                change >= 0
-                                    ? "+"
-                                    : ""
-                            )
-                            +
-                            change.toFixed(2)
-                            +
-                            "%";
+                changeNode.innerText =
+                    (
+                        change >= 0
+                            ? "+"
+                            : ""
+                    )
+                    +
+                    change.toFixed(2)
+                    +
+                    "%";
 
 
-                        last.classList.toggle(
-                            "green",
-                            change >= 0
-                        );
+                changeNode.classList.toggle(
+                    "up",
+                    change >= 0
+                );
 
 
-                        last.classList.toggle(
-                            "red",
-                            change < 0
-                        );
-
-                    }
-
-                }
+                changeNode.classList.toggle(
+                    "down",
+                    change < 0
+                );
 
             }
 
@@ -3578,13 +3401,23 @@ function refreshTickerValues() {
 
 
 setInterval(
-    refreshTickerValues,
-    200
+    updateTickerPrices,
+    250
+);
+
+
+/*
+    Les HIGH / LOW / VOL sont moins urgents.
+*/
+
+setInterval(
+    buildTicker,
+    5000
 );
 
 
 /* =========================================================
-   ACCESS SYSTEM
+   ACCESS BUTTON
 ========================================================= */
 
 const input =
@@ -3658,11 +3491,11 @@ document
         "click",
         () => {
 
-            const value =
+            const key =
                 input.value.trim();
 
 
-            if (!value) {
+            if (!key) {
 
                 rejectAccess(
                     "ДОСТУП ОТКЛОНЁН — КЛЮЧ НЕ УКАЗАН"
@@ -3703,36 +3536,19 @@ input.addEventListener(
 
 
 /* =========================================================
-   INITIAL TICKER UPDATE
+   START MESSAGE
 ========================================================= */
 
-setTimeout(
-    buildTicker,
-    1000
+console.log(
+    "%c ELITE CRYPTO MARKET TERMINAL ",
+    "background:#111;color:#b6ff35;font-weight:bold;padding:8px"
 );
 
-
-window.addEventListener(
-    "resize",
-    () => {
-
-        /*
-            Recrée le ticker uniquement lorsque
-            la taille change.
-        */
-
-        buildTicker();
-
-    }
+console.log(
+    "Loading real Binance 1m OHLC data..."
 );
 
 </script>
 
 </body>
-
 </html>
-```
-
-Cette fois le point essentiel est le **défilement temporel continu** : les chandeliers ne sont pas simplement placés à des positions fixes. Leur position horizontale dépend aussi de la fraction de seconde en cours, donc le marché **glisse continuellement**, tandis que les nouveaux trades modifient réellement le chandelier courant.
-
-Si Binance coupe momentanément la connexion, le système se reconnecte automatiquement ; il n'y a pas de « fin de graphique » où tout devient une ligne droite.
