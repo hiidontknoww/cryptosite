@@ -1,1481 +1,1707 @@
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
-
-    <title>ELITE CRYPTO — Закрытая система</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --bg: #030303;
-            --panel: rgba(10, 10, 10, .91);
-            --panel-2: rgba(16, 16, 16, .78);
-
-            --white: #f5f5f5;
-            --gray: #777;
-            --muted: #4f4f4f;
-
-            --border: rgba(255,255,255,.095);
-
-            --green: #b9ff3d;
-            --green-soft: rgba(185,255,61,.75);
-
-            --red: #ff4242;
-            --red-soft: rgba(255,66,66,.72);
-
-            --header-height: 72px;
-            --ticker-height: 34px;
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
-        }
-
-        html {
-            width: 100%;
-            min-height: 100%;
-            background: var(--bg);
-        }
-
-        body {
-            width: 100%;
-            min-height: 100dvh;
-
-            overflow-x: hidden;
-            overflow-y: auto;
-
-            background:
-                radial-gradient(
-                    circle at 50% 45%,
-                    rgba(35,35,35,.17),
-                    transparent 42%
-                ),
-                #030303;
-
-            color: var(--white);
-
-            font-family:
-                Inter,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            -webkit-font-smoothing: antialiased;
-            text-rendering: optimizeLegibility;
-        }
-
-        button,
-        input {
-            font: inherit;
-        }
-
-        /* =====================================================
-           BACKGROUND
-        ===================================================== */
-
-        #marketCanvas {
-            position: fixed;
-            inset: 0;
-
-            width: 100%;
-            height: 100%;
-
-            z-index: 0;
-            pointer-events: none;
-
-            opacity: .82;
-        }
-
-        .background-grid {
-            position: fixed;
-            inset: 0;
-
-            z-index: 1;
-            pointer-events: none;
-
-            background-image:
-                linear-gradient(
-                    rgba(255,255,255,.025) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    90deg,
-                    rgba(255,255,255,.025) 1px,
-                    transparent 1px
-                );
-
-            background-size: 52px 52px;
-
-            mask-image:
-                linear-gradient(
-                    to bottom,
-                    transparent 0%,
-                    black 12%,
-                    black 86%,
-                    transparent 100%
-                );
-        }
-
-        .vignette {
-            position: fixed;
-            inset: 0;
-
-            z-index: 2;
-            pointer-events: none;
-
-            background:
-                radial-gradient(
-                    ellipse at center,
-                    rgba(0,0,0,.04) 0%,
-                    rgba(0,0,0,.10) 42%,
-                    rgba(0,0,0,.68) 100%
-                );
-        }
-
-        .center-fade {
-            position: fixed;
-            left: 50%;
-            top: 50%;
-
-            width: min(850px, 100vw);
-            height: min(650px, 100vh);
-
-            transform: translate(-50%, -50%);
-
-            z-index: 3;
-            pointer-events: none;
-
-            background:
-                radial-gradient(
-                    ellipse,
-                    rgba(0,0,0,.80) 0%,
-                    rgba(0,0,0,.55) 48%,
-                    transparent 76%
-                );
-        }
-
-        .scanlines {
-            position: fixed;
-            inset: 0;
-
-            z-index: 30;
-            pointer-events: none;
-
-            background:
-                repeating-linear-gradient(
-                    to bottom,
-                    rgba(255,255,255,.008) 0,
-                    rgba(255,255,255,.008) 1px,
-                    transparent 1px,
-                    transparent 4px
-                );
-
-            opacity: .35;
-        }
-
-        /* =====================================================
-           HEADER
-        ===================================================== */
-
-        header {
-            position: sticky;
-            top: 0;
-
-            z-index: 20;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-            width: 100%;
-            min-height: var(--header-height);
+<title>ELITE CRYPTO — Private Access</title>
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+<style>
 
-            padding:
-                0
-                max(22px, 4vw);
+/* =========================================================
+   RESET
+========================================================= */
 
-            border-bottom: 1px solid var(--border);
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-            background:
-                linear-gradient(
-                    to bottom,
-                    rgba(3,3,3,.97),
-                    rgba(3,3,3,.78)
-                );
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
 
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
-        }
+body {
+    min-height: 100dvh;
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+    overflow-x: hidden;
 
-            min-width: 0;
-        }
+    background: #030303;
+    color: #f4f4f4;
 
-        .brand-mark {
-            position: relative;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
 
-            width: 34px;
-            height: 34px;
+    -webkit-font-smoothing: antialiased;
+}
 
-            flex: 0 0 34px;
 
-            display: grid;
-            place-items: center;
+/* =========================================================
+   VARIABLES
+========================================================= */
 
-            border: 1px solid rgba(255,255,255,.23);
+:root {
 
-            color: #eee;
+    --green: #baff42;
+    --red: #ff4040;
 
-            font-size: 11px;
-            font-weight: 900;
-            letter-spacing: -.05em;
-        }
+    --bg: #030303;
 
-        .brand-mark::after {
-            content: "";
+    --line: rgba(255,255,255,.09);
 
-            position: absolute;
+    --muted: #666;
+    --muted2: #444;
 
-            width: 6px;
-            height: 6px;
+    --ticker1: 32px;
+    --ticker2: 27px;
 
-            top: -3px;
-            right: -3px;
+}
 
-            background: var(--green);
 
-            box-shadow:
-                0 0 14px
-                rgba(185,255,61,.85);
-        }
+/* =========================================================
+   BACKGROUND
+========================================================= */
 
-        .brand-name {
-            white-space: nowrap;
+#marketCanvas {
 
-            font-size: 14px;
-            font-weight: 800;
+    position: fixed;
 
-            letter-spacing: .17em;
-        }
+    inset: 0;
 
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
+    width: 100%;
+    height: 100%;
 
-        nav {
-            display: flex;
-            gap: 4px;
-        }
+    z-index: 0;
 
-        nav button {
-            padding: 9px 12px;
+    pointer-events: none;
 
-            background: transparent;
-            border: 1px solid transparent;
+    opacity: .78;
+}
 
-            color: #666;
 
-            font-size: 9px;
-            letter-spacing: .10em;
+.background-grid {
 
-            cursor: pointer;
+    position: fixed;
 
-            transition: .2s ease;
-        }
+    inset: 0;
 
-        nav button:hover {
-            color: #aaa;
-            border-color: var(--border);
-            background: rgba(255,255,255,.02);
-        }
+    z-index: 1;
 
-        .header-status {
-            display: flex;
-            align-items: center;
-            gap: 7px;
+    pointer-events: none;
 
-            color: #686868;
+    background-image:
 
-            font-family: monospace;
-            font-size: 8px;
-            letter-spacing: .08em;
+        linear-gradient(
+            rgba(255,255,255,.022) 1px,
+            transparent 1px
+        ),
 
-            white-space: nowrap;
-        }
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.022) 1px,
+            transparent 1px
+        );
 
-        .status-dot {
-            width: 6px;
-            height: 6px;
+    background-size: 52px 52px;
 
-            border-radius: 50%;
+    mask-image:
+        linear-gradient(
+            to bottom,
+            transparent,
+            black 12%,
+            black 88%,
+            transparent
+        );
+}
 
-            background: var(--green);
 
-            box-shadow:
-                0 0 12px
-                rgba(185,255,61,.75);
+.background-fade {
 
-            animation: statusPulse 1.7s infinite;
-        }
+    position: fixed;
 
-        @keyframes statusPulse {
-            0%, 100% {
-                opacity: 1;
-            }
+    inset: 0;
 
-            50% {
-                opacity: .35;
-            }
-        }
-
-        /* =====================================================
-           MAIN
-        ===================================================== */
-
-        main {
-            position: relative;
-            z-index: 10;
-
-            min-height:
-                calc(
-                    100dvh
-                    - var(--header-height)
-                    - var(--ticker-height)
-                    - 74px
-                );
-
-            display: grid;
-            place-items: center;
-
-            padding:
-                clamp(38px, 8vh, 90px)
-                20px
-                90px;
-        }
+    z-index: 2;
 
-        .access-card {
-            position: relative;
+    pointer-events: none;
 
-            width: min(500px, 100%);
+    background:
 
-            padding:
-                clamp(27px, 5vw, 42px);
+        radial-gradient(
+            ellipse at center,
+            rgba(0,0,0,.10) 0%,
+            rgba(0,0,0,.48) 45%,
+            rgba(0,0,0,.88) 100%
+        );
+}
 
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(20,20,20,.94),
-                    rgba(6,6,6,.95)
-                );
 
-            border:
-                1px solid
-                rgba(255,255,255,.13);
+.center-mask {
 
-            box-shadow:
-                0 35px 110px rgba(0,0,0,.84),
-                0 8px 30px rgba(0,0,0,.5),
-                inset 0 1px 0 rgba(255,255,255,.045);
+    position: fixed;
 
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
+    left: 50%;
+    top: 50%;
 
-            animation:
-                cardIn .8s
-                cubic-bezier(.2,.8,.2,1);
-        }
+    width: min(900px,100vw);
+    height: min(700px,100vh);
 
-        .access-card::before {
-            content: "";
+    transform:
+        translate(-50%,-50%);
 
-            position: absolute;
+    z-index: 3;
 
-            top: 0;
-            left: 25px;
-            right: 25px;
+    pointer-events: none;
 
-            height: 1px;
+    background:
 
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(255,255,255,.28),
-                    transparent
-                );
-        }
+        radial-gradient(
+            ellipse,
+            rgba(0,0,0,.90) 0%,
+            rgba(0,0,0,.70) 48%,
+            transparent 78%
+        );
+}
 
-        .access-card::after {
-            content: "";
 
-            position: absolute;
-            inset: 0;
+.scanlines {
 
-            pointer-events: none;
+    position: fixed;
 
-            background:
-                linear-gradient(
-                    120deg,
-                    rgba(255,255,255,.025),
-                    transparent 30%
-                );
-        }
+    inset: 0;
 
-        @keyframes cardIn {
-            from {
-                opacity: 0;
-                transform:
-                    translateY(20px)
-                    scale(.985);
-            }
+    z-index: 40;
 
-            to {
-                opacity: 1;
-                transform:
-                    translateY(0)
-                    scale(1);
-            }
-        }
+    pointer-events: none;
 
-        .eyebrow {
-            margin-bottom: 17px;
+    opacity: .20;
 
-            color: #707070;
+    background:
 
-            font-family: monospace;
-            font-size: 9px;
-            letter-spacing: .23em;
-        }
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,.012) 0,
+            rgba(255,255,255,.012) 1px,
+            transparent 1px,
+            transparent 4px
+        );
+}
 
-        h1 {
-            margin-bottom: 11px;
 
-            color: #f1f1f1;
+/* =========================================================
+   HEADER
+========================================================= */
 
-            font-size:
-                clamp(26px, 5vw, 34px);
+header {
 
-            line-height: 1.12;
-            font-weight: 700;
+    position: sticky;
 
-            letter-spacing: -.045em;
-        }
+    top: 0;
 
-        .title-line {
-            width: 48px;
-            height: 2px;
+    z-index: 30;
 
-            margin-bottom: 23px;
+    width: 100%;
 
-            background: var(--green);
+    min-height: 72px;
 
-            box-shadow:
-                0 0 16px
-                rgba(185,255,61,.48);
-        }
+    display: flex;
 
-        .description {
-            margin-bottom: 27px;
+    align-items: center;
 
-            color: #777;
+    justify-content: space-between;
 
-            font-size: 12px;
-            line-height: 1.8;
-        }
+    padding:
+        0
+        max(18px,4vw);
 
-        /* =====================================================
-           INPUT
-        ===================================================== */
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
 
-        .key-label {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
+    background:
+        rgba(3,3,3,.88);
 
-            margin-bottom: 8px;
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+}
 
-            color: #707070;
 
-            font-family: monospace;
-            font-size: 8px;
-            letter-spacing: .13em;
-        }
+.brand {
 
-        .key-input {
-            width: 100%;
-            height: 54px;
+    display: flex;
 
-            padding: 0 15px;
+    align-items: center;
 
-            outline: none;
+    gap: 12px;
 
-            background:
-                rgba(0,0,0,.72);
+    min-width: 0;
+}
 
-            border:
-                1px solid
-                #292929;
 
-            border-radius: 0;
+.brand-mark {
 
-            color: #fff;
+    position: relative;
 
-            font-family: monospace;
-            font-size: 13px;
+    width: 34px;
+    height: 34px;
 
-            letter-spacing: .08em;
+    flex: 0 0 34px;
 
-            -webkit-appearance: none;
+    display: grid;
 
-            transition:
-                border-color .2s,
-                box-shadow .2s,
-                background .2s;
-        }
+    place-items: center;
 
-        .key-input::placeholder {
-            color: #3f3f3f;
-        }
+    border:
+        1px solid
+        rgba(255,255,255,.25);
 
-        .key-input:focus {
-            border-color: #4b4b4b;
+    color: white;
 
-            background: rgba(0,0,0,.86);
+    font-size: 11px;
 
-            box-shadow:
-                0 0 0 3px
-                rgba(255,255,255,.025);
-        }
+    font-weight: 900;
+}
 
-        .key-input.error {
-            border-color:
-                rgba(255,66,66,.78);
 
-            animation:
-                shake .35s ease;
-        }
+.brand-mark::after {
 
-        @keyframes shake {
-            0%, 100% {
-                transform: translateX(0);
-            }
+    content: "";
 
-            25% {
-                transform: translateX(-5px);
-            }
+    position: absolute;
 
-            75% {
-                transform: translateX(5px);
-            }
-        }
+    width: 6px;
+    height: 6px;
 
-        /* =====================================================
-           BUTTON
-        ===================================================== */
+    right: -3px;
+    top: -3px;
 
-        .access-button {
-            width: 100%;
-            min-height: 54px;
+    background:
+        var(--green);
 
-            margin-top: 12px;
+    box-shadow:
+        0 0 14px
+        rgba(186,255,66,.8);
+}
 
-            background:
-                linear-gradient(
-                    180deg,
-                    #171717,
-                    #101010
-                );
 
-            border:
-                1px solid
-                #333;
+.brand-name {
 
-            color: #dedede;
+    white-space: nowrap;
 
-            font-size: 10px;
-            font-weight: 700;
+    font-size: 14px;
 
-            letter-spacing: .16em;
+    font-weight: 800;
 
-            cursor: pointer;
+    letter-spacing: .17em;
+}
 
-            transition:
-                background .2s,
-                border-color .2s,
-                transform .15s;
-        }
 
-        .access-button:hover {
-            background: #1b1b1b;
-            border-color: #555;
-        }
+.header-right {
 
-        .access-button:active {
-            transform: scale(.988);
-        }
+    display: flex;
 
-        /* =====================================================
-           ERROR
-        ===================================================== */
+    align-items: center;
 
-        .error-box {
-            min-height: 42px;
+    gap: 20px;
+}
 
-            display: flex;
-            align-items: center;
 
-            margin-top: 15px;
-            padding: 10px 12px;
+nav {
 
-            background:
-                rgba(255,66,66,.035);
+    display: flex;
 
-            border:
-                1px solid
-                rgba(255,66,66,.16);
+    gap: 3px;
+}
 
-            color: #ff5555;
 
-            font-family: monospace;
-            font-size: 8px;
-            line-height: 1.5;
-            letter-spacing: .06em;
+nav button {
 
-            opacity: 0;
-            transform: translateY(-5px);
+    border: 1px solid transparent;
 
-            pointer-events: none;
+    background: transparent;
 
-            transition:
-                opacity .25s,
-                transform .25s;
-        }
+    color: #606060;
 
-        .error-box.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    padding:
+        9px
+        11px;
 
-        .error-icon {
-            flex: 0 0 6px;
+    font-size: 9px;
 
-            width: 6px;
-            height: 6px;
+    letter-spacing: .1em;
 
-            margin-right: 10px;
+    cursor: pointer;
 
-            border-radius: 50%;
+    transition: .2s ease;
+}
 
-            background: var(--red);
 
-            box-shadow:
-                0 0 10px
-                rgba(255,66,66,.85);
-        }
+nav button:hover {
 
-        /* =====================================================
-           SECURITY
-        ===================================================== */
+    color: #aaa;
 
-        .security-info {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+    border-color:
+        rgba(255,255,255,.08);
 
-            margin-top: 24px;
-            padding-top: 17px;
+    background:
+        rgba(255,255,255,.02);
+}
 
-            border-top:
-                1px solid
-                rgba(255,255,255,.065);
 
-            color: #555;
+.header-live {
 
-            font-family: monospace;
-            font-size: 7px;
-            letter-spacing: .06em;
-        }
+    display: flex;
 
-        .security-info span {
-            white-space: nowrap;
-        }
+    align-items: center;
 
-        .security-info span:nth-child(2) {
-            text-align: center;
-        }
+    gap: 7px;
 
-        .security-info span:last-child {
-            text-align: right;
-        }
+    color: #666;
 
-        /* =====================================================
-           LOWER INFORMATION AREA
-        ===================================================== */
+    font-family: monospace;
 
-        .lower-info {
-            position: fixed;
+    font-size: 8px;
 
-            left: 0;
-            right: 0;
-            bottom:
-                calc(
-                    var(--ticker-height)
-                    + var(--safe-bottom)
-                );
+    white-space: nowrap;
+}
 
-            z-index: 12;
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+.live-dot {
 
-            padding:
-                8px
-                max(20px, 4vw);
+    width: 6px;
+    height: 6px;
 
-            pointer-events: none;
-        }
+    border-radius: 50%;
 
-        .footer-copy {
-            color: #4f4f4f;
+    background:
+        var(--green);
 
-            font-family: monospace;
-            font-size: 7px;
-            line-height: 1.65;
+    box-shadow:
+        0 0 12px
+        rgba(186,255,66,.8);
 
-            letter-spacing: .06em;
-        }
+    animation:
+        pulse 1.5s infinite;
+}
 
-        .live-market {
-            display: flex;
-            align-items: center;
-            gap: 8px;
 
-            color: #555;
+@keyframes pulse {
 
-            font-family: monospace;
-            font-size: 7px;
-            letter-spacing: .07em;
-        }
+    0%,100% {
+        opacity: 1;
+    }
 
-        .live-market::before {
-            content: "";
+    50% {
+        opacity: .3;
+    }
 
-            width: 5px;
-            height: 5px;
+}
 
-            flex: 0 0 5px;
 
-            border-radius: 50%;
+/* =========================================================
+   MAIN
+========================================================= */
 
-            background: var(--green);
+main {
 
-            box-shadow:
-                0 0 10px
-                rgba(185,255,61,.7);
-        }
+    position: relative;
 
-        /* =====================================================
-           TICKERS
-        ===================================================== */
+    z-index: 10;
 
-        .ticker-stack {
-            position: fixed;
+    min-height:
+        calc(
+            100dvh
+            - 72px
+            - var(--ticker1)
+            - var(--ticker2)
+        );
 
-            left: 0;
-            right: 0;
-            bottom: 0;
+    display: flex;
 
-            z-index: 25;
+    align-items: center;
 
-            padding-bottom: var(--safe-bottom);
+    justify-content: center;
 
-            background:
-                rgba(3,3,3,.96);
+    padding:
+        55px
+        18px
+        105px;
+}
 
-            border-top:
-                1px solid
-                rgba(255,255,255,.09);
 
-            box-shadow:
-                0 -15px 35px
-                rgba(0,0,0,.4);
+/* =========================================================
+   ACCESS CARD
+========================================================= */
 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-        }
+.access-card {
 
-        .ticker {
-            width: 100%;
-            height: var(--ticker-height);
+    position: relative;
 
-            display: flex;
-            align-items: center;
+    width:
+        min(
+            500px,
+            100%
+        );
 
-            overflow: hidden;
+    padding:
+        clamp(
+            25px,
+            5vw,
+            42px
+        );
 
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.045);
-        }
+    background:
 
-        .ticker.secondary {
-            height: 27px;
-            opacity: .75;
-        }
+        linear-gradient(
+            145deg,
+            rgba(21,21,21,.95),
+            rgba(6,6,6,.96)
+        );
 
-        .ticker-track {
-            display: flex;
-            align-items: center;
-            gap: 46px;
+    border:
+        1px solid
+        rgba(255,255,255,.13);
 
-            width: max-content;
+    box-shadow:
 
-            white-space: nowrap;
+        0 40px 120px
+        rgba(0,0,0,.9),
 
-            animation:
-                tickerMove 34s
-                linear infinite;
-        }
+        inset 0 1px 0
+        rgba(255,255,255,.04);
 
-        .ticker.secondary .ticker-track {
-            gap: 55px;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
 
-            animation:
-                tickerMoveReverse 40s
-                linear infinite;
-        }
+    animation:
+        cardIn .8s
+        cubic-bezier(.2,.8,.2,1);
+}
 
-        @keyframes tickerMove {
-            from {
-                transform: translateX(0);
-            }
 
-            to {
-                transform: translateX(-50%);
-            }
-        }
+.access-card::before {
 
-        @keyframes tickerMoveReverse {
-            from {
-                transform: translateX(-50%);
-            }
+    content: "";
 
-            to {
-                transform: translateX(0);
-            }
-        }
+    position: absolute;
 
-        .ticker-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
+    left: 25px;
+    right: 25px;
 
-            color: #777;
+    top: 0;
 
-            font-family: monospace;
-            font-size: 8px;
-        }
+    height: 1px;
 
-        .ticker-item strong {
-            color: #d5d5d5;
+    background:
 
-            font-weight: 700;
-        }
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.28),
+            transparent
+        );
+}
 
-        .ticker-price {
-            color: #8a8a8a;
-        }
 
-        .ticker-change {
-            font-size: 7px;
-        }
+@keyframes cardIn {
 
-        .up {
-            color: var(--green);
-        }
+    from {
 
-        .down {
-            color: var(--red);
-        }
+        opacity: 0;
 
-        /* =====================================================
-           MOBILE
-        ===================================================== */
+        transform:
+            translateY(20px)
+            scale(.985);
 
-        @media (max-width: 900px) {
+    }
 
-            nav {
-                display: none;
-            }
+    to {
 
-            .header-right {
-                gap: 0;
-            }
+        opacity: 1;
 
-            .header-status {
-                display: none;
-            }
+        transform:
+            translateY(0)
+            scale(1);
 
-            main {
-                min-height:
-                    calc(
-                        100dvh
-                        - var(--header-height)
-                        - 61px
-                    );
+    }
 
-                padding:
-                    35px
-                    16px
-                    100px;
-            }
+}
 
-            .lower-info {
-                display: none;
-            }
 
-            #marketCanvas {
-                opacity: .56;
-            }
-        }
+/* =========================================================
+   CARD CONTENT
+========================================================= */
 
-        @media (max-width: 600px) {
+.eyebrow {
 
-            :root {
-                --header-height: 62px;
-                --ticker-height: 31px;
-            }
+    margin-bottom: 17px;
 
-            header {
-                padding:
-                    0
-                    15px;
-            }
+    color: #707070;
 
-            .brand {
-                gap: 9px;
-            }
+    font-family: monospace;
 
-            .brand-mark {
-                width: 30px;
-                height: 30px;
-                flex-basis: 30px;
-            }
+    font-size: 9px;
 
-            .brand-name {
-                font-size: 11px;
-                letter-spacing: .13em;
-            }
+    letter-spacing: .23em;
+}
 
-            main {
-                min-height:
-                    calc(
-                        100dvh
-                        - var(--header-height)
-                        - 58px
-                    );
 
-                display: flex;
-                align-items: center;
+h1 {
 
-                padding:
-                    28px
-                    13px
-                    92px;
-            }
+    margin-bottom: 11px;
 
-            .access-card {
-                width: 100%;
+    font-size:
+        clamp(
+            26px,
+            5vw,
+            34px
+        );
 
-                padding:
-                    25px
-                    20px
-                    23px;
-            }
+    line-height: 1.1;
 
-            .eyebrow {
-                font-size: 7px;
-                letter-spacing: .18em;
-            }
+    letter-spacing: -.045em;
 
-            h1 {
-                font-size: 27px;
-            }
+    font-weight: 700;
+}
 
-            .description {
-                font-size: 11px;
-                line-height: 1.72;
-                margin-bottom: 23px;
-            }
 
-            .key-input,
-            .access-button {
-                height: 51px;
-                min-height: 51px;
-            }
+.title-line {
 
-            .security-info {
-                grid-template-columns: 1fr;
-                gap: 7px;
-            }
+    width: 48px;
 
-            .security-info span,
-            .security-info span:nth-child(2),
-            .security-info span:last-child {
-                text-align: left;
-            }
+    height: 2px;
 
-            .ticker {
-                height: 29px;
-            }
+    margin-bottom: 23px;
 
-            .ticker.secondary {
-                height: 26px;
-            }
+    background:
+        var(--green);
 
-            .ticker-track {
-                gap: 31px;
-                animation-duration: 28s;
-            }
+    box-shadow:
+        0 0 15px
+        rgba(186,255,66,.45);
+}
 
-            .ticker.secondary .ticker-track {
-                gap: 38px;
-                animation-duration: 34s;
-            }
 
-            .ticker-item {
-                font-size: 7px;
-            }
+.description {
 
-            .ticker-change {
-                font-size: 6px;
-            }
+    margin-bottom: 27px;
 
-            .background-grid {
-                background-size: 36px 36px;
-            }
-        }
+    color: #777;
 
-        @media (max-width: 380px) {
+    font-size: 12px;
 
-            main {
-                padding-top: 22px;
-            }
+    line-height: 1.8;
+}
 
-            .access-card {
-                padding:
-                    22px
-                    17px
-                    20px;
-            }
 
-            h1 {
-                font-size: 24px;
-            }
+/* =========================================================
+   INPUT
+========================================================= */
 
-            .description {
-                font-size: 10px;
-            }
+.key-label {
 
-            .key-input {
-                font-size: 11px;
-            }
+    display: flex;
 
-            .access-button {
-                font-size: 8px;
-            }
-        }
+    justify-content: space-between;
 
-        @media (prefers-reduced-motion: reduce) {
+    gap: 10px;
 
-            *,
-            *::before,
-            *::after {
-                scroll-behavior: auto !important;
-                animation-duration: .01ms !important;
-                animation-iteration-count: 1 !important;
-            }
-        }
-    </style>
+    margin-bottom: 8px;
+
+    color: #707070;
+
+    font-family: monospace;
+
+    font-size: 8px;
+
+    letter-spacing: .13em;
+}
+
+
+.key-input {
+
+    width: 100%;
+
+    height: 54px;
+
+    outline: none;
+
+    padding:
+        0
+        15px;
+
+    border:
+        1px solid
+        #292929;
+
+    border-radius: 0;
+
+    background:
+        rgba(0,0,0,.75);
+
+    color: white;
+
+    font-family: monospace;
+
+    font-size: 13px;
+
+    letter-spacing: .08em;
+
+    transition:
+        .2s ease;
+}
+
+
+.key-input::placeholder {
+    color: #3e3e3e;
+}
+
+
+.key-input:focus {
+
+    border-color:
+        #505050;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255,255,255,.025);
+}
+
+
+.key-input.error {
+
+    border-color:
+        rgba(255,64,64,.8);
+
+    animation:
+        shake .35s;
+}
+
+
+@keyframes shake {
+
+    0%,100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.access-button {
+
+    width: 100%;
+
+    height: 54px;
+
+    margin-top: 12px;
+
+    border:
+        1px solid
+        #333;
+
+    background:
+        linear-gradient(
+            #181818,
+            #101010
+        );
+
+    color: #ddd;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: .16em;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.access-button:hover {
+
+    border-color: #555;
+
+    background:
+        #1b1b1b;
+}
+
+
+.access-button:active {
+
+    transform:
+        scale(.988);
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-box {
+
+    min-height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    margin-top: 15px;
+
+    padding:
+        10px
+        12px;
+
+    border:
+        1px solid
+        rgba(255,64,64,.16);
+
+    background:
+        rgba(255,64,64,.035);
+
+    color:
+        #ff5555;
+
+    font-family: monospace;
+
+    font-size: 8px;
+
+    line-height: 1.5;
+
+    opacity: 0;
+
+    transform:
+        translateY(-5px);
+
+    pointer-events: none;
+
+    transition: .25s ease;
+}
+
+
+.error-box.visible {
+
+    opacity: 1;
+
+    transform:
+        translateY(0);
+}
+
+
+.error-icon {
+
+    width: 6px;
+    height: 6px;
+
+    flex: 0 0 6px;
+
+    margin-right: 10px;
+
+    border-radius: 50%;
+
+    background:
+        var(--red);
+
+    box-shadow:
+        0 0 10px
+        rgba(255,64,64,.8);
+}
+
+
+/* =========================================================
+   SECURITY
+========================================================= */
+
+.security-info {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap: 8px;
+
+    margin-top: 24px;
+
+    padding-top: 17px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.06);
+
+    color: #555;
+
+    font-family: monospace;
+
+    font-size: 7px;
+
+    letter-spacing: .06em;
+}
+
+
+.security-info span:nth-child(2) {
+    text-align: center;
+}
+
+
+.security-info span:last-child {
+    text-align: right;
+}
+
+
+/* =========================================================
+   TICKER AREA
+========================================================= */
+
+.ticker-stack {
+
+    position: fixed;
+
+    left: 0;
+    right: 0;
+
+    bottom: 0;
+
+    z-index: 50;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    background:
+        rgba(3,3,3,.97);
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.1);
+
+    box-shadow:
+        0 -15px 45px
+        rgba(0,0,0,.6);
+
+    backdrop-filter: blur(18px);
+}
+
+
+.ticker {
+
+    width: 100%;
+
+    height: var(--ticker1);
+
+    overflow: hidden;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.045);
+}
+
+
+.ticker.secondary {
+
+    height: var(--ticker2);
+
+    opacity: .78;
+}
+
+
+.ticker-track {
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    width: max-content;
+
+    min-width: 200%;
+
+    will-change:
+        transform;
+
+    animation:
+        tickerLeft
+        35s
+        linear
+        infinite;
+}
+
+
+.ticker.secondary
+.ticker-track {
+
+    animation:
+        tickerRight
+        45s
+        linear
+        infinite;
+}
+
+
+@keyframes tickerLeft {
+
+    from {
+        transform:
+            translate3d(0,0,0);
+    }
+
+    to {
+        transform:
+            translate3d(-50%,0,0);
+    }
+
+}
+
+
+@keyframes tickerRight {
+
+    from {
+        transform:
+            translate3d(-50%,0,0);
+    }
+
+    to {
+        transform:
+            translate3d(0,0,0);
+    }
+
+}
+
+
+.ticker-item {
+
+    height: 100%;
+
+    flex:
+        0 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        0 24px;
+
+    border-right:
+        1px solid
+        rgba(255,255,255,.055);
+
+    color: #777;
+
+    font-family: monospace;
+
+    font-size: 8px;
+
+    white-space: nowrap;
+}
+
+
+.ticker-item strong {
+
+    margin-right: 8px;
+
+    color: #ddd;
+}
+
+
+.ticker-price {
+
+    color: #999;
+
+    min-width: 80px;
+}
+
+
+.ticker-change {
+
+    margin-left: 8px;
+
+    min-width: 42px;
+
+    font-size: 7px;
+}
+
+
+.up {
+    color: var(--green) !important;
+}
+
+
+.down {
+    color: var(--red) !important;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:900px) {
+
+    nav {
+        display: none;
+    }
+
+    .header-live {
+        display: none;
+    }
+
+    main {
+
+        min-height:
+            calc(
+                100dvh
+                - 72px
+                - var(--ticker1)
+                - var(--ticker2)
+            );
+
+        padding:
+            35px
+            14px
+            100px;
+    }
+
+    #marketCanvas {
+        opacity: .58;
+    }
+
+}
+
+
+@media(max-width:600px) {
+
+    :root {
+
+        --ticker1: 29px;
+
+        --ticker2: 25px;
+
+    }
+
+
+    header {
+
+        min-height: 62px;
+
+        padding:
+            0
+            15px;
+    }
+
+
+    .brand-mark {
+
+        width: 30px;
+        height: 30px;
+
+        flex-basis: 30px;
+    }
+
+
+    .brand-name {
+
+        font-size: 11px;
+
+        letter-spacing: .12em;
+    }
+
+
+    main {
+
+        min-height:
+            calc(
+                100dvh
+                - 62px
+                - var(--ticker1)
+                - var(--ticker2)
+            );
+
+        align-items: center;
+
+        padding:
+            25px
+            12px
+            95px;
+    }
+
+
+    .access-card {
+
+        padding:
+            25px
+            20px
+            23px;
+    }
+
+
+    .eyebrow {
+
+        font-size: 7px;
+
+        letter-spacing: .17em;
+    }
+
+
+    h1 {
+
+        font-size: 26px;
+    }
+
+
+    .description {
+
+        font-size: 11px;
+
+        line-height: 1.7;
+
+        margin-bottom: 22px;
+    }
+
+
+    .key-input,
+    .access-button {
+
+        height: 51px;
+    }
+
+
+    .security-info {
+
+        grid-template-columns: 1fr;
+
+        gap: 7px;
+    }
+
+
+    .security-info span,
+    .security-info span:nth-child(2),
+    .security-info span:last-child {
+
+        text-align: left;
+    }
+
+
+    .ticker-item {
+
+        padding:
+            0
+            14px;
+
+        font-size: 7px;
+    }
+
+
+    .ticker-price {
+
+        min-width: 64px;
+    }
+
+
+    .background-grid {
+
+        background-size:
+            35px 35px;
+    }
+
+}
+
+
+@media(max-width:380px) {
+
+    main {
+
+        padding-top: 18px;
+    }
+
+
+    .access-card {
+
+        padding:
+            21px
+            17px
+            20px;
+    }
+
+
+    h1 {
+
+        font-size: 23px;
+    }
+
+
+    .description {
+
+        font-size: 10px;
+    }
+
+
+    .access-button {
+
+        font-size: 8px;
+    }
+
+}
+
+
+@media(prefers-reduced-motion:reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            .01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+    }
+
+}
+
+</style>
 </head>
+
 
 <body>
 
-    <!-- =====================================================
-         BACKGROUND MARKET ENGINE
-         12 REALISTIC MARKET WINDOWS
-    ====================================================== -->
 
-    <canvas id="marketCanvas"></canvas>
+<!-- =========================================================
+     CANVAS
+========================================================= -->
 
-    <div class="background-grid"></div>
-    <div class="center-fade"></div>
-    <div class="vignette"></div>
-    <div class="scanlines"></div>
+<canvas id="marketCanvas"></canvas>
+
+<div class="background-grid"></div>
+
+<div class="center-mask"></div>
+
+<div class="background-fade"></div>
+
+<div class="scanlines"></div>
 
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+<!-- =========================================================
+     HEADER
+========================================================= -->
 
-    <header>
+<header>
 
-        <div class="brand">
+    <div class="brand">
 
-            <div class="brand-mark">
-                EC
-            </div>
-
-            <div class="brand-name">
-                ELITE CRYPTO
-            </div>
-
+        <div class="brand-mark">
+            EC
         </div>
 
-        <div class="header-right">
-
-            <nav>
-
-                <button onclick="locked()">
-                    РЫНКИ
-                </button>
-
-                <button onclick="locked()">
-                    АНАЛИТИКА
-                </button>
-
-                <button onclick="locked()">
-                    ПОРТФЕЛЬ
-                </button>
-
-                <button onclick="locked()">
-                    КОМАНДА
-                </button>
-
-                <button onclick="locked()">
-                    КОНТАКТЫ
-                </button>
-
-            </nav>
-
-            <div class="header-status">
-                <span class="status-dot"></span>
-                MARKET ONLINE
-            </div>
-
+        <div class="brand-name">
+            ELITE CRYPTO
         </div>
 
-    </header>
+    </div>
 
 
-    <!-- =====================================================
-         MAIN ACCESS
-    ====================================================== -->
+    <div class="header-right">
 
-    <main>
+        <nav>
 
-        <section class="access-card">
-
-            <div class="eyebrow">
-                PRIVATE ACCESS // EC-01
-            </div>
-
-            <h1>
-                Закрытая система
-            </h1>
-
-            <div class="title-line"></div>
-
-            <p class="description">
-                Добро пожаловать в закрытую инфраструктуру
-                Elite Crypto. Для продолжения работы необходимо
-                предоставить действительный ключ доступа.
-            </p>
-
-
-            <div class="key-label">
-
-                <span>
-                    КЛЮЧ ДОСТУПА
-                </span>
-
-                <span>
-                    ENCRYPTED
-                </span>
-
-            </div>
-
-
-            <input
-                id="accessKey"
-                class="key-input"
-                type="password"
-                autocomplete="off"
-                autocapitalize="off"
-                spellcheck="false"
-                placeholder="Введите ключ доступа..."
-            >
-
-
-            <button
-                class="access-button"
-                onclick="checkAccess()"
-            >
-                ПОДТВЕРДИТЬ ДОСТУП
+            <button onclick="locked()">
+                РЫНКИ
             </button>
 
+            <button onclick="locked()">
+                АНАЛИТИКА
+            </button>
 
-            <div
-                id="errorBox"
-                class="error-box"
-            >
+            <button onclick="locked()">
+                ПОРТФЕЛЬ
+            </button>
 
-                <div class="error-icon"></div>
+            <button onclick="locked()">
+                КОМАНДА
+            </button>
 
-                <span id="errorText">
-                    ДОСТУП ОТКЛОНЁН — НЕДЕЙСТВИТЕЛЬНЫЙ КЛЮЧ
-                </span>
+            <button onclick="locked()">
+                КОНТАКТЫ
+            </button>
 
-            </div>
-
-
-            <div class="security-info">
-
-                <span>
-                    SECURE CHANNEL
-                </span>
-
-                <span>
-                    RSA / AES-256
-                </span>
-
-                <span>
-                    ENCRYPTED
-                </span>
-
-            </div>
-
-        </section>
-
-    </main>
+        </nav>
 
 
-    <!-- =====================================================
-         LOWER INFO
-    ====================================================== -->
+        <div class="header-live">
 
-    <div class="lower-info">
+            <span class="live-dot"></span>
 
-        <div class="footer-copy">
+            LIVE MARKET
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main>
+
+    <section class="access-card">
+
+        <div class="eyebrow">
+            PRIVATE ACCESS // EC-01
+        </div>
+
+
+        <h1>
+            Закрытая система
+        </h1>
+
+
+        <div class="title-line"></div>
+
+
+        <p class="description">
+
+            Добро пожаловать в закрытую инфраструктуру
+            Elite Crypto. Для продолжения работы необходимо
+            предоставить действительный ключ доступа.
+
+        </p>
+
+
+        <div class="key-label">
 
             <span>
-                ELITE CRYPTO · ЗАКРЫТАЯ ФИНАНСОВАЯ ИНФРАСТРУКТУРА
+                КЛЮЧ ДОСТУПА
             </span>
 
-            <br>
-
             <span>
-                МОСКВА, РОССИЯ · PRIVATE DIGITAL ASSET MANAGEMENT
+                ENCRYPTED
             </span>
 
         </div>
 
-        <div class="live-market">
-            MARKET DATA · LIVE STREAM
+
+        <input
+            id="accessKey"
+            class="key-input"
+            type="password"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            placeholder="Введите ключ доступа..."
+        >
+
+
+        <button
+            class="access-button"
+            onclick="checkAccess()"
+        >
+            ПОДТВЕРДИТЬ ДОСТУП
+        </button>
+
+
+        <div
+            id="errorBox"
+            class="error-box"
+        >
+
+            <div class="error-icon"></div>
+
+            <span id="errorText">
+                ДОСТУП ОТКЛОНЁН — НЕДЕЙСТВИТЕЛЬНЫЙ КЛЮЧ
+            </span>
+
+        </div>
+
+
+        <div class="security-info">
+
+            <span>
+                SECURE CHANNEL
+            </span>
+
+            <span>
+                RSA / AES-256
+            </span>
+
+            <span>
+                ENCRYPTED
+            </span>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================================
+     TICKER
+========================================================= -->
+
+<div class="ticker-stack">
+
+
+    <!-- =====================================================
+         LIVE PRICE TICKER
+    ====================================================== -->
+
+    <div class="ticker">
+
+        <div class="ticker-track">
+
+            <!-- SET 1 -->
+
+            <div class="ticker-item">
+                <strong>BTC/USDT</strong>
+                <span
+                    class="ticker-price"
+                    id="btcPrice"
+                >—</span>
+                <span
+                    class="ticker-change"
+                    id="btcChange"
+                >—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>ETH/USDT</strong>
+                <span
+                    class="ticker-price"
+                    id="ethPrice"
+                >—</span>
+                <span
+                    class="ticker-change"
+                    id="ethChange"
+                >—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>BNB/USDT</strong>
+                <span
+                    class="ticker-price"
+                    id="bnbPrice"
+                >—</span>
+                <span
+                    class="ticker-change"
+                    id="bnbChange"
+                >—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>SOL/USDT</strong>
+                <span
+                    class="ticker-price"
+                    id="solPrice"
+                >—</span>
+                <span
+                    class="ticker-change"
+                    id="solChange"
+                >—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>BTC/USDT</strong>
+                <span id="btcPrice2">—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>ETH/USDT</strong>
+                <span id="ethPrice2">—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>BNB/USDT</strong>
+                <span id="bnbPrice2">—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>SOL/USDT</strong>
+                <span id="solPrice2">—</span>
+            </div>
+
+
+            <!-- SET 2 -->
+
+            <div class="ticker-item">
+                <strong>BTC/USDT</strong>
+                <span id="btcPrice3">—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>ETH/USDT</strong>
+                <span id="ethPrice3">—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>BNB/USDT</strong>
+                <span id="bnbPrice3">—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>SOL/USDT</strong>
+                <span id="solPrice3">—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>BTC/USDT</strong>
+                <span id="btcPrice4">—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>ETH/USDT</strong>
+                <span id="ethPrice4">—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>BNB/USDT</strong>
+                <span id="bnbPrice4">—</span>
+            </div>
+
+
+            <div class="ticker-item">
+                <strong>SOL/USDT</strong>
+                <span id="solPrice4">—</span>
+            </div>
+
         </div>
 
     </div>
 
 
     <!-- =====================================================
-         MULTI TICKER
+         MARKET DATA TICKER
     ====================================================== -->
 
-    <div class="ticker-stack">
+    <div class="ticker secondary">
 
-        <!-- FIRST ROW -->
+        <div class="ticker-track">
 
-        <div class="ticker">
-
-            <div class="ticker-track">
-
-                <div class="ticker-item">
-                    <strong>BTC/USDT</strong>
-                    <span class="ticker-price" id="btcPrice">—</span>
-                    <span class="ticker-change" id="btcChange">—</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>ETH/USDT</strong>
-                    <span class="ticker-price" id="ethPrice">—</span>
-                    <span class="ticker-change" id="ethChange">—</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>BNB/USDT</strong>
-                    <span class="ticker-price" id="bnbPrice">—</span>
-                    <span class="ticker-change" id="bnbChange">—</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>SOL/USDT</strong>
-                    <span class="ticker-price" id="solPrice">—</span>
-                    <span class="ticker-change" id="solChange">—</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>BTC/USDT</strong>
-                    <span id="btcPrice2">—</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>ETH/USDT</strong>
-                    <span id="ethPrice2">—</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>BNB/USDT</strong>
-                    <span id="bnbPrice2">—</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>SOL/USDT</strong>
-                    <span id="solPrice2">—</span>
-                </div>
-
-                <!-- DUPLICATE FOR SEAMLESS LOOP -->
-
-                <div class="ticker-item">
-                    <strong>BTC/USDT</strong>
-                    <span id="btcPrice3">—</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>ETH/USDT</strong>
-                    <span id="ethPrice3">—</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>BNB/USDT</strong>
-                    <span id="bnbPrice3">—</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>SOL/USDT</strong>
-                    <span id="solPrice3">—</span>
-                </div>
-
+            <div class="ticker-item">
+                <strong>MARKET CAP</strong>
+                <span>$2.48T</span>
             </div>
 
-        </div>
+            <div class="ticker-item">
+                <strong>24H VOLUME</strong>
+                <span>$98.42B</span>
+            </div>
+
+            <div class="ticker-item">
+                <strong>BTC DOMINANCE</strong>
+                <span>57.8%</span>
+            </div>
+
+            <div class="ticker-item">
+                <strong>FEAR & GREED</strong>
+                <span class="up">72 · GREED</span>
+            </div>
+
+            <div class="ticker-item">
+                <strong>FUNDING</strong>
+                <span class="up">+0.0082%</span>
+            </div>
+
+            <div class="ticker-item">
+                <strong>OPEN INTEREST</strong>
+                <span>$38.6B</span>
+            </div>
+
+            <div class="ticker-item">
+                <strong>ACTIVE PAIRS</strong>
+                <span>1,842</span>
+            </div>
+
+            <div class="ticker-item">
+                <strong>NETWORK</strong>
+                <span class="up">STABLE</span>
+            </div>
 
 
-        <!-- SECOND ROW -->
+            <!-- DUPLICATE -->
 
-        <div class="ticker secondary">
+            <div class="ticker-item">
+                <strong>MARKET CAP</strong>
+                <span>$2.48T</span>
+            </div>
 
-            <div class="ticker-track">
+            <div class="ticker-item">
+                <strong>24H VOLUME</strong>
+                <span>$98.42B</span>
+            </div>
 
-                <div class="ticker-item">
-                    <strong>MARKET CAP</strong>
-                    <span>$2.48T</span>
-                </div>
+            <div class="ticker-item">
+                <strong>BTC DOMINANCE</strong>
+                <span>57.8%</span>
+            </div>
 
-                <div class="ticker-item">
-                    <strong>24H VOLUME</strong>
-                    <span>$98.42B</span>
-                </div>
+            <div class="ticker-item">
+                <strong>FEAR & GREED</strong>
+                <span class="up">72 · GREED</span>
+            </div>
 
-                <div class="ticker-item">
-                    <strong>BTC DOMINANCE</strong>
-                    <span>57.8%</span>
-                </div>
+            <div class="ticker-item">
+                <strong>FUNDING</strong>
+                <span class="up">+0.0082%</span>
+            </div>
 
-                <div class="ticker-item">
-                    <strong>FEAR & GREED</strong>
-                    <span class="up">72 · GREED</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>FUNDING</strong>
-                    <span class="up">+0.0082%</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>OPEN INTEREST</strong>
-                    <span>$38.6B</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>ACTIVE PAIRS</strong>
-                    <span>1,842</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>NETWORK</strong>
-                    <span class="up">STABLE</span>
-                </div>
-
-                <!-- DUPLICATE -->
-
-                <div class="ticker-item">
-                    <strong>MARKET CAP</strong>
-                    <span>$2.48T</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>24H VOLUME</strong>
-                    <span>$98.42B</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>BTC DOMINANCE</strong>
-                    <span>57.8%</span>
-                </div>
-
-                <div class="ticker-item">
-                    <strong>FEAR & GREED</strong>
-                    <span class="up">72 · GREED</span>
-                </div>
-
+            <div class="ticker-item">
+                <strong>OPEN INTEREST</strong>
+                <span>$38.6B</span>
             </div>
 
         </div>
 
     </div>
+
+</div>
 
 
 <script>
 
-/* ============================================================
-   ELITE CRYPTO
-   MARKET VISUAL ENGINE
-============================================================ */
+/* =========================================================
+   MARKET ENGINE
+========================================================= */
 
 
-/* ============================================================
-   SYMBOLS
-============================================================ */
-
-const symbols = [
+const SYMBOLS = [
     "btcusdt",
     "ethusdt",
     "bnbusdt",
@@ -1483,556 +1709,50 @@ const symbols = [
 ];
 
 
-const prices = {
-    btcusdt: 0,
-    ethusdt: 0,
-    bnbusdt: 0,
-    solusdt: 0
-};
+const BASE_PRICE = {
 
-
-const previousPrices = {
-    btcusdt: 0,
-    ethusdt: 0,
-    bnbusdt: 0,
-    solusdt: 0
-};
-
-
-const histories = {
-    btcusdt: [],
-    ethusdt: [],
-    bnbusdt: [],
-    solusdt: []
-};
-
-
-/* ============================================================
-   FALLBACK MARKET BASE
-============================================================ */
-
-const fallbackBases = {
     btcusdt: 105000,
+
     ethusdt: 4000,
+
     bnbusdt: 900,
+
     solusdt: 220
+
 };
 
 
-/* ============================================================
-   ACCESS
-============================================================ */
+const market = {};
 
-function checkAccess() {
 
-    const input =
-        document.getElementById("accessKey");
+SYMBOLS.forEach(symbol => {
 
-    const errorBox =
-        document.getElementById("errorBox");
+    market[symbol] = {
 
-    const errorText =
-        document.getElementById("errorText");
+        price: BASE_PRICE[symbol],
 
+        previous: BASE_PRICE[symbol],
 
-    const value =
-        input.value.trim();
+        candles: [],
 
+        currentCandle: null,
 
-    input.classList.remove("error");
+        lastTradeTime: 0,
 
-    void input.offsetWidth;
+        live: false,
 
-    input.classList.add("error");
+        trend: 0,
 
+        momentum: 0
 
-    if (!value.length) {
-
-        errorText.innerText =
-            "ДОСТУП ОТКЛОНЁН — КЛЮЧ НЕ УКАЗАН";
-
-    } else {
-
-        errorText.innerText =
-            "ДОСТУП ОТКЛОНЁН — НЕДЕЙСТВИТЕЛЬНЫЙ КЛЮЧ";
-
-    }
-
-
-    errorBox.classList.add("visible");
-
-
-    setTimeout(() => {
-
-        input.classList.remove("error");
-
-    }, 400);
-
-}
-
-
-document
-    .getElementById("accessKey")
-    .addEventListener(
-        "keydown",
-        event => {
-
-            if (event.key === "Enter") {
-                checkAccess();
-            }
-
-        }
-    );
-
-
-/* ============================================================
-   LOCKED NAVIGATION
-============================================================ */
-
-function locked() {
-
-    const errorBox =
-        document.getElementById("errorBox");
-
-    const errorText =
-        document.getElementById("errorText");
-
-    const input =
-        document.getElementById("accessKey");
-
-
-    errorText.innerText =
-        "РАЗДЕЛ ЗАБЛОКИРОВАН — ТРЕБУЕТСЯ КЛЮЧ ДОСТУПА";
-
-
-    errorBox.classList.add("visible");
-
-    input.focus();
-
-}
-
-
-/* ============================================================
-   MARKET HISTORY GENERATOR
-   Creates realistic-looking trends with volatility,
-   momentum, pullbacks and occasional reversals.
-============================================================ */
-
-function generateHistory(
-    symbol,
-    length = 150
-) {
-
-    let value =
-        fallbackBases[symbol];
-
-    const history = [];
-
-    let momentum =
-        (Math.random() - .5) * .0015;
-
-    let trend =
-        (Math.random() - .5) * .0008;
-
-
-    for (let i = 0; i < length; i++) {
-
-        /* slow trend changes */
-
-        if (Math.random() < .025) {
-
-            trend =
-                (Math.random() - .5)
-                * .0014;
-
-        }
-
-
-        /* momentum */
-
-        momentum *= .88;
-
-        momentum +=
-            (Math.random() - .5)
-            * .0012;
-
-
-        /* occasional larger movement */
-
-        let shock = 0;
-
-        if (Math.random() < .018) {
-
-            shock =
-                (Math.random() - .5)
-                * .012;
-
-        }
-
-
-        const volatility =
-            symbol === "solusdt"
-                ? .0032
-                : symbol === "bnbusdt"
-                    ? .0024
-                    : .002;
-
-
-        const change =
-            trend +
-            momentum +
-            (
-                Math.random() - .5
-            ) * volatility +
-            shock;
-
-
-        value *=
-            Math.max(
-                .985,
-                1 + change
-            );
-
-
-        history.push(value);
-
-    }
-
-
-    return history;
-}
-
-
-symbols.forEach(symbol => {
-
-    histories[symbol] =
-        generateHistory(symbol);
+    };
 
 });
 
 
-/* ============================================================
-   BINANCE LIVE STREAM
-============================================================ */
-
-const streams =
-    symbols
-        .map(symbol => symbol + "@trade")
-        .join("/");
-
-
-let socket = null;
-
-
-function connectMarket() {
-
-    try {
-
-        socket =
-            new WebSocket(
-                "wss://stream.binance.com:9443/stream?streams="
-                + streams
-            );
-
-
-        socket.onopen = () => {
-
-            console.log(
-                "ELITE CRYPTO — LIVE MARKET STREAM"
-            );
-
-        };
-
-
-        socket.onmessage = event => {
-
-            try {
-
-                const packet =
-                    JSON.parse(event.data);
-
-
-                if (!packet.data) {
-                    return;
-                }
-
-
-                const data =
-                    packet.data;
-
-
-                const symbol =
-                    data.s.toLowerCase();
-
-
-                const price =
-                    Number(data.p);
-
-
-                if (
-                    !price ||
-                    !histories[symbol]
-                ) {
-                    return;
-                }
-
-
-                previousPrices[symbol] =
-                    prices[symbol] ||
-                    price;
-
-
-                prices[symbol] =
-                    price;
-
-
-                histories[symbol].push(price);
-
-
-                if (
-                    histories[symbol].length
-                    > 150
-                ) {
-
-                    histories[symbol].shift();
-
-                }
-
-
-                updateTicker(
-                    symbol,
-                    price
-                );
-
-            }
-            catch (error) {
-
-                console.warn(
-                    "Market packet error",
-                    error
-                );
-
-            }
-
-        };
-
-
-        socket.onerror = () => {
-
-            console.warn(
-                "Market stream unavailable"
-            );
-
-        };
-
-
-        socket.onclose = () => {
-
-            console.warn(
-                "Market stream disconnected"
-            );
-
-
-            setTimeout(
-                connectMarket,
-                3000
-            );
-
-        };
-
-    }
-    catch (error) {
-
-        console.warn(error);
-
-    }
-
-}
-
-
-connectMarket();
-
-
-/* ============================================================
-   PRICE FORMAT
-============================================================ */
-
-function formatPrice(
-    symbol,
-    price
-) {
-
-    if (!price) {
-        return "—";
-    }
-
-
-    if (
-        symbol === "btcusdt" ||
-        symbol === "ethusdt"
-    ) {
-
-        return "$" +
-            price.toLocaleString(
-                "en-US",
-                {
-                    maximumFractionDigits: 2
-                }
-            );
-
-    }
-
-
-    return "$" +
-        price.toLocaleString(
-            "en-US",
-            {
-                maximumFractionDigits: 3
-            }
-        );
-
-}
-
-
-/* ============================================================
-   CHANGE
-============================================================ */
-
-function calculateChange(symbol) {
-
-    const history =
-        histories[symbol];
-
-
-    if (
-        !history ||
-        history.length < 20
-    ) {
-        return 0;
-    }
-
-
-    const current =
-        history[history.length - 1];
-
-    const old =
-        history[
-            Math.max(
-                0,
-                history.length - 20
-            )
-        ];
-
-
-    return (
-        (current - old) /
-        old
-    ) * 100;
-
-}
-
-
-/* ============================================================
-   TICKER UPDATE
-============================================================ */
-
-function updateTicker(
-    symbol,
-    price
-) {
-
-    const prefix = {
-
-        btcusdt: "btc",
-        ethusdt: "eth",
-        bnbusdt: "bnb",
-        solusdt: "sol"
-
-    }[symbol];
-
-
-    if (!prefix) {
-        return;
-    }
-
-
-    const formatted =
-        formatPrice(
-            symbol,
-            price
-        );
-
-
-    const ids = [
-
-        prefix + "Price",
-        prefix + "Price2",
-        prefix + "Price3"
-
-    ];
-
-
-    ids.forEach(id => {
-
-        const element =
-            document.getElementById(id);
-
-
-        if (element) {
-            element.innerText = formatted;
-        }
-
-    });
-
-
-    const change =
-        calculateChange(symbol);
-
-
-    const changeIds = [
-        prefix + "Change"
-    ];
-
-
-    changeIds.forEach(id => {
-
-        const element =
-            document.getElementById(id);
-
-
-        if (!element) {
-            return;
-        }
-
-
-        element.innerText =
-            (
-                change >= 0
-                    ? "+"
-                    : ""
-            ) +
-            change.toFixed(2) +
-            "%";
-
-
-        element.classList.toggle(
-            "up",
-            change >= 0
-        );
-
-        element.classList.toggle(
-            "down",
-            change < 0
-        );
-
-    });
-
-}
-
-
-/* ============================================================
+/* =========================================================
    CANVAS
-============================================================ */
+========================================================= */
 
 const canvas =
     document.getElementById(
@@ -2049,51 +1769,49 @@ const ctx =
     );
 
 
-let canvasWidth = 0;
-let canvasHeight = 0;
-let pixelRatio = 1;
+let W = 0;
+let H = 0;
+let DPR = 1;
 
 
 function resizeCanvas() {
 
-    pixelRatio =
+    DPR =
         Math.min(
             window.devicePixelRatio || 1,
             2
         );
 
 
-    canvasWidth =
+    W =
         window.innerWidth;
 
 
-    canvasHeight =
+    H =
         window.innerHeight;
 
 
     canvas.width =
-        canvasWidth *
-        pixelRatio;
+        W * DPR;
 
 
     canvas.height =
-        canvasHeight *
-        pixelRatio;
+        H * DPR;
 
 
     canvas.style.width =
-        canvasWidth + "px";
+        W + "px";
 
 
     canvas.style.height =
-        canvasHeight + "px";
+        H + "px";
 
 
     ctx.setTransform(
-        pixelRatio,
+        DPR,
         0,
         0,
-        pixelRatio,
+        DPR,
         0,
         0
     );
@@ -2113,180 +1831,969 @@ window.addEventListener(
 resizeCanvas();
 
 
-/* ============================================================
-   12 CHART POSITIONS
-============================================================ */
+/* =========================================================
+   CREATE REALISTIC HISTORY
+========================================================= */
 
-const miniCharts = [
+function createHistory(symbol) {
 
-    {
-        symbol: "btcusdt",
-        x: .025,
-        y: .12,
-        w: .17,
-        h: .15
-    },
+    const state =
+        market[symbol];
 
-    {
-        symbol: "ethusdt",
-        x: .225,
-        y: .09,
-        w: .16,
-        h: .14
-    },
 
-    {
-        symbol: "bnbusdt",
-        x: .425,
-        y: .13,
-        w: .17,
-        h: .15
-    },
+    let price =
+        BASE_PRICE[symbol];
 
-    {
-        symbol: "solusdt",
-        x: .625,
-        y: .08,
-        w: .16,
-        h: .15
-    },
 
-    {
-        symbol: "btcusdt",
-        x: .82,
-        y: .13,
-        w: .155,
-        h: .14
-    },
+    let trend =
+        (Math.random() - .5)
+        * .0008;
 
-    {
-        symbol: "solusdt",
-        x: .025,
-        y: .69,
-        w: .17,
-        h: .15
-    },
 
-    {
-        symbol: "bnbusdt",
-        x: .225,
-        y: .76,
-        w: .16,
-        h: .14
-    },
+    let momentum =
+        0;
 
-    {
-        symbol: "ethusdt",
-        x: .425,
-        y: .71,
-        w: .17,
-        h: .15
-    },
 
-    {
-        symbol: "btcusdt",
-        x: .625,
-        y: .76,
-        w: .16,
-        h: .14
-    },
+    for (
+        let i = 0;
+        i < 180;
+        i++
+    ) {
 
-    {
-        symbol: "ethusdt",
-        x: .82,
-        y: .70,
-        w: .155,
-        h: .15
-    },
+        /*
+            Slowly changing market trend
+        */
 
-    {
-        symbol: "bnbusdt",
-        x: .075,
-        y: .43,
-        w: .14,
-        h: .105
-    },
+        if (
+            Math.random() < .025
+        ) {
 
-    {
-        symbol: "solusdt",
-        x: .785,
-        y: .43,
-        w: .14,
-        h: .105
+            trend =
+                (Math.random() - .5)
+                * .0014;
+
+        }
+
+
+        /*
+            Momentum
+        */
+
+        momentum *= .91;
+
+
+        momentum +=
+            (
+                Math.random() - .5
+            )
+            * .001;
+
+
+        /*
+            Different volatility by asset
+        */
+
+        const volatility =
+            symbol === "solusdt"
+                ? .0035
+                : symbol === "bnbusdt"
+                    ? .0027
+                    : .0021;
+
+
+        const change =
+            trend +
+            momentum +
+            (
+                Math.random() - .5
+            ) * volatility;
+
+
+        price *=
+            1 + change;
+
+
+        /*
+            Create tiny candle
+        */
+
+        const open =
+            price;
+
+
+        const close =
+            price *
+            (
+                1 +
+                (
+                    Math.random() - .5
+                ) * .002
+            );
+
+
+        const high =
+            Math.max(open, close) *
+            (
+                1 +
+                Math.random() * .0015
+            );
+
+
+        const low =
+            Math.min(open, close) *
+            (
+                1 -
+                Math.random() * .0015
+            );
+
+
+        state.candles.push({
+
+            open,
+            high,
+            low,
+            close,
+
+            volume:
+                20 +
+                Math.random() * 100
+
+        });
+
+
+        price =
+            close;
+
     }
 
-];
+
+    state.price =
+        price;
 
 
-/* ============================================================
-   DRAW CHART
-============================================================ */
+    state.previous =
+        price;
 
-function drawMiniChart(
-    chart,
-    data,
+}
+
+
+SYMBOLS.forEach(
+    createHistory
+);
+
+
+/* =========================================================
+   CANDLE CREATION
+========================================================= */
+
+function addTradeToCandle(
+    symbol,
+    price,
+    volume
+) {
+
+    const state =
+        market[symbol];
+
+
+    const now =
+        Date.now();
+
+
+    /*
+        One candle represents 1 second.
+
+        The chart therefore continuously receives
+        new candles without artificial pauses.
+    */
+
+    const bucket =
+        Math.floor(
+            now / 1000
+        ) * 1000;
+
+
+    if (
+        !state.currentCandle ||
+        state.currentCandle.time !== bucket
+    ) {
+
+        if (
+            state.currentCandle
+        ) {
+
+            state.candles.push(
+                state.currentCandle
+            );
+
+        }
+
+
+        state.currentCandle = {
+
+            time: bucket,
+
+            open: price,
+
+            high: price,
+
+            low: price,
+
+            close: price,
+
+            volume:
+                volume || 0
+
+        };
+
+    }
+    else {
+
+        const candle =
+            state.currentCandle;
+
+
+        candle.high =
+            Math.max(
+                candle.high,
+                price
+            );
+
+
+        candle.low =
+            Math.min(
+                candle.low,
+                price
+            );
+
+
+        candle.close =
+            price;
+
+
+        candle.volume +=
+            volume || 0;
+
+    }
+
+
+    /*
+        Sliding window.
+
+        IMPORTANT:
+        This prevents the chart from stopping.
+        Old candles are continuously removed.
+    */
+
+    while (
+        state.candles.length > 85
+    ) {
+
+        state.candles.shift();
+
+    }
+
+}
+
+
+/* =========================================================
+   BINANCE WEBSOCKET
+========================================================= */
+
+let socket = null;
+
+
+function connectBinance() {
+
+    const streams =
+        SYMBOLS
+            .map(
+                symbol =>
+                    symbol +
+                    "@trade"
+            )
+            .join("/");
+
+
+    try {
+
+        socket =
+            new WebSocket(
+
+                "wss://stream.binance.com:9443/stream?streams="
+                +
+                streams
+
+            );
+
+
+        socket.onopen = () => {
+
+            SYMBOLS.forEach(
+                symbol => {
+
+                    market[symbol]
+                        .live = true;
+
+                }
+            );
+
+
+            console.log(
+                "ELITE CRYPTO — LIVE"
+            );
+
+        };
+
+
+        socket.onmessage =
+            event => {
+
+                try {
+
+                    const packet =
+                        JSON.parse(
+                            event.data
+                        );
+
+
+                    if (
+                        !packet.data
+                    ) {
+                        return;
+                    }
+
+
+                    const data =
+                        packet.data;
+
+
+                    const symbol =
+                        data.s.toLowerCase();
+
+
+                    const price =
+                        Number(data.p);
+
+
+                    const quantity =
+                        Number(data.q);
+
+
+                    if (
+                        !market[symbol] ||
+                        !price
+                    ) {
+                        return;
+                    }
+
+
+                    const state =
+                        market[symbol];
+
+
+                    state.previous =
+                        state.price;
+
+
+                    state.price =
+                        price;
+
+
+                    state.lastTradeTime =
+                        Date.now();
+
+
+                    addTradeToCandle(
+                        symbol,
+                        price,
+                        quantity
+                    );
+
+
+                    updateTicker(
+                        symbol
+                    );
+
+                }
+                catch(error) {
+
+                    console.warn(
+                        "Trade error",
+                        error
+                    );
+
+                }
+
+            };
+
+
+        socket.onerror =
+            () => {
+
+                console.warn(
+                    "Binance connection error"
+                );
+
+            };
+
+
+        socket.onclose =
+            () => {
+
+                SYMBOLS.forEach(
+                    symbol => {
+
+                        market[symbol]
+                            .live = false;
+
+                    }
+                );
+
+
+                /*
+                    Reconnect automatically.
+                    No artificial pause in the
+                    chart itself.
+                */
+
+                setTimeout(
+                    connectBinance,
+                    1500
+                );
+
+            };
+
+    }
+    catch(error) {
+
+        console.warn(error);
+
+        setTimeout(
+            connectBinance,
+            1500
+        );
+
+    }
+
+}
+
+
+connectBinance();
+
+
+/* =========================================================
+   FALLBACK LIVE ENGINE
+========================================================= */
+
+setInterval(
+    () => {
+
+        SYMBOLS.forEach(
+            symbol => {
+
+                const state =
+                    market[symbol];
+
+
+                /*
+                    If Binance is live,
+                    do absolutely nothing.
+
+                    The chart uses the actual trades.
+                */
+
+                if (
+                    state.live &&
+                    Date.now() -
+                    state.lastTradeTime
+                    < 3000
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                    Fallback only when the
+                    network is unavailable.
+                */
+
+                state.trend +=
+                    (
+                        Math.random() - .5
+                    )
+                    * .00015;
+
+
+                state.trend =
+                    Math.max(
+                        -.0012,
+                        Math.min(
+                            .0012,
+                            state.trend
+                        )
+                    );
+
+
+                state.momentum *= .94;
+
+
+                state.momentum +=
+                    (
+                        Math.random() - .5
+                    )
+                    * .0008;
+
+
+                const movement =
+                    state.trend +
+                    state.momentum +
+                    (
+                        Math.random() - .5
+                    ) * .002;
+
+
+                const price =
+                    state.price *
+                    (
+                        1 + movement
+                    );
+
+
+                state.previous =
+                    state.price;
+
+
+                state.price =
+                    price;
+
+
+                addTradeToCandle(
+                    symbol,
+                    price,
+                    Math.random() * 10
+                );
+
+
+                updateTicker(
+                    symbol
+                );
+
+            }
+        );
+
+    },
+    250
+);
+
+
+/* =========================================================
+   PRICE FORMAT
+========================================================= */
+
+function formatPrice(
+    symbol,
+    price
+) {
+
+    if (!price) {
+        return "—";
+    }
+
+
+    const decimals =
+        (
+            symbol === "btcusdt" ||
+            symbol === "ethusdt"
+        )
+            ? 2
+            : 3;
+
+
+    return "$" +
+        price.toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits:
+                    decimals,
+
+                maximumFractionDigits:
+                    decimals
+            }
+        );
+
+}
+
+
+/* =========================================================
+   24H-STYLE SHORT CHANGE
+========================================================= */
+
+function getChange(
+    symbol
+) {
+
+    const state =
+        market[symbol];
+
+
+    const candles =
+        state.candles;
+
+
+    if (
+        candles.length < 20
+    ) {
+
+        return 0;
+
+    }
+
+
+    const old =
+        candles[
+            Math.max(
+                0,
+                candles.length - 20
+            )
+        ].open;
+
+
+    return (
+        (
+            state.price -
+            old
+        ) /
+        old
+    ) * 100;
+
+}
+
+
+/* =========================================================
+   UPDATE TICKER
+========================================================= */
+
+function updateTicker(
+    symbol
+) {
+
+    const state =
+        market[symbol];
+
+
+    const prefix = {
+
+        btcusdt: "btc",
+        ethusdt: "eth",
+        bnbusdt: "bnb",
+        solusdt: "sol"
+
+    }[symbol];
+
+
+    if (!prefix) {
+        return;
+    }
+
+
+    const price =
+        formatPrice(
+            symbol,
+            state.price
+        );
+
+
+    [
+        prefix + "Price",
+        prefix + "Price2",
+        prefix + "Price3",
+        prefix + "Price4"
+
+    ].forEach(
+        id => {
+
+            const element =
+                document.getElementById(
+                    id
+                );
+
+
+            if (element) {
+
+                element.innerText =
+                    price;
+
+            }
+
+        }
+    );
+
+
+    const change =
+        getChange(symbol);
+
+
+    const changeElement =
+        document.getElementById(
+            prefix + "Change"
+        );
+
+
+    if (
+        changeElement
+    ) {
+
+        changeElement.innerText =
+
+            (
+                change >= 0
+                    ? "+"
+                    : ""
+            )
+            +
+            change.toFixed(2)
+            +
+            "%";
+
+
+        changeElement.classList.toggle(
+            "up",
+            change >= 0
+        );
+
+
+        changeElement.classList.toggle(
+            "down",
+            change < 0
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CHART POSITIONS
+========================================================= */
+
+function getChartPositions() {
+
+    const mobile =
+        window.innerWidth <= 600;
+
+
+    const tablet =
+        window.innerWidth <= 1000;
+
+
+    if (mobile) {
+
+        /*
+            12 charts = 3 columns x 4 rows.
+        */
+
+        return [
+
+            [.02,.09,.29,.13],
+            [.355,.07,.29,.13],
+            [.69,.09,.29,.13],
+
+            [.02,.30,.29,.13],
+            [.355,.32,.29,.13],
+            [.69,.29,.29,.13],
+
+            [.02,.55,.29,.13],
+            [.355,.57,.29,.13],
+            [.69,.54,.29,.13],
+
+            [.02,.75,.29,.12],
+            [.355,.78,.29,.12],
+            [.69,.75,.29,.12]
+
+        ];
+
+    }
+
+
+    if (tablet) {
+
+        /*
+            4 columns x 3 rows.
+        */
+
+        return [
+
+            [.02,.09,.21,.14],
+            [.275,.07,.21,.14],
+            [.53,.09,.21,.14],
+            [.785,.07,.19,.14],
+
+            [.02,.69,.21,.14],
+            [.275,.73,.21,.14],
+            [.53,.69,.21,.14],
+            [.785,.72,.19,.14],
+
+            [.08,.41,.19,.12],
+            [.31,.44,.19,.12],
+            [.61,.40,.19,.12],
+            [.82,.43,.14,.12]
+
+        ];
+
+    }
+
+
+    /*
+        Desktop:
+        5 top/bottom charts +
+        2 center charts.
+    */
+
+    return [
+
+        [.015,.10,.17,.16],
+        [.205,.07,.17,.15],
+        [.395,.10,.17,.16],
+        [.585,.07,.17,.15],
+        [.775,.10,.20,.16],
+
+        [.015,.72,.17,.16],
+        [.205,.76,.17,.15],
+        [.395,.71,.17,.16],
+        [.585,.76,.17,.15],
+        [.775,.71,.20,.16],
+
+        [.025,.41,.16,.13],
+        [.815,.41,.16,.13]
+
+    ];
+
+}
+
+
+/* =========================================================
+   DRAW ONE TRADING CHART
+========================================================= */
+
+function drawChart(
+    symbol,
     x,
     y,
     width,
     height
 ) {
 
+    const state =
+        market[symbol];
+
+
+    let candles =
+        state.candles.slice(
+            -60
+        );
+
+
+    /*
+        Current candle is always rendered.
+        This is what makes the chart move
+        continuously between candles.
+    */
+
     if (
-        !data ||
-        data.length < 2
+        state.currentCandle
     ) {
-        return;
+
+        candles =
+            [
+                ...candles,
+                state.currentCandle
+            ];
+
     }
 
 
-    const recent =
-        data.slice(-90);
+    if (
+        candles.length < 3
+    ) {
 
+        return;
+
+    }
+
+
+    /* -------------------------------------------------------
+       PRICE RANGE
+    ------------------------------------------------------- */
 
     let min =
-        Math.min(...recent);
+        Infinity;
 
     let max =
-        Math.max(...recent);
+        -Infinity;
+
+
+    candles.forEach(
+        candle => {
+
+            min =
+                Math.min(
+                    min,
+                    candle.low
+                );
+
+
+            max =
+                Math.max(
+                    max,
+                    candle.high
+                );
+
+        }
+    );
 
 
     const range =
         max - min || 1;
 
 
-    min -= range * .13;
-    max += range * .13;
+    min -=
+        range * .08;
 
 
-    const current =
-        recent[recent.length - 1];
-
-    const start =
-        recent[0];
+    max +=
+        range * .08;
 
 
-    const rising =
-        current >= start;
+    const chartHeight =
+        height * .78;
 
 
-    const lineColor =
-        rising
-            ? "rgba(185,255,61,.78)"
-            : "rgba(255,66,66,.76)";
+    const volumeTop =
+        y + chartHeight;
 
 
-    const fillColor =
-        rising
-            ? "rgba(185,255,61,.055)"
-            : "rgba(255,66,66,.05)";
+    const candleWidth =
+        width /
+        candles.length;
 
 
-    /* --------------------------------------------------------
-       CHART BACKPLATE
-    -------------------------------------------------------- */
+    const bodyWidth =
+        Math.max(
+            1.5,
+            candleWidth * .58
+        );
+
+
+    /* -------------------------------------------------------
+       BACKGROUND
+    ------------------------------------------------------- */
 
     ctx.fillStyle =
-        "rgba(8,8,8,.22)";
+        "rgba(5,5,5,.16)";
+
 
     ctx.fillRect(
         x,
@@ -2297,9 +2804,11 @@ function drawMiniChart(
 
 
     ctx.strokeStyle =
-        "rgba(255,255,255,.075)";
+        "rgba(255,255,255,.065)";
+
 
     ctx.lineWidth = 1;
+
 
     ctx.strokeRect(
         x,
@@ -2309,26 +2818,26 @@ function drawMiniChart(
     );
 
 
-    /* --------------------------------------------------------
+    /* -------------------------------------------------------
        GRID
-    -------------------------------------------------------- */
+    ------------------------------------------------------- */
 
     ctx.strokeStyle =
-        "rgba(255,255,255,.035)";
-
-    ctx.lineWidth = 1;
+        "rgba(255,255,255,.027)";
 
 
     for (
         let i = 1;
-        i < 4;
+        i < 5;
         i++
     ) {
 
         const gy =
             y +
-            height *
-            (i / 4);
+            chartHeight *
+            (
+                i / 5
+            );
 
 
         ctx.beginPath();
@@ -2350,14 +2859,16 @@ function drawMiniChart(
 
     for (
         let i = 1;
-        i < 5;
+        i < 6;
         i++
     ) {
 
         const gx =
             x +
             width *
-            (i / 5);
+            (
+                i / 6
+            );
 
 
         ctx.beginPath();
@@ -2377,569 +2888,571 @@ function drawMiniChart(
     }
 
 
-    /* --------------------------------------------------------
-       VOLUME BARS
-    -------------------------------------------------------- */
+    /* -------------------------------------------------------
+       CANDLES + VOLUME
+    ------------------------------------------------------- */
 
-    const volumeHeight =
-        height * .16;
-
-
-    recent.forEach(
-        (value, index) => {
-
-            if (index % 3 !== 0) {
-                return;
-            }
+    let maxVolume =
+        1;
 
 
-            const px =
+    candles.forEach(
+        candle => {
+
+            maxVolume =
+                Math.max(
+                    maxVolume,
+                    candle.volume
+                );
+
+        }
+    );
+
+
+    candles.forEach(
+        (candle,index) => {
+
+            const cx =
                 x +
+                index *
+                candleWidth +
+                candleWidth / 2;
+
+
+            const openY =
+                y +
+                chartHeight -
                 (
-                    index /
-                    (recent.length - 1)
-                ) *
-                width;
+                    (
+                        candle.open -
+                        min
+                    ) /
+                    (
+                        max -
+                        min
+                    )
+                )
+                *
+                chartHeight;
 
 
-            const randomVolume =
-                .25 +
-                Math.random() * .75;
+            const closeY =
+                y +
+                chartHeight -
+                (
+                    (
+                        candle.close -
+                        min
+                    ) /
+                    (
+                        max -
+                        min
+                    )
+                )
+                *
+                chartHeight;
 
 
-            const barHeight =
-                volumeHeight *
-                randomVolume;
+            const highY =
+                y +
+                chartHeight -
+                (
+                    (
+                        candle.high -
+                        min
+                    ) /
+                    (
+                        max -
+                        min
+                    )
+                )
+                *
+                chartHeight;
+
+
+            const lowY =
+                y +
+                chartHeight -
+                (
+                    (
+                        candle.low -
+                        min
+                    ) /
+                    (
+                        max -
+                        min
+                    )
+                )
+                *
+                chartHeight;
+
+
+            const rising =
+                candle.close >=
+                candle.open;
+
+
+            const color =
+                rising
+                    ? "rgba(186,255,66,.72)"
+                    : "rgba(255,64,64,.72)";
+
+
+            /* wick */
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                cx,
+                highY
+            );
+
+            ctx.lineTo(
+                cx,
+                lowY
+            );
+
+
+            ctx.strokeStyle =
+                color;
+
+            ctx.lineWidth = 1;
+
+            ctx.stroke();
+
+
+            /* body */
+
+            const bodyTop =
+                Math.min(
+                    openY,
+                    closeY
+                );
+
+
+            const bodyHeight =
+                Math.max(
+                    1,
+                    Math.abs(
+                        closeY -
+                        openY
+                    )
+                );
+
+
+            ctx.fillStyle =
+                color;
+
+
+            ctx.fillRect(
+                cx -
+                bodyWidth / 2,
+
+                bodyTop,
+
+                bodyWidth,
+
+                bodyHeight
+            );
+
+
+            /* volume */
+
+            const volumeHeight =
+                (
+                    candle.volume /
+                    maxVolume
+                )
+                *
+                height
+                *
+                .17;
 
 
             ctx.fillStyle =
                 rising
-                    ? "rgba(185,255,61,.08)"
-                    : "rgba(255,66,66,.075)";
+                    ? "rgba(186,255,66,.10)"
+                    : "rgba(255,64,64,.10)";
 
 
             ctx.fillRect(
-                px,
-                y + height - barHeight,
-                1.2,
-                barHeight
+
+                cx -
+                bodyWidth / 2,
+
+                volumeTop +
+                (
+                    height -
+                    (
+                        volumeTop -
+                        y
+                    )
+                )
+                -
+                volumeHeight,
+
+                bodyWidth,
+
+                volumeHeight
+
             );
 
         }
     );
 
 
-    /* --------------------------------------------------------
-       AREA FILL
-    -------------------------------------------------------- */
+    /* -------------------------------------------------------
+       LIVE PRICE LINE
+    ------------------------------------------------------- */
+
+    const current =
+        state.price;
+
+
+    const priceY =
+        y +
+        chartHeight -
+        (
+            (
+                current -
+                min
+            ) /
+            (
+                max -
+                min
+            )
+        )
+        *
+        chartHeight;
+
 
     ctx.beginPath();
 
-
-    recent.forEach(
-        (value, index) => {
-
-            const px =
-                x +
-                (
-                    index /
-                    (recent.length - 1)
-                ) *
-                width;
-
-
-            const py =
-                y +
-                height -
-                (
-                    (value - min) /
-                    (max - min)
-                ) *
-                height;
-
-
-            if (index === 0) {
-                ctx.moveTo(px, py);
-            } else {
-                ctx.lineTo(px, py);
-            }
-
-        }
+    ctx.moveTo(
+        x,
+        priceY
     );
-
 
     ctx.lineTo(
         x + width,
-        y + height
-    );
-
-    ctx.lineTo(
-        x,
-        y + height
-    );
-
-    ctx.closePath();
-
-
-    ctx.fillStyle =
-        fillColor;
-
-    ctx.fill();
-
-
-    /* --------------------------------------------------------
-       MAIN GRAPH
-    -------------------------------------------------------- */
-
-    ctx.beginPath();
-
-
-    recent.forEach(
-        (value, index) => {
-
-            const px =
-                x +
-                (
-                    index /
-                    (recent.length - 1)
-                ) *
-                width;
-
-
-            const py =
-                y +
-                height -
-                (
-                    (value - min) /
-                    (max - min)
-                ) *
-                height;
-
-
-            if (index === 0) {
-                ctx.moveTo(px, py);
-            } else {
-                ctx.lineTo(px, py);
-            }
-
-        }
+        priceY
     );
 
 
     ctx.strokeStyle =
-        lineColor;
+        "rgba(255,255,255,.12)";
 
-    ctx.lineWidth = 1.15;
-
-    ctx.shadowBlur = 7;
-
-    ctx.shadowColor =
-        rising
-            ? "rgba(185,255,61,.20)"
-            : "rgba(255,66,66,.18)";
+    ctx.setLineDash(
+        [3,4]
+    );
 
     ctx.stroke();
 
-    ctx.shadowBlur = 0;
+    ctx.setLineDash([]);
 
 
-    /* --------------------------------------------------------
-       ENDPOINT
-    -------------------------------------------------------- */
-
-    const lastY =
-        y +
-        height -
-        (
-            (current - min) /
-            (max - min)
-        ) *
-        height;
-
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x + width,
-        lastY,
-        1.8,
-        0,
-        Math.PI * 2
-    );
-
-
-    ctx.fillStyle =
-        rising
-            ? "#b9ff3d"
-            : "#ff4242";
-
-    ctx.fill();
-
-
-    /* --------------------------------------------------------
-       MINI LABEL
-    -------------------------------------------------------- */
+    /* -------------------------------------------------------
+       PRICE LABEL
+    ------------------------------------------------------- */
 
     const label =
-        chart.symbol
-            .replace("usdt", "")
-            .toUpperCase();
-
-
-    const percent =
-        (
-            (current - start) /
-            start
-        ) * 100;
+        formatPrice(
+            symbol,
+            current
+        );
 
 
     ctx.font =
         "700 7px monospace";
 
+
     ctx.fillStyle =
-        "rgba(220,220,220,.58)";
+        "rgba(235,235,235,.72)";
 
 
     ctx.fillText(
         label,
-        x + 7,
-        y + 11
+        x + width - 58,
+        Math.max(
+            y + 9,
+            priceY - 4
+        )
+    );
+
+
+    /* -------------------------------------------------------
+       SYMBOL LABEL
+    ------------------------------------------------------- */
+
+    const name =
+        symbol
+            .replace(
+                "usdt",
+                ""
+            )
+            .toUpperCase();
+
+
+    const change =
+        getChange(symbol);
+
+
+    ctx.font =
+        "700 7px monospace";
+
+
+    ctx.fillStyle =
+        "rgba(235,235,235,.62)";
+
+
+    ctx.fillText(
+        name,
+        x + 6,
+        y + 10
     );
 
 
     ctx.font =
         "6px monospace";
 
+
     ctx.fillStyle =
-        rising
-            ? "rgba(185,255,61,.68)"
-            : "rgba(255,66,66,.68)";
+        change >= 0
+            ? "rgba(186,255,66,.72)"
+            : "rgba(255,64,64,.72)";
 
 
     ctx.fillText(
         (
-            percent >= 0
+            change >= 0
                 ? "+"
                 : ""
-        ) +
-        percent.toFixed(2) +
+        )
+        +
+        change.toFixed(2)
+        +
         "%",
-        x + 7,
-        y + 21
+        x + 6,
+        y + 20
     );
 
 }
 
 
-/* ============================================================
-   RESPONSIVE CHART LAYOUT
-============================================================ */
+/* =========================================================
+   CONTINUOUS MARKET MOTION
+========================================================= */
 
-function getResponsiveChart(chart) {
-
-    const mobile =
-        window.innerWidth <= 600;
+let animationFrame = 0;
 
 
-    const tablet =
-        window.innerWidth <= 900;
-
-
-    if (!mobile && !tablet) {
-        return chart;
-    }
-
-
-    /*
-        On smaller screens we make the 12 charts
-        narrower and keep the central area darker.
-    */
-
-    const columns =
-        mobile
-            ? 3
-            : 4;
-
-
-    const row =
-        Math.floor(
-            miniCharts.indexOf(chart) /
-            columns
-        );
-
-
-    const column =
-        miniCharts.indexOf(chart) %
-        columns;
-
-
-    const gap =
-        mobile
-            ? .025
-            : .035;
-
-
-    const usableWidth =
-        1 -
-        gap *
-        (columns + 1);
-
-
-    const width =
-        usableWidth / columns;
-
-
-    return {
-
-        symbol: chart.symbol,
-
-        x:
-            gap +
-            column *
-            (width + gap),
-
-        y:
-            mobile
-                ? .12 + row * .17
-                : .13 + row * .23,
-
-        w: width,
-
-        h:
-            mobile
-                ? .11
-                : .14
-
-    };
-
-}
-
-
-/* ============================================================
-   ANIMATION
-============================================================ */
-
-let lastFrame = 0;
-
-
-function animateMarket(timestamp) {
-
-    /*
-        Slightly lower rendering frequency on mobile
-        to save battery/GPU.
-    */
-
-    const mobile =
-        window.innerWidth <= 600;
-
-
-    const interval =
-        mobile
-            ? 42
-            : 26;
-
-
-    if (
-        timestamp -
-        lastFrame <
-        interval
-    ) {
-
-        requestAnimationFrame(
-            animateMarket
-        );
-
-        return;
-
-    }
-
-
-    lastFrame = timestamp;
-
+function render() {
 
     ctx.clearRect(
         0,
         0,
-        canvasWidth,
-        canvasHeight
+        W,
+        H
     );
 
 
-    miniCharts.forEach(chart => {
-
-        const layout =
-            getResponsiveChart(chart);
+    const positions =
+        getChartPositions();
 
 
-        drawMiniChart(
+    /*
+        12 charts.
 
-            chart,
+        They are always drawn from their complete
+        sliding history. There is no end point.
+    */
 
-            histories[
-                chart.symbol
-            ],
+    positions.forEach(
+        (position,index) => {
 
-            canvasWidth * layout.x,
+            const symbol =
+                SYMBOLS[
+                    index %
+                    SYMBOLS.length
+                ];
 
-            canvasHeight * layout.y,
 
-            canvasWidth * layout.w,
+            drawChart(
 
-            canvasHeight * layout.h
+                symbol,
 
+                W * position[0],
+
+                H * position[1],
+
+                W * position[2],
+
+                H * position[3]
+
+            );
+
+        }
+    );
+
+
+    animationFrame =
+        requestAnimationFrame(
+            render
         );
 
-    });
+}
 
 
-    requestAnimationFrame(
-        animateMarket
+render();
+
+
+/* =========================================================
+   ACCESS
+========================================================= */
+
+function checkAccess() {
+
+    const input =
+        document.getElementById(
+            "accessKey"
+        );
+
+
+    const errorBox =
+        document.getElementById(
+            "errorBox"
+        );
+
+
+    const errorText =
+        document.getElementById(
+            "errorText"
+        );
+
+
+    const value =
+        input.value.trim();
+
+
+    input.classList.remove(
+        "error"
+    );
+
+
+    void input.offsetWidth;
+
+
+    input.classList.add(
+        "error"
+    );
+
+
+    if (!value) {
+
+        errorText.innerText =
+            "ДОСТУП ОТКЛОНЁН — КЛЮЧ НЕ УКАЗАН";
+
+    }
+    else {
+
+        errorText.innerText =
+            "ДОСТУП ОТКЛОНЁН — НЕДЕЙСТВИТЕЛЬНЫЙ КЛЮЧ";
+
+    }
+
+
+    errorBox.classList.add(
+        "visible"
+    );
+
+
+    setTimeout(
+        () => {
+
+            input.classList.remove(
+                "error"
+            );
+
+        },
+        400
     );
 
 }
 
 
-requestAnimationFrame(
-    animateMarket
-);
+document
+    .getElementById(
+        "accessKey"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
 
+            if (
+                event.key ===
+                "Enter"
+            ) {
 
-/* ============================================================
-   FALLBACK SIMULATION
-   Used when Binance is unavailable.
-============================================================ */
+                checkAccess();
 
-setInterval(() => {
-
-    symbols.forEach(symbol => {
-
-        /*
-            When live prices arrive, still allow a tiny
-            synthetic movement between packets so the
-            background graphs feel alive.
-        */
-
-        const history =
-            histories[symbol];
-
-
-        const previous =
-            history[
-                history.length - 1
-            ];
-
-
-        if (!previous) {
-            return;
-        }
-
-
-        const volatility =
-            symbol === "solusdt"
-                ? .0018
-                : .0012;
-
-
-        const next =
-            previous *
-            (
-                1 +
-                (
-                    Math.random() - .5
-                ) *
-                volatility
-            );
-
-
-        history.push(next);
-
-
-        if (
-            history.length > 150
-        ) {
-
-            history.shift();
+            }
 
         }
+    );
 
 
-        /*
-            Only use simulation for ticker
-            if no real stream is connected.
-        */
+/* =========================================================
+   LOCKED NAV
+========================================================= */
 
-        if (!prices[symbol]) {
+function locked() {
 
-            prices[symbol] =
-                next;
-
-
-            updateTicker(
-                symbol,
-                next
-            );
-
-        }
-
-    });
-
-}, 180);
-
-
-/* ============================================================
-   SMALL LIVE PULSE
-============================================================ */
-
-setInterval(() => {
-
-    const items =
-        document.querySelectorAll(
-            ".ticker-item"
+    const errorBox =
+        document.getElementById(
+            "errorBox"
         );
 
 
-    items.forEach(item => {
-
-        item.style.opacity = ".58";
-
-
-        setTimeout(() => {
-
-            item.style.opacity = "1";
-
-        }, 110);
-
-    });
-
-}, 2600);
+    const errorText =
+        document.getElementById(
+            "errorText"
+        );
 
 
-/* ============================================================
-   CLEANUP / VISIBILITY
-============================================================ */
+    errorText.innerText =
+        "РАЗДЕЛ ЗАБЛОКИРОВАН — ТРЕБУЕТСЯ КЛЮЧ ДОСТУПА";
 
-document.addEventListener(
-    "visibilitychange",
+
+    errorBox.classList.add(
+        "visible"
+    );
+
+
+    document
+        .getElementById(
+            "accessKey"
+        )
+        .focus();
+
+}
+
+
+/* =========================================================
+   IMMEDIATE TICKER REFRESH
+========================================================= */
+
+setInterval(
     () => {
 
-        if (
-            document.hidden &&
-            socket
-        ) {
+        SYMBOLS.forEach(
+            updateTicker
+        );
 
-            /*
-                Do not close the socket here:
-                browsers already throttle background tabs.
-            */
-
-            return;
-        }
-
-    }
+    },
+    100
 );
 
 </script>
 
 </body>
 </html>
-```
