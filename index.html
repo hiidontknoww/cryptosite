@@ -53,7 +53,6 @@ body {
 :root {
     --green: #b6ff35;
     --red: #ff4545;
-    --border: rgba(255,255,255,.10);
 }
 
 
@@ -102,7 +101,7 @@ body {
 
 
 /* =========================================================
-   DARK VIGNETTE
+   VIGNETTE
 ========================================================= */
 
 .vignette {
@@ -116,15 +115,15 @@ body {
     background:
         radial-gradient(
             ellipse at center,
-            rgba(0,0,0,.20) 0%,
-            rgba(0,0,0,.62) 46%,
+            rgba(0,0,0,.12) 0%,
+            rgba(0,0,0,.58) 48%,
             rgba(0,0,0,.94) 100%
         );
 }
 
 
 /* =========================================================
-   CENTRAL BLUR / FADE
+   CENTER FADE
 ========================================================= */
 
 .centerFade {
@@ -136,7 +135,8 @@ body {
     width: min(900px, 100vw);
     height: min(720px, 100vh);
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(-50%, -50%);
 
     z-index: 3;
 
@@ -146,9 +146,9 @@ body {
         radial-gradient(
             ellipse,
             rgba(0,0,0,.96) 0%,
-            rgba(0,0,0,.88) 43%,
-            rgba(0,0,0,.25) 70%,
-            transparent 80%
+            rgba(0,0,0,.90) 40%,
+            rgba(0,0,0,.35) 68%,
+            transparent 82%
         );
 }
 
@@ -165,7 +165,7 @@ body {
 
     pointer-events: none;
 
-    opacity: .11;
+    opacity: .10;
 
     background:
         repeating-linear-gradient(
@@ -185,9 +185,9 @@ body {
 header {
     position: fixed;
 
+    top: 0;
     left: 0;
     right: 0;
-    top: 0;
 
     height: 70px;
 
@@ -215,6 +215,7 @@ header {
 .logo {
     display: flex;
     align-items: center;
+
     gap: 11px;
 }
 
@@ -247,12 +248,14 @@ header {
 .headerRight {
     display: flex;
     align-items: center;
+
     gap: 28px;
 }
 
 
 .nav {
     display: flex;
+
     gap: 26px;
 
     color: #555;
@@ -272,6 +275,7 @@ header {
 .liveStatus {
     display: flex;
     align-items: center;
+
     gap: 7px;
 
     color: #666;
@@ -287,24 +291,29 @@ header {
 
     border-radius: 50%;
 
-    background: var(--green);
+    background:
+        var(--green);
 
     box-shadow:
         0 0 12px
         rgba(182,255,53,.9);
 
-    animation: pulse 1.2s infinite;
+    animation:
+        pulse 1.2s infinite;
 }
 
 
 @keyframes pulse {
-    0%,100% {
+
+    0%,
+    100% {
         opacity: 1;
     }
 
     50% {
         opacity: .25;
     }
+
 }
 
 
@@ -315,11 +324,10 @@ header {
 main {
     position: fixed;
 
-    left: 0;
-    right: 0;
-
     top: 70px;
     bottom: 62px;
+    left: 0;
+    right: 0;
 
     z-index: 10;
 
@@ -332,11 +340,12 @@ main {
 
 
 /* =========================================================
-   ACCESS CARD
+   CARD
 ========================================================= */
 
 .card {
-    width: min(470px, 100%);
+    width:
+        min(470px, 100%);
 
     padding:
         clamp(27px, 5vw, 42px);
@@ -394,7 +403,8 @@ h1 {
 
     margin-bottom: 23px;
 
-    background: var(--green);
+    background:
+        var(--green);
 
     box-shadow:
         0 0 16px
@@ -432,7 +442,8 @@ input {
     width: 100%;
     height: 53px;
 
-    padding: 0 14px;
+    padding:
+        0 14px;
 
     outline: none;
 
@@ -447,10 +458,6 @@ input {
 
     font-family: monospace;
     font-size: 12px;
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease;
 }
 
 
@@ -464,7 +471,8 @@ input:focus {
 
 
 input.error {
-    border-color: var(--red);
+    border-color:
+        var(--red);
 
     animation:
         shake .35s;
@@ -472,17 +480,23 @@ input.error {
 
 
 @keyframes shake {
-    0%,100% {
-        transform: translateX(0);
+
+    0%,
+    100% {
+        transform:
+            translateX(0);
     }
 
     25% {
-        transform: translateX(-5px);
+        transform:
+            translateX(-5px);
     }
 
     75% {
-        transform: translateX(5px);
+        transform:
+            translateX(5px);
     }
+
 }
 
 
@@ -507,15 +521,12 @@ button {
     font-weight: 800;
 
     letter-spacing: .16em;
-
-    transition:
-        background .2s ease,
-        border-color .2s ease;
 }
 
 
 button:hover {
     background: #191919;
+
     border-color: #555;
 }
 
@@ -528,6 +539,7 @@ button:hover {
 
     display: flex;
     align-items: center;
+
     gap: 9px;
 
     opacity: 0;
@@ -539,7 +551,8 @@ button:hover {
     background:
         rgba(255,69,69,.035);
 
-    color: var(--red);
+    color:
+        var(--red);
 
     font-family: monospace;
     font-size: 7px;
@@ -555,7 +568,9 @@ button:hover {
 
 #error.show {
     opacity: 1;
-    transform: translateY(0);
+
+    transform:
+        translateY(0);
 }
 
 
@@ -567,7 +582,8 @@ button:hover {
 
     border-radius: 50%;
 
-    background: var(--red);
+    background:
+        var(--red);
 
     box-shadow:
         0 0 9px
@@ -594,7 +610,7 @@ button:hover {
 
 
 /* =========================================================
-   BOTTOM TICKER
+   TICKER
 ========================================================= */
 
 .ticker {
@@ -611,7 +627,7 @@ button:hover {
     overflow: hidden;
 
     background:
-        rgba(2,2,2,.97);
+        rgba(2,2,2,.98);
 
     border-top:
         1px solid
@@ -652,7 +668,8 @@ button:hover {
 
     width: max-content;
 
-    will-change: transform;
+    will-change:
+        transform;
 }
 
 
@@ -665,7 +682,7 @@ button:hover {
 .tickerTrack.forward {
     animation:
         tickerForward
-        45s
+        55s
         linear
         infinite;
 }
@@ -674,7 +691,7 @@ button:hover {
 .tickerTrack.reverse {
     animation:
         tickerReverse
-        50s
+        60s
         linear
         infinite;
 }
@@ -683,11 +700,13 @@ button:hover {
 @keyframes tickerForward {
 
     from {
-        transform: translateX(0);
+        transform:
+            translateX(0);
     }
 
     to {
-        transform: translateX(-50%);
+        transform:
+            translateX(-50%);
     }
 
 }
@@ -696,11 +715,13 @@ button:hover {
 @keyframes tickerReverse {
 
     from {
-        transform: translateX(-50%);
+        transform:
+            translateX(-50%);
     }
 
     to {
-        transform: translateX(0);
+        transform:
+            translateX(0);
     }
 
 }
@@ -745,12 +766,14 @@ button:hover {
 
 
 .up {
-    color: var(--green);
+    color:
+        var(--green);
 }
 
 
 .down {
-    color: var(--red);
+    color:
+        var(--red);
 }
 
 
@@ -760,7 +783,7 @@ button:hover {
 
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE
 ========================================================= */
 
 @media(max-width: 900px) {
@@ -792,7 +815,7 @@ button:hover {
     }
 
 
-    .headerRight .liveStatus {
+    .liveStatus {
         display: none;
     }
 
@@ -809,7 +832,7 @@ button:hover {
 
 
     #marketCanvas {
-        opacity: .82;
+        opacity: .78;
     }
 
 
@@ -848,7 +871,6 @@ button:hover {
 }
 
 </style>
-
 </head>
 
 
@@ -892,9 +914,13 @@ button:hover {
     <div class="headerRight">
 
         <div class="nav">
+
             <span>ПОРТФЕЛЬ</span>
+
             <span>КОМАНДА</span>
+
             <span>КОНТАКТЫ</span>
+
         </div>
 
 
@@ -912,7 +938,7 @@ button:hover {
 
 
 <!-- =========================================================
-     ACCESS CARD
+     CARD
 ========================================================= -->
 
 <main>
@@ -1032,16 +1058,17 @@ button:hover {
 
 /* =========================================================
    ELITE CRYPTO
-   REAL MARKET ENGINE
+   REAL-TIME MARKET ENGINE
 ========================================================= */
 
 
 /*
-    =========================================================
-    MARCHÉS
-    =========================================================
+    12 vrais marchés.
 
-    12 vrais marchés Binance.
+    Il y a volontairement plusieurs meme coins :
+    DOGE / SHIB / PEPE.
+
+    Les prix ne sont jamais inventés.
 */
 
 const SYMBOLS = [
@@ -1052,40 +1079,50 @@ const SYMBOLS = [
     "SOLUSDT",
 
     "XRPUSDT",
-    "ADAUSDT",
     "DOGEUSDT",
-    "AVAXUSDT",
+    "SHIBUSDT",
+    "PEPEUSDT",
 
+    "AVAXUSDT",
     "LINKUSDT",
-    "TRXUSDT",
     "SUIUSDT",
-    "TONUSDT"
+    "TRXUSDT"
 
 ];
 
 
 /*
-    =========================================================
-    CONFIGURATION
-    =========================================================
+    Bougies ultra courtes.
+
+    Une nouvelle bougie apparaît toutes les secondes.
+
+    Cela donne un mouvement beaucoup plus naturel
+    pour un background de terminal.
 */
 
-const CANDLE_INTERVAL =
-    60 * 1000;
+const INTERVAL =
+    1000;
 
 
 /*
-    80 bougies de 1 minute.
-
-    Elles viennent directement de Binance.
+    Nombre de bougies affichées.
 */
 
-const HISTORY_LIMIT = 80;
+const MAX_CANDLES =
+    75;
 
 
 /*
-    État de chaque marché.
+    Nombre de bougies demandées au démarrage.
 */
+
+const HISTORY_LIMIT =
+    75;
+
+
+/* =========================================================
+   MARKET STATE
+========================================================= */
 
 const markets = {};
 
@@ -1115,9 +1152,11 @@ SYMBOLS.forEach(
 
             live: false,
 
-            loaded: false,
+            firstLiveTrade: false,
 
-            lastTrade: 0
+            lastTradeTime: 0,
+
+            lastUpdate: 0
 
         };
 
@@ -1210,7 +1249,7 @@ resizeCanvas();
    PRICE FORMAT
 ========================================================= */
 
-function decimalsFor(
+function getDecimals(
     symbol,
     price
 ) {
@@ -1225,14 +1264,37 @@ function decimalsFor(
     if (
         symbol === "ETHUSDT" ||
         symbol === "BNBUSDT" ||
-        symbol === "SOLUSDT"
+        symbol === "SOLUSDT" ||
+        symbol === "AVAXUSDT" ||
+        symbol === "LINKUSDT"
     ) {
         return 2;
     }
 
 
     if (
-        price >= 100
+        symbol === "DOGEUSDT"
+    ) {
+        return 5;
+    }
+
+
+    if (
+        symbol === "SHIBUSDT"
+    ) {
+        return 8;
+    }
+
+
+    if (
+        symbol === "PEPEUSDT"
+    ) {
+        return 10;
+    }
+
+
+    if (
+        price >= 10
     ) {
         return 2;
     }
@@ -1263,7 +1325,6 @@ function formatPrice(
 ) {
 
     if (
-        price === null ||
         !Number.isFinite(price)
     ) {
 
@@ -1272,21 +1333,22 @@ function formatPrice(
     }
 
 
+    const decimals =
+        getDecimals(
+            symbol,
+            price
+        );
+
+
     return "$" +
         price.toLocaleString(
             "en-US",
             {
                 minimumFractionDigits:
-                    decimalsFor(
-                        symbol,
-                        price
-                    ),
+                    decimals,
 
                 maximumFractionDigits:
-                    decimalsFor(
-                        symbol,
-                        price
-                    )
+                    decimals
             }
         );
 
@@ -1298,7 +1360,6 @@ function formatVolume(
 ) {
 
     if (
-        !value ||
         !Number.isFinite(value)
     ) {
 
@@ -1313,8 +1374,7 @@ function formatVolume(
 
         return (
             value / 1e9
-        ).toFixed(2)
-        + "B";
+        ).toFixed(2) + "B";
 
     }
 
@@ -1325,8 +1385,7 @@ function formatVolume(
 
         return (
             value / 1e6
-        ).toFixed(2)
-        + "M";
+        ).toFixed(2) + "M";
 
     }
 
@@ -1337,8 +1396,7 @@ function formatVolume(
 
         return (
             value / 1e3
-        ).toFixed(2)
-        + "K";
+        ).toFixed(2) + "K";
 
     }
 
@@ -1349,15 +1407,8 @@ function formatVolume(
 
 
 /* =========================================================
-   LOAD REAL HISTORICAL CANDLES
+   LOAD REAL 1 SECOND HISTORY
 ========================================================= */
-
-
-/*
-    Ici on ne fabrique PAS une courbe artificielle.
-
-    On demande les vraies bougies 1 minute à Binance.
-*/
 
 async function loadHistory(
     symbol
@@ -1369,26 +1420,25 @@ async function loadHistory(
 
     try {
 
-        const url =
-            "https://api.binance.com/api/v3/klines"
-            +
-            "?symbol="
-            +
-            symbol
-            +
-            "&interval=1m"
-            +
-            "&limit="
-            +
-            HISTORY_LIMIT;
-
-
         const response =
             await fetch(
-                url,
+
+                "https://api.binance.com/api/v3/klines"
+                +
+                "?symbol="
+                +
+                symbol
+                +
+                "&interval=1s"
+                +
+                "&limit="
+                +
+                HISTORY_LIMIT,
+
                 {
                     cache: "no-store"
                 }
+
             );
 
 
@@ -1434,13 +1484,6 @@ async function loadHistory(
             );
 
 
-        /*
-            La dernière bougie reçue est la bougie
-            actuellement en formation.
-
-            On la conserve séparément.
-        */
-
         if (
             state.candles.length
         ) {
@@ -1454,16 +1497,12 @@ async function loadHistory(
         }
 
 
-        state.loaded =
-            true;
-
-
     }
     catch(error) {
 
         console.warn(
+            "1s history unavailable:",
             symbol,
-            "historical data unavailable",
             error
         );
 
@@ -1473,35 +1512,28 @@ async function loadHistory(
 
 
 /*
-    Charge les 12 marchés en parallèle.
+    Tous les historiques sont demandés en parallèle.
 */
 
-async function loadAllHistory() {
-
-    await Promise.all(
-        SYMBOLS.map(
-            loadHistory
-        )
-    );
-
-}
-
-
-loadAllHistory();
+Promise.all(
+    SYMBOLS.map(
+        loadHistory
+    )
+);
 
 
 /* =========================================================
-   REAL-TIME TRADES
+   REAL-TIME WEBSOCKET
 ========================================================= */
 
-let ws = null;
+let socket = null;
 
 let reconnectTimer = null;
 
 let reconnectDelay = 1000;
 
 
-function connectWebSocket() {
+function connectMarketStream() {
 
     clearTimeout(
         reconnectTimer
@@ -1509,10 +1541,10 @@ function connectWebSocket() {
 
 
     /*
-        Chaque marché possède son propre flux trade.
+        @trade = transactions réelles.
 
-        Les trades arrivent immédiatement dès qu'ils
-        sont reçus par le navigateur.
+        Chaque trade reçu modifie immédiatement
+        le prix et la bougie actuelle.
     */
 
     const streams =
@@ -1526,30 +1558,30 @@ function connectWebSocket() {
             .join("/");
 
 
-    const url =
-        "wss://stream.binance.com:9443/stream?streams="
-        +
-        streams;
+    socket =
+        new WebSocket(
+
+            "wss://stream.binance.com:9443/stream?streams="
+            +
+            streams
+
+        );
 
 
-    ws =
-        new WebSocket(url);
-
-
-    ws.onopen =
+    socket.onopen =
         () => {
 
             reconnectDelay =
                 1000;
 
             console.log(
-                "BINANCE MARKET STREAM CONNECTED"
+                "ELITE CRYPTO — REAL MARKET STREAM CONNECTED"
             );
 
         };
 
 
-    ws.onmessage =
+    socket.onmessage =
         event => {
 
             try {
@@ -1588,15 +1620,21 @@ function connectWebSocket() {
 
 
                 const price =
-                    Number(data.p);
+                    Number(
+                        data.p
+                    );
 
 
                 const quantity =
-                    Number(data.q);
+                    Number(
+                        data.q
+                    );
 
 
                 const tradeTime =
-                    Number(data.T);
+                    Number(
+                        data.T
+                    );
 
 
                 if (
@@ -1608,7 +1646,7 @@ function connectWebSocket() {
                 }
 
 
-                processTrade(
+                updateRealTrade(
                     state,
                     price,
                     quantity,
@@ -1619,7 +1657,7 @@ function connectWebSocket() {
             catch(error) {
 
                 console.warn(
-                    "WebSocket packet error",
+                    "Market packet error",
                     error
                 );
 
@@ -1628,18 +1666,20 @@ function connectWebSocket() {
         };
 
 
-    ws.onerror =
+    socket.onerror =
         () => {
 
             try {
-                ws.close();
+
+                socket.close();
+
             }
-            catch(e) {}
+            catch(error) {}
 
         };
 
 
-    ws.onclose =
+    socket.onclose =
         () => {
 
             SYMBOLS.forEach(
@@ -1654,15 +1694,18 @@ function connectWebSocket() {
 
             reconnectTimer =
                 setTimeout(
-                    connectWebSocket,
+
+                    connectMarketStream,
+
                     reconnectDelay
+
                 );
 
 
             reconnectDelay =
                 Math.min(
                     reconnectDelay * 1.5,
-                    8000
+                    10000
                 );
 
         };
@@ -1670,14 +1713,14 @@ function connectWebSocket() {
 }
 
 
-connectWebSocket();
+connectMarketStream();
 
 
 /* =========================================================
-   PROCESS TRADE
+   REAL TRADE ENGINE
 ========================================================= */
 
-function processTrade(
+function updateRealTrade(
     state,
     price,
     quantity,
@@ -1688,8 +1731,16 @@ function processTrade(
         true;
 
 
-    state.lastTrade =
-        Date.now();
+    state.firstLiveTrade =
+        true;
+
+
+    state.lastTradeTime =
+        timestamp;
+
+
+    state.lastUpdate =
+        performance.now();
 
 
     state.previousPrice =
@@ -1700,19 +1751,18 @@ function processTrade(
         price;
 
 
-    const candleTime =
+    const bucket =
         Math.floor(
             timestamp /
-            CANDLE_INTERVAL
+            INTERVAL
         )
         *
-        CANDLE_INTERVAL;
+        INTERVAL;
 
 
     /*
-        Si on n'a pas encore reçu l'historique,
-        on crée uniquement la bougie réelle à partir
-        du trade reçu.
+        Si aucune bougie actuelle n'existe,
+        on commence directement avec le vrai trade.
     */
 
     if (
@@ -1722,7 +1772,7 @@ function processTrade(
         state.current = {
 
             time:
-                candleTime,
+                bucket,
 
             open:
                 price,
@@ -1748,16 +1798,16 @@ function processTrade(
 
 
     /*
-        Nouvelle minute.
+        NOUVELLE SECONDE
     */
 
     if (
-        candleTime >
+        bucket >
         state.current.time
     ) {
 
         /*
-            Fermer l'ancienne bougie.
+            L'ancienne bougie devient définitive.
         */
 
         state.candles.push(
@@ -1766,39 +1816,42 @@ function processTrade(
 
 
         /*
-            Si plusieurs minutes ont été traversées,
-            on remplit les minutes sans transaction avec
-            le dernier vrai prix.
+            S'il y a plusieurs secondes sans transaction,
+            on crée des bougies plates au dernier vrai prix.
 
-            Pas de faux mouvement.
+            On n'invente aucun mouvement.
         */
 
-        let nextTime =
+        let next =
             state.current.time +
-            CANDLE_INTERVAL;
+            INTERVAL;
 
 
         while (
-            nextTime <
-            candleTime
+            next <
+            bucket
         ) {
+
+            const lastPrice =
+                state.current.close;
+
 
             state.candles.push({
 
                 time:
-                    nextTime,
+                    next,
 
                 open:
-                    price,
+                    lastPrice,
 
                 high:
-                    price,
+                    lastPrice,
 
                 low:
-                    price,
+                    lastPrice,
 
                 close:
-                    price,
+                    lastPrice,
 
                 volume:
                     0
@@ -1806,20 +1859,20 @@ function processTrade(
             });
 
 
-            nextTime +=
-                CANDLE_INTERVAL;
+            next +=
+                INTERVAL;
 
         }
 
 
         /*
-            Nouvelle vraie bougie.
+            Nouvelle bougie avec le VRAI prix.
         */
 
         state.current = {
 
             time:
-                candleTime,
+                bucket,
 
             open:
                 price,
@@ -1842,10 +1895,10 @@ function processTrade(
     else {
 
         /*
-            Même bougie :
+            Même seconde.
 
-            chaque trade modifie réellement
-            High / Low / Close / Volume.
+            Chaque transaction modifie immédiatement
+            le High / Low / Close.
         */
 
         state.current.high =
@@ -1872,9 +1925,13 @@ function processTrade(
     }
 
 
+    /*
+        On garde uniquement les dernières bougies.
+    */
+
     while (
         state.candles.length >
-        HISTORY_LIMIT
+        MAX_CANDLES
     ) {
 
         state.candles.shift();
@@ -1885,19 +1942,114 @@ function processTrade(
 
 
 /* =========================================================
-   24H MARKET DATA
+   CLOCK — CONTINUOUS CANDLE ROLL
 ========================================================= */
 
-async function load24h() {
+function maintainCandles(
+    state,
+    now
+) {
+
+    if (
+        !state.current ||
+        !state.price
+    ) {
+
+        return;
+
+    }
+
+
+    const currentBucket =
+        Math.floor(
+            now /
+            INTERVAL
+        )
+        *
+        INTERVAL;
+
+
+    /*
+        Si le marché n'a pas envoyé de trade
+        pendant plusieurs secondes, le temps continue
+        quand même.
+
+        On crée donc uniquement des bougies plates.
+    */
+
+    while (
+        currentBucket >
+        state.current.time
+    ) {
+
+        state.candles.push(
+            state.current
+        );
+
+
+        const nextTime =
+            state.current.time +
+            INTERVAL;
+
+
+        const lastPrice =
+            state.current.close;
+
+
+        state.current = {
+
+            time:
+                nextTime,
+
+            open:
+                lastPrice,
+
+            high:
+                lastPrice,
+
+            low:
+                lastPrice,
+
+            close:
+                lastPrice,
+
+            volume:
+                0
+
+        };
+
+
+        while (
+            state.candles.length >
+            MAX_CANDLES
+        ) {
+
+            state.candles.shift();
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   24H DATA
+========================================================= */
+
+async function update24h() {
 
     try {
 
         const response =
             await fetch(
+
                 "https://api.binance.com/api/v3/ticker/24hr",
+
                 {
                     cache: "no-store"
                 }
+
             );
 
 
@@ -1910,7 +2062,7 @@ async function load24h() {
         }
 
 
-        const all =
+        const data =
             await response.json();
 
 
@@ -1920,7 +2072,7 @@ async function load24h() {
             );
 
 
-        all.forEach(
+        data.forEach(
             ticker => {
 
                 if (
@@ -1970,7 +2122,7 @@ async function load24h() {
     catch(error) {
 
         console.warn(
-            "24h data unavailable"
+            "24h update unavailable"
         );
 
     }
@@ -1978,12 +2130,12 @@ async function load24h() {
 }
 
 
-load24h();
+update24h();
 
 
 setInterval(
-    load24h,
-    5000
+    update24h,
+    3000
 );
 
 
@@ -1991,15 +2143,7 @@ setInterval(
    CHART LAYOUT
 ========================================================= */
 
-function getChartLayout() {
-
-    /*
-        DESKTOP
-
-        4 colonnes x 3 lignes.
-
-        Le centre est couvert par le fade + la carte.
-    */
+function getLayout() {
 
     if (
         W >= 1200
@@ -2007,29 +2151,25 @@ function getChartLayout() {
 
         return [
 
-            [0.01, .10, .235, .18],
-            [.255, .08, .235, .18],
-            [.50, .08, .235, .18],
-            [.745, .10, .245, .18],
+            [0.01,.10,.235,.18],
+            [.255,.08,.235,.18],
+            [.50,.08,.235,.18],
+            [.745,.10,.245,.18],
 
-            [.01, .40, .235, .18],
-            [.255, .42, .235, .18],
-            [.50, .42, .235, .18],
-            [.745, .40, .245, .18],
+            [.01,.40,.235,.18],
+            [.255,.42,.235,.18],
+            [.50,.42,.235,.18],
+            [.745,.40,.245,.18],
 
-            [.01, .70, .235, .18],
-            [.255, .72, .235, .18],
-            [.50, .72, .235, .18],
-            [.745, .70, .245, .18]
+            [.01,.70,.235,.18],
+            [.255,.72,.235,.18],
+            [.50,.72,.235,.18],
+            [.745,.70,.245,.18]
 
         ];
 
     }
 
-
-    /*
-        TABLETTE
-    */
 
     if (
         W >= 650
@@ -2037,50 +2177,44 @@ function getChartLayout() {
 
         return [
 
-            [.01, .09, .31, .18],
-            [.345, .08, .31, .18],
-            [.68, .09, .31, .18],
+            [.01,.09,.31,.18],
+            [.345,.08,.31,.18],
+            [.68,.09,.31,.18],
 
-            [.01, .39, .31, .18],
-            [.345, .42, .31, .18],
-            [.68, .39, .31, .18],
+            [.01,.39,.31,.18],
+            [.345,.42,.31,.18],
+            [.68,.39,.31,.18],
 
-            [.01, .69, .31, .18],
-            [.345, .72, .31, .18],
-            [.68, .69, .31, .18],
+            [.01,.69,.31,.18],
+            [.345,.72,.31,.18],
+            [.68,.69,.31,.18],
 
-            [.01, .54, .20, .10],
-            [.79, .54, .20, .10],
-            [.40, .03, .20, .08]
+            [.01,.54,.20,.10],
+            [.79,.54,.20,.10],
+            [.40,.03,.20,.08]
 
         ];
 
     }
 
 
-    /*
-        MOBILE
-
-        3 colonnes x 4 lignes.
-    */
-
     return [
 
-        [.005, .085, .31, .17],
-        [.345, .07, .31, .17],
-        [.685, .085, .31, .17],
+        [.005,.085,.31,.17],
+        [.345,.07,.31,.17],
+        [.685,.085,.31,.17],
 
-        [.005, .30, .31, .17],
-        [.345, .32, .31, .17],
-        [.685, .30, .31, .17],
+        [.005,.30,.31,.17],
+        [.345,.32,.31,.17],
+        [.685,.30,.31,.17],
 
-        [.005, .55, .31, .16],
-        [.345, .53, .31, .16],
-        [.685, .55, .31, .16],
+        [.005,.55,.31,.16],
+        [.345,.53,.31,.16],
+        [.685,.55,.31,.16],
 
-        [.005, .76, .31, .14],
-        [.345, .75, .31, .14],
-        [.685, .76, .31, .14]
+        [.005,.76,.31,.14],
+        [.345,.75,.31,.14],
+        [.685,.76,.31,.14]
 
     ];
 
@@ -2088,7 +2222,7 @@ function getChartLayout() {
 
 
 /* =========================================================
-   DRAW GRID
+   GRID
 ========================================================= */
 
 function drawGrid(
@@ -2101,12 +2235,9 @@ function drawGrid(
     ctx.strokeStyle =
         "rgba(255,255,255,.035)";
 
+
     ctx.lineWidth = 1;
 
-
-    /*
-        lignes horizontales
-    */
 
     for (
         let i = 1;
@@ -2116,10 +2247,8 @@ function drawGrid(
 
         const yy =
             y +
-            (
-                h * .76
-            )
-            *
+            h *
+            .74 *
             (
                 i / 5
             );
@@ -2142,13 +2271,9 @@ function drawGrid(
     }
 
 
-    /*
-        lignes verticales
-    */
-
     for (
         let i = 1;
-        i < 7;
+        i < 8;
         i++
     ) {
 
@@ -2156,7 +2281,7 @@ function drawGrid(
             x +
             w *
             (
-                i / 7
+                i / 8
             );
 
 
@@ -2180,7 +2305,7 @@ function drawGrid(
 
 
 /* =========================================================
-   DRAW CHART
+   CHART
 ========================================================= */
 
 function drawChart(
@@ -2192,37 +2317,29 @@ function drawChart(
     now
 ) {
 
-    let candles =
+    maintainCandles(
+        state,
+        now
+    );
+
+
+    const candles =
         state.candles
             .slice(
-                -HISTORY_LIMIT
+                -MAX_CANDLES
+            )
+            .concat(
+                state.current
+                    ? [state.current]
+                    : []
             );
 
-
-    /*
-        Ajouter la bougie actuelle.
-    */
-
-    if (
-        state.current
-    ) {
-
-        candles.push(
-            state.current
-        );
-
-    }
-
-
-    /*
-        Pas assez de données.
-    */
 
     if (
         candles.length < 3
     ) {
 
-        drawLoadingChart(
+        drawLoading(
             state,
             x,
             y,
@@ -2236,7 +2353,7 @@ function drawChart(
 
 
     /* =====================================================
-       RANGE RÉEL
+       PRICE RANGE
     ===================================================== */
 
     let min =
@@ -2250,32 +2367,50 @@ function drawChart(
     candles.forEach(
         candle => {
 
-            min =
-                Math.min(
-                    min,
+            if (
+                Number.isFinite(
                     candle.low
-                );
+                )
+            ) {
+
+                min =
+                    Math.min(
+                        min,
+                        candle.low
+                    );
+
+            }
 
 
-            max =
-                Math.max(
-                    max,
+            if (
+                Number.isFinite(
                     candle.high
-                );
+                )
+            ) {
+
+                max =
+                    Math.max(
+                        max,
+                        candle.high
+                    );
+
+            }
 
         }
     );
 
 
-    /*
-        Marge proportionnelle.
-
-        Cela évite les chandeliers écrasés.
-    */
-
     let range =
         max - min;
 
+
+    /*
+        Très important :
+
+        on ne prend PAS une grosse marge fixe.
+
+        On adapte l'échelle au mouvement réel.
+    */
 
     if (
         !Number.isFinite(range) ||
@@ -2284,19 +2419,23 @@ function drawChart(
 
         range =
             Math.max(
-                Math.abs(max) * .001,
-                .000001
+                Math.abs(max) * .0008,
+                .00000001
             );
 
     }
 
 
-    min -=
+    const padding =
         range * .08;
+
+
+    min -=
+        padding;
 
 
     max +=
-        range * .08;
+        padding;
 
 
     range =
@@ -2304,16 +2443,15 @@ function drawChart(
 
 
     const chartHeight =
-        h * .72;
+        h * .73;
 
 
     const volumeTop =
-        y +
-        h * .77;
+        y + h * .77;
 
 
     const volumeHeight =
-        h * .18;
+        h * .17;
 
 
     /* =====================================================
@@ -2321,7 +2459,7 @@ function drawChart(
     ===================================================== */
 
     ctx.fillStyle =
-        "rgba(2,2,2,.30)";
+        "rgba(2,2,2,.27)";
 
 
     ctx.fillRect(
@@ -2333,7 +2471,7 @@ function drawChart(
 
 
     ctx.strokeStyle =
-        "rgba(255,255,255,.065)";
+        "rgba(255,255,255,.06)";
 
 
     ctx.strokeRect(
@@ -2353,18 +2491,8 @@ function drawChart(
 
 
     /* =====================================================
-       TIME SCROLL
+       CONTINUOUS HORIZONTAL MOVEMENT
     ===================================================== */
-
-    /*
-        La dernière bougie avance continuellement.
-
-        0 = début de minute
-        1 = fin de minute
-
-        Donc le graphique se déplace doucement,
-        pas par gros sauts.
-    */
 
     let progress = 0;
 
@@ -2379,7 +2507,7 @@ function drawChart(
                 state.current.time
             )
             /
-            CANDLE_INTERVAL;
+            INTERVAL;
 
 
         progress =
@@ -2398,6 +2526,13 @@ function drawChart(
         candles.length;
 
 
+    /*
+        Les bougies se déplacent doucement de droite
+        vers la gauche pendant que le temps avance.
+
+        Pas de téléportation.
+    */
+
     const candleWidth =
         w / count;
 
@@ -2405,12 +2540,12 @@ function drawChart(
     const bodyWidth =
         Math.max(
             1.2,
-            candleWidth * .55
+            candleWidth * .58
         );
 
 
     /* =====================================================
-       MAX VOLUME
+       VOLUME
     ===================================================== */
 
     let maxVolume =
@@ -2435,13 +2570,8 @@ function drawChart(
 
 
     /* =====================================================
-       CLOSE LINE
+       PRICE LINE
     ===================================================== */
-
-    /*
-        Ligne de clôture très discrète,
-        comme sur certains terminaux.
-    */
 
     ctx.beginPath();
 
@@ -2500,10 +2630,11 @@ function drawChart(
 
 
     ctx.strokeStyle =
-        "rgba(255,255,255,.09)";
+        "rgba(255,255,255,.10)";
 
 
     ctx.lineWidth = 1;
+
 
     ctx.stroke();
 
@@ -2624,14 +2755,14 @@ function drawChart(
 
             ctx.strokeStyle =
                 bullish
-                    ? "rgba(182,255,53,.88)"
-                    : "rgba(255,69,69,.88)";
+                    ? "rgba(182,255,53,.90)"
+                    : "rgba(255,69,69,.90)";
 
 
             ctx.lineWidth =
                 Math.max(
                     .7,
-                    candleWidth * .09
+                    candleWidth * .10
                 );
 
 
@@ -2687,7 +2818,7 @@ function drawChart(
                 candle.volume || 0;
 
 
-            const vh =
+            const volumeHeightPx =
                 (
                     volume /
                     maxVolume
@@ -2707,13 +2838,13 @@ function drawChart(
                 px -
                 bodyWidth / 2,
 
-                y +
-                h -
-                vh,
+                volumeTop +
+                volumeHeight -
+                volumeHeightPx,
 
                 bodyWidth,
 
-                vh
+                volumeHeightPx
 
             );
 
@@ -2722,14 +2853,16 @@ function drawChart(
 
 
     /* =====================================================
-       CURRENT PRICE
+       CURRENT PRICE LINE
     ===================================================== */
 
     if (
-        state.price
+        Number.isFinite(
+            state.price
+        )
     ) {
 
-        const py =
+        const priceY =
             y +
             chartHeight -
             (
@@ -2744,20 +2877,16 @@ function drawChart(
             chartHeight;
 
 
-        /*
-            Price line.
-        */
-
         ctx.beginPath();
 
         ctx.moveTo(
             x,
-            py
+            priceY
         );
 
         ctx.lineTo(
             x + w,
-            py
+            priceY
         );
 
 
@@ -2767,24 +2896,25 @@ function drawChart(
 
 
         ctx.strokeStyle =
-            "rgba(255,255,255,.17)";
+            "rgba(255,255,255,.16)";
 
-
-        ctx.lineWidth = 1;
 
         ctx.stroke();
+
 
         ctx.setLineDash([]);
 
 
         /*
-            Point live.
+            Petit point qui respire.
+
+            Il représente le dernier trade réel.
         */
 
         const pulse =
             (
                 Math.sin(
-                    now / 160
+                    now / 120
                 )
                 + 1
             )
@@ -2796,9 +2926,9 @@ function drawChart(
 
         ctx.arc(
             x + w - 5,
-            py,
+            priceY,
             1.5 +
-            pulse * 1.5,
+            pulse * 1.3,
             0,
             Math.PI * 2
         );
@@ -2811,28 +2941,28 @@ function drawChart(
         ctx.fill();
 
 
-        /*
-            Prix actuel.
-        */
-
         ctx.font =
             "700 7px monospace";
 
 
         ctx.fillStyle =
-            "rgba(255,255,255,.82)";
+            "rgba(255,255,255,.88)";
 
 
         ctx.fillText(
+
             formatPrice(
                 state.symbol,
                 state.price
             ),
+
             x + 5,
+
             Math.max(
-                y + 32,
-                py - 4
+                y + 31,
+                priceY - 5
             )
+
         );
 
     }
@@ -2851,17 +2981,20 @@ function drawChart(
 
 
     ctx.fillText(
+
         state.symbol.replace(
             "USDT",
             "/USDT"
         ),
+
         x + 6,
         y + 10
+
     );
 
 
     /* =====================================================
-       LIVE
+       LIVE STATUS
     ===================================================== */
 
     ctx.font =
@@ -2870,21 +3003,24 @@ function drawChart(
 
     ctx.fillStyle =
         state.live
-            ? "rgba(182,255,53,.72)"
-            : "rgba(255,170,60,.65)";
+            ? "rgba(182,255,53,.78)"
+            : "rgba(255,170,60,.70)";
 
 
     ctx.fillText(
+
         state.live
             ? "● LIVE"
             : "● CONNECTING",
+
         x + 6,
         y + 19
+
     );
 
 
     /* =====================================================
-       24H
+       24H CHANGE
     ===================================================== */
 
     if (
@@ -2903,8 +3039,8 @@ function drawChart(
 
         ctx.fillStyle =
             change >= 0
-                ? "rgba(182,255,53,.80)"
-                : "rgba(255,69,69,.80)";
+                ? "rgba(182,255,53,.82)"
+                : "rgba(255,69,69,.82)";
 
 
         ctx.fillText(
@@ -2920,7 +3056,6 @@ function drawChart(
             "%",
 
             x + w - 39,
-
             y + 10
 
         );
@@ -2931,10 +3066,10 @@ function drawChart(
 
 
 /* =========================================================
-   LOADING CHART
+   LOADING
 ========================================================= */
 
-function drawLoadingChart(
+function drawLoading(
     state,
     x,
     y,
@@ -2967,20 +3102,23 @@ function drawLoadingChart(
 
 
     ctx.font =
-        "700 7px monospace";
+        "800 7px monospace";
 
 
     ctx.fillStyle =
-        "rgba(255,255,255,.55)";
+        "rgba(255,255,255,.65)";
 
 
     ctx.fillText(
+
         state.symbol.replace(
             "USDT",
             "/USDT"
         ),
+
         x + 6,
         y + 10
+
     );
 
 
@@ -2989,11 +3127,11 @@ function drawLoadingChart(
 
 
     ctx.fillStyle =
-        "rgba(255,170,60,.7)";
+        "rgba(182,255,53,.65)";
 
 
     ctx.fillText(
-        "● LOADING REAL MARKET DATA",
+        "● WAITING FOR LIVE DATA",
         x + 6,
         y + 20
     );
@@ -3002,7 +3140,7 @@ function drawLoadingChart(
 
 
 /* =========================================================
-   MAIN RENDER LOOP
+   RENDER LOOP
 ========================================================= */
 
 function render(
@@ -3018,35 +3156,27 @@ function render(
 
 
     const layout =
-        getChartLayout();
+        getLayout();
 
 
     layout.forEach(
-        (position,index) => {
+        (pos,index) => {
 
             const symbol =
                 SYMBOLS[index];
 
 
-            const state =
-                markets[symbol];
-
-
             drawChart(
 
-                state,
+                markets[symbol],
 
-                W *
-                position[0],
+                W * pos[0],
 
-                H *
-                position[1],
+                H * pos[1],
 
-                W *
-                position[2],
+                W * pos[2],
 
-                H *
-                position[3],
+                H * pos[3],
 
                 Date.now()
 
@@ -3055,6 +3185,14 @@ function render(
         }
     );
 
+
+    /*
+        requestAnimationFrame tourne en continu.
+
+        Les données de prix ne sont PAS inventées :
+        le frame sert seulement à redessiner immédiatement
+        les vraies données reçues.
+    */
 
     requestAnimationFrame(
         render
@@ -3069,10 +3207,10 @@ requestAnimationFrame(
 
 
 /* =========================================================
-   TICKER HTML
+   TICKER
 ========================================================= */
 
-function createTickerItem(
+function tickerItem(
     symbol
 ) {
 
@@ -3080,33 +3218,16 @@ function createTickerItem(
         markets[symbol];
 
 
-    const price =
-        formatPrice(
-            symbol,
-            state.price
-        );
-
-
     const change =
         Number.isFinite(
             state.change24h
         )
-            ? (
-                (
-                    state.change24h >= 0
-                        ? "+"
-                        : ""
-                )
-                +
-                state.change24h.toFixed(2)
-                +
-                "%"
-            )
-            : "—";
+            ? state.change24h
+            : 0;
 
 
     const cls =
-        state.change24h >= 0
+        change >= 0
             ? "up"
             : "down";
 
@@ -3116,15 +3237,25 @@ function createTickerItem(
         <div class="tickerItem">
 
             <span class="symbol">
-                ${symbol.replace("USDT","/USDT")}
+                ${symbol.replace(
+                    "USDT",
+                    "/USDT"
+                )}
             </span>
 
             <span class="price">
-                ${price}
+                ${formatPrice(
+                    symbol,
+                    state.price
+                )}
             </span>
 
             <span class="${cls}">
-                ${change}
+                ${
+                    change >= 0
+                        ? "+"
+                        : ""
+                }${change.toFixed(2)}%
             </span>
 
         </div>
@@ -3134,7 +3265,7 @@ function createTickerItem(
 }
 
 
-function createSecondTickerItem(
+function tickerStats(
     symbol
 ) {
 
@@ -3147,7 +3278,10 @@ function createSecondTickerItem(
         <div class="tickerItem">
 
             <span class="symbol">
-                ${symbol.replace("USDT","/USDT")}
+                ${symbol.replace(
+                    "USDT",
+                    "/USDT"
+                )}
             </span>
 
             <span class="muted">
@@ -3196,7 +3330,7 @@ function createSecondTickerItem(
 
 
 /* =========================================================
-   BUILD CONTINUOUS TICKER
+   BUILD TICKER
 ========================================================= */
 
 function buildTicker() {
@@ -3213,34 +3347,33 @@ function buildTicker() {
         );
 
 
-    let group1 = "";
+    let first = "";
 
-    let group2 = "";
+    let second = "";
 
 
     /*
-        On répète les marchés plusieurs fois
-        pour que la ligne soit plus longue que
-        n'importe quel écran.
+        Plusieurs répétitions garantissent
+        qu'il n'y a jamais de trou.
     */
 
     for (
-        let r = 0;
-        r < 4;
-        r++
+        let repeat = 0;
+        repeat < 5;
+        repeat++
     ) {
 
         SYMBOLS.forEach(
             symbol => {
 
-                group1 +=
-                    createTickerItem(
+                first +=
+                    tickerItem(
                         symbol
                     );
 
 
-                group2 +=
-                    createSecondTickerItem(
+                second +=
+                    tickerStats(
                         symbol
                     );
 
@@ -3250,35 +3383,30 @@ function buildTicker() {
     }
 
 
-    /*
-        Deux groupes strictement identiques.
+    forward.innerHTML = `
 
-        L'animation passe de 0 à -50%.
-        Il n'y a donc jamais de vide entre deux boucles.
-    */
-
-    forward.innerHTML =
-        `
         <div class="tickerGroup">
-            ${group1}
+            ${first}
         </div>
 
         <div class="tickerGroup">
-            ${group1}
+            ${first}
         </div>
-        `;
+
+    `;
 
 
-    reverse.innerHTML =
-        `
-        <div class="tickerGroup">
-            ${group2}
-        </div>
+    reverse.innerHTML = `
 
         <div class="tickerGroup">
-            ${group2}
+            ${second}
         </div>
-        `;
+
+        <div class="tickerGroup">
+            ${second}
+        </div>
+
+    `;
 
 }
 
@@ -3287,137 +3415,19 @@ buildTicker();
 
 
 /*
-    Actualisation visuelle du ticker.
+    Mise à jour fréquente des prix du ticker.
 
-    Pas de reconstruction permanente du DOM.
-*/
-
-function updateTickerPrices() {
-
-    const items =
-        document.querySelectorAll(
-            "#tickerForward .tickerItem"
-        );
-
-
-    items.forEach(
-        item => {
-
-            const symbolNode =
-                item.querySelector(
-                    ".symbol"
-                );
-
-
-            if (!symbolNode) {
-                return;
-            }
-
-
-            const symbol =
-                symbolNode.innerText
-                    .trim()
-                    .replace(
-                        "/USDT",
-                        "USDT"
-                    );
-
-
-            const state =
-                markets[symbol];
-
-
-            if (!state) {
-                return;
-            }
-
-
-            const priceNode =
-                item.querySelector(
-                    ".price"
-                );
-
-
-            const changeNode =
-                item.querySelector(
-                    ".up, .down"
-                );
-
-
-            if (
-                priceNode
-            ) {
-
-                priceNode.innerText =
-                    formatPrice(
-                        symbol,
-                        state.price
-                    );
-
-            }
-
-
-            if (
-                changeNode
-            ) {
-
-                const change =
-                    Number.isFinite(
-                        state.change24h
-                    )
-                        ? state.change24h
-                        : 0;
-
-
-                changeNode.innerText =
-                    (
-                        change >= 0
-                            ? "+"
-                            : ""
-                    )
-                    +
-                    change.toFixed(2)
-                    +
-                    "%";
-
-
-                changeNode.classList.toggle(
-                    "up",
-                    change >= 0
-                );
-
-
-                changeNode.classList.toggle(
-                    "down",
-                    change < 0
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-setInterval(
-    updateTickerPrices,
-    250
-);
-
-
-/*
-    Les HIGH / LOW / VOL sont moins urgents.
+    Pas de délai artificiel sur les graphiques.
 */
 
 setInterval(
     buildTicker,
-    5000
+    1000
 );
 
 
 /* =========================================================
-   ACCESS BUTTON
+   ACCESS
 ========================================================= */
 
 const input =
@@ -3491,11 +3501,9 @@ document
         "click",
         () => {
 
-            const key =
-                input.value.trim();
-
-
-            if (!key) {
+            if (
+                !input.value.trim()
+            ) {
 
                 rejectAccess(
                     "ДОСТУП ОТКЛОНЁН — КЛЮЧ НЕ УКАЗАН"
@@ -3536,16 +3544,16 @@ input.addEventListener(
 
 
 /* =========================================================
-   START MESSAGE
+   DEBUG
 ========================================================= */
 
 console.log(
-    "%c ELITE CRYPTO MARKET TERMINAL ",
+    "%c ELITE CRYPTO — REAL MARKET ENGINE ",
     "background:#111;color:#b6ff35;font-weight:bold;padding:8px"
 );
 
 console.log(
-    "Loading real Binance 1m OHLC data..."
+    "12 markets / real trades / 1-second candles / live OHLC"
 );
 
 </script>
